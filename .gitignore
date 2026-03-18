@@ -1,0 +1,18 @@
+# Compilation
+bin/
+obj/
+
+# Local DB
+*.db
+*.db-shm
+*.db-wal
+
+# Personal Config
+.vs/
+.vscode/
+appsettings.Development.json
+usersecrets.json
+
+# System Files
+.DS_Store
+Thumbs.db
