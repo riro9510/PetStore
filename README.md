@@ -4,7 +4,7 @@
 🐾 **Jose David Colmenarez Gil**  
 🐾 **Joelnin Elizabeth Rodriguez Manosalva**  
 🐾 **Vanessa Yang**  
-🐾 **Ricardo Ramos Olivares**
-🐾 **Yeampier Huerta**
-🐾 **Ndarama Mark**
+🐾 **Ricardo Ramos Olivares**  
+🐾 **Yeampier Huerta**  
+🐾 **Ndarama Mark**  
 
