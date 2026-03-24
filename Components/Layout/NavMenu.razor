@@ -1,29 +1,24 @@
-﻿<div class="nav-container">
+﻿<nav class="nav-menu">
 
-    <div class="nav-header">
-        <h3>PetStore</h3>
-        <p>Find a pet to love</p>
+    <NavLink href="/" Match="NavLinkMatch.All">
+        Home
+    </NavLink>
+
+    <div class="pets-menu">
+        <span>Pets</span>
+
+        <div class="pets-list">
+            <NavLink href="/dogs">Dogs</NavLink>
+            <NavLink href="/cats">Cats</NavLink>
+            <NavLink href="/dragons">Dragons</NavLink>
+            <NavLink href="/unicorns">Unicorns</NavLink>
+            <NavLink href="/birds">Birds</NavLink>
+            <NavLink href="/elephants">Elephants</NavLink>
+        </div>
     </div>
 
-    <nav class="nav-links">
+    <NavLink href="/about">
+        About Us
+    </NavLink>
 
-        <a href="/">Home</a>
-
-        <div class="dropdown">
-            <span class="dropdown-title">Pets </span>
-
-            <div class="dropdown-menu">
-                <a href="/dogs">Dogs</a>
-                <a href="/cats">Cats</a>
-                <a href="/dragons">Dragons</a>
-                <a href="/unicorns">Unicorns</a>
-                <a href="/birds">Birds</a>
-                <a href="/elephants">Elephants</a>
-            </div>
-        </div>
-
-        <a href="/about">About Us</a>
-
-    </nav>
-
-</div>
+</nav>

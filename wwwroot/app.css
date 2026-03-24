@@ -68,24 +68,6 @@ main {
     font-size: 0.95rem;
 }
 
-.nav-links {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: #111827;
-    font-weight: 500;
-    padding: 0.6rem 0.75rem;
-    border-radius: 10px;
-}
-
-.nav-links a:hover {
-    background-color: #f3f4f6;
-}
-
 .home-hero {
     text-align: center;
     padding: 2rem 1rem 3rem 1rem;
@@ -148,33 +130,38 @@ main {
     font-size: 0.95rem;
 }
 
-.dropdown {
-    position: relative;
-}
-
-.dropdown-title {
-    display: block;
-    padding: 0.6rem 0.75rem;
-    font-weight: 500;
-    cursor: pointer;
-}
-
-.dropdown-menu {
-    display: none;
+.nav-menu {
+    display: flex;
     flex-direction: column;
-    margin-left: 10px;
+    gap: 6px;
 }
 
-.dropdown-menu a {
-    padding: 0.4rem 0.75rem;
+.nav-menu a,
+.pets-menu span {
+    padding: 10px 12px;
     text-decoration: none;
     color: #111827;
+    border-radius: 8px;
+    cursor: pointer;
+    display: block;
 }
 
-.dropdown-menu a:hover {
+.nav-menu a:hover,
+.pets-menu span:hover {
     background-color: #f3f4f6;
 }
 
-.dropdown:hover .dropdown-menu {
+.nav-menu a.active {
+    background-color: #e5e7eb;
+    font-weight: 600;
+}
+
+.pets-list {
+    display: none;
+    flex-direction: column;
+    margin-left: 15px;
+}
+
+.pets-menu:hover .pets-list {
     display: flex;
 }
