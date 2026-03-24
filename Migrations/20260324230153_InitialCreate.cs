@@ -35,10 +35,10 @@ namespace PetStore.Migrations
                 columns: new[] { "Id", "Age", "Breed", "Category", "Description", "ImageUrl", "Name" },
                 values: new object[,]
                 {
-                    { 1, 3, "Golden Retriever", "Dog", "Friendly, loyal, and ready for a home.", "images/dog1.jpg", "Max" },
-                    { 2, 2, "Siamese", "Cat", "Curious, calm, and full of personality.", "images/cat1.jpg", "Luna" },
-                    { 3, 100, "Mini Flame", "Dragon", "Magical companion with fiery charm.", "images/dragon1.jpg", "Draco" },
-                    { 4, 5, "Silver Mane", "Unicorn", "Rare, graceful, and full of wonder.", "images/unicorn1.jpg", "Sparkle" }
+                    { 1, 3, "Golden Retriever", "dogs", "Friendly, loyal, and ready for a home.", "https://raw.githubusercontent.com/vsyang/pet-images/main/goldenr.jpg", "Max" },
+                    { 2, 2, "Siamese", "cats", "Curious, calm, and full of personality.", "https://raw.githubusercontent.com/vsyang/pet-images/main/siamese.jpg", "Luna" },
+                    { 3, 100, "Mini Flame", "dragons", "Magical companion with fiery charm.", "https://raw.githubusercontent.com/vsyang/pet-images/main/toothless.jpg", "Toothless" },
+                    { 4, 5, "Silver Mane", "unicorns", "Rare, graceful, and full of wonder.", "https://raw.githubusercontent.com/vsyang/pet-images/main/unicorn.jpg", "Sparkle" }
                 });
         }
 

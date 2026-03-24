@@ -10,7 +10,7 @@ using PetStore.Data;
 namespace PetStore.Migrations
 {
     [DbContext(typeof(PetStoreContext))]
-    [Migration("20260324043420_InitialCreate")]
+    [Migration("20260324230153_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -58,9 +58,9 @@ namespace PetStore.Migrations
                             Id = 1,
                             Age = 3,
                             Breed = "Golden Retriever",
-                            Category = "Dog",
+                            Category = "dogs",
                             Description = "Friendly, loyal, and ready for a home.",
-                            ImageUrl = "images/dog1.jpg",
+                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/goldenr.jpg",
                             Name = "Max"
                         },
                         new
@@ -68,9 +68,9 @@ namespace PetStore.Migrations
                             Id = 2,
                             Age = 2,
                             Breed = "Siamese",
-                            Category = "Cat",
+                            Category = "cats",
                             Description = "Curious, calm, and full of personality.",
-                            ImageUrl = "images/cat1.jpg",
+                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/siamese.jpg",
                             Name = "Luna"
                         },
                         new
@@ -78,19 +78,19 @@ namespace PetStore.Migrations
                             Id = 3,
                             Age = 100,
                             Breed = "Mini Flame",
-                            Category = "Dragon",
+                            Category = "dragons",
                             Description = "Magical companion with fiery charm.",
-                            ImageUrl = "images/dragon1.jpg",
-                            Name = "Draco"
+                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/toothless.jpg",
+                            Name = "Toothless"
                         },
                         new
                         {
                             Id = 4,
                             Age = 5,
                             Breed = "Silver Mane",
-                            Category = "Unicorn",
+                            Category = "unicorns",
                             Description = "Rare, graceful, and full of wonder.",
-                            ImageUrl = "images/unicorn1.jpg",
+                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/unicorn.jpg",
                             Name = "Sparkle"
                         });
                 });

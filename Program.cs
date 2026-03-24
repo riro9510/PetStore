@@ -10,7 +10,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddDbContext<PetStoreContext>(options =>
 options.UseSqlite("Data Source=petstore.db"));
-builder.Services.AddSingleton<PetService>();
+builder.Services.AddScoped<PetService>();
 
 var app = builder.Build();
 
