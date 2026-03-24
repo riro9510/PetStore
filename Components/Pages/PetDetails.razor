@@ -1,5 +1,7 @@
 @page "/pet/{id:int}"
 @using PetStore.Models
+@using PetStore.Services
+@inject PetService PetService
 
 <PageTitle>Pet Details</PageTitle>
 
@@ -10,47 +12,33 @@
 else
 {
   <section class="pet-details">
-
     <div class="pet-icon">@selectedPet.ImageUrl</div>
 
     <h1>@selectedPet.Name</h1>
 
     <p><strong>Category:</strong> @selectedPet.Category</p>
     <p><strong>Age:</strong> @selectedPet.Age</p>
-
     <p>@selectedPet.Description</p>
 
     @if (!isSignedIn)
     {
       <div class="pet-help-box">
-
         <p>Please sign in if you'd like to help @selectedPet.Name.</p>
-
-        <NavLink class="signin-button" href="/signin">
-          Sign In
-        </NavLink>
-
+        <NavLink class="signin-button" href="/signin">Sign In</NavLink>
       </div>
     }
     else
     {
       <div class="pet-help-box">
-
         <h3>How would you like to help @selectedPet.Name?</h3>
 
         <div class="help-buttons">
-
           <button class="help-button">Adopt</button>
-
           <button class="help-button">Foster</button>
-
           <button class="help-button">Sponsor</button>
-
         </div>
-
       </div>
     }
-
   </section>
 }
 
@@ -59,30 +47,10 @@ else
   public int id { get; set; }
 
   private Pet? selectedPet;
-
-  private List<Pet> allPets = new()
-    {
-        new Pet { Id = 1, Name = "Max", Category = "dogs", Description = "A playful and loyal dog.", ImageUrl = "🐶", Age = 3 },
-        new Pet { Id = 2, Name = "Bella", Category = "dogs", Description = "Loves long walks and treats.", ImageUrl = "🐶", Age
-= 2 },
-        new Pet { Id = 3, Name = "Luna", Category = "cats", Description = "A calm cat who loves naps.", ImageUrl = "🐱", Age = 4
-},
-        new Pet { Id = 4, Name = "Milo", Category = "cats", Description = "Curious and full of energy.", ImageUrl = "🐱", Age =
-1 },
-        new Pet { Id = 5, Name = "Draco", Category = "dragons", Description = "A tiny dragon with a big personality.", ImageUrl
-= "🐉", Age = 100 },
-        new Pet { Id = 6, Name = "Sparkle", Category = "unicorns", Description = "Gentle and magical.", ImageUrl = "🦄", Age = 7
-},
-        new Pet { Id = 7, Name = "Sunny", Category = "birds", Description = "Bright and cheerful singer.", ImageUrl = "🐦", Age
-= 2 },
-        new Pet { Id = 8, Name = "Daisy", Category = "elephants", Description = "A kind giant with a sweet nature.", ImageUrl =
-"🐘", Age = 12 }
-    };
-
-  bool isSignedIn = false; // Replace with real authentication logic in a future update
+  bool isSignedIn = false;
 
   protected override void OnParametersSet()
   {
-    selectedPet = allPets.FirstOrDefault(p => p.Id == id);
+    selectedPet = PetService.GetPetById(id);
   }
 }

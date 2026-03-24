@@ -1,10 +1,16 @@
 using PetStore.Components;
+using Microsoft.EntityFrameworkCore;
+using PetStore.Data;
+using PetStore.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddDbContext<PetStoreContext>(options =>
+options.UseSqlite("Data Source=petstore.db"));
+builder.Services.AddSingleton<PetService>();
 
 var app = builder.Build();
 
