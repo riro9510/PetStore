@@ -15,4 +15,4 @@ ENV ASPNETCORE_URLS=http://0.0.0.0:10000
 
 EXPOSE 10000
 
-ENTRYPOINT ["dotnet", "Test.dll"]
+ENTRYPOINT ["dotnet", "PetStore.dll"]
