@@ -1,30 +1,29 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">PetStore</a>
+﻿<div class="nav-container">
+
+    <div class="nav-header">
+        <h3>PetStore</h3>
+        <p>Find a pet to love</p>
     </div>
-</div>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+    <nav class="nav-links">
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
+        <a href="/">Home</a>
+
+        <div class="dropdown">
+            <span class="dropdown-title">Pets </span>
+
+            <div class="dropdown-menu">
+                <a href="/dogs">Dogs</a>
+                <a href="/cats">Cats</a>
+                <a href="/dragons">Dragons</a>
+                <a href="/unicorns">Unicorns</a>
+                <a href="/birds">Birds</a>
+                <a href="/elephants">Elephants</a>
+            </div>
         </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
+        <a href="/about">About Us</a>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
     </nav>
-</div>
 
+</div>
