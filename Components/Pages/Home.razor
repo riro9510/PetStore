@@ -3,7 +3,7 @@
 <PageTitle>Home</PageTitle>
 
 <section class="home-hero">
-  <h1>Welcome to Pawsitive Friends</h1>
+  <h1>Welcome to PetStore</h1>
   <p>
     Browse animals by category and find a pet you would love to adopt, foster, or sponsor.
   </p>
@@ -13,42 +13,25 @@
   <h2>Choose a pet type</h2>
 
   <div class="category-grid">
-
-    <NavLink class="category-card" href="/dogs">
-      <div class="category-icon">🐶</div>
-      <h3>Dogs</h3>
-      <p>Friendly, loyal, and ready for a home.</p>
-    </NavLink>
-
-    <NavLink class="category-card" href="/cats">
-      <div class="category-icon">🐱</div>
-      <h3>Cats</h3>
-      <p>Curious, calm, and full of personality.</p>
-    </NavLink>
-
-    <NavLink class="category-card" href="/dragons">
-      <div class="category-icon">🐉</div>
-      <h3>Dragons</h3>
-      <p>Magical companions with fiery charm.</p>
-    </NavLink>
-
-    <NavLink class="category-card" href="/unicorns">
-      <div class="category-icon">🦄</div>
-      <h3>Unicorns</h3>
-      <p>Rare, graceful, and full of wonder.</p>
-    </NavLink>
-
-    <NavLink class="category-card" href="/birds">
-      <div class="category-icon">🐦</div>
-      <h3>Birds</h3>
-      <p>Bright, social, and fun to watch.</p>
-    </NavLink>
-
-    <NavLink class="category-card" href="/elephants">
-      <div class="category-icon">🐘</div>
-      <h3>Elephants</h3>
-      <p>Gentle giants with big hearts.</p>
-    </NavLink>
-
+    @foreach (var category in petCategories)
+    {
+      <NavLink class="category-card" href="@category.Route">
+        <div class="category-icon">@category.Icon</div>
+        <h3>@category.Name</h3>
+        <p>@category.Description</p>
+      </NavLink>
+    }
   </div>
 </section>
+
+@code {
+  private List<PetCategory> petCategories = new()
+    {
+        new PetCategory { Name = "Dogs", Route = "/dogs", Icon = "🐶", Description = "Friendly, loyal, and ready for a home." },
+        new PetCategory { Name = "Cats", Route = "/cats", Icon = "🐱", Description = "Curious, calm, and full of personality." },
+        new PetCategory { Name = "Dragons", Route = "/dragons", Icon = "🐉", Description = "Magical companions with fiery charm." },
+        new PetCategory { Name = "Unicorns", Route = "/unicorns", Icon = "🦄", Description = "Rare, graceful, and full of wonder." },
+        new PetCategory { Name = "Birds", Route = "/birds", Icon = "🐦", Description = "Bright, social, and fun to watch." },
+        new PetCategory { Name = "Elephants", Route = "/elephants", Icon = "🐘", Description = "Gentle giants with big hearts." }
+    };
+}
