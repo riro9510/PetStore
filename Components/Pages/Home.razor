@@ -2,6 +2,36 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<section class="home-hero">
+  <h1>Welcome to PetStore</h1>
+  <p>
+    Browse animals by category and find a pet you would love to adopt, foster, or sponsor.
+  </p>
+</section>
 
-Welcome to your new app.
+<section class="home-categories">
+  <h2>Choose a pet type</h2>
+
+  <div class="category-grid">
+    @foreach (var category in petCategories)
+    {
+      <NavLink class="category-card" href="@category.Route">
+        <div class="category-icon">@category.Icon</div>
+        <h3>@category.Name</h3>
+        <p>@category.Description</p>
+      </NavLink>
+    }
+  </div>
+</section>
+
+@code {
+  private List<PetCategory> petCategories = new()
+    {
+        new PetCategory { Name = "Dogs", Route = "/petdisplay/dogs", Icon = "🐶", Description = "Friendly, loyal, and ready for a home." },
+        new PetCategory { Name = "Cats", Route = "/petdisplay/cats", Icon = "🐱", Description = "Curious, calm, and full of personality." },
+        new PetCategory { Name = "Dragons", Route = "/petdisplay/dragons", Icon = "🐉", Description = "Magical companions with fiery charm." },
+        new PetCategory { Name = "Unicorns", Route = "/petdisplay/unicorns", Icon = "🦄", Description = "Rare, graceful, and full of wonder." },
+        new PetCategory { Name = "Birds", Route = "/petdisplay/birds", Icon = "🐦", Description = "Bright, social, and fun to watch." },
+        new PetCategory { Name = "Elephants", Route = "/petdisplay/elephants", Icon = "🐘", Description = "Gentle giants with big hearts." }
+    };
+}
