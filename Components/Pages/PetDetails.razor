@@ -1,76 +1,88 @@
-@page "/petdisplay/{category}"
+@page "/pet/{id:int}"
 @using PetStore.Models
 
-<PageTitle>Pets</PageTitle>
+<PageTitle>Pet Details</PageTitle>
 
-<h1>@PageTitleText</h1>
-
-@if (filteredPets.Count == 0)
+@if (selectedPet is null)
 {
-  <p>No pets found in this category.</p>
+  <p>Pet not found.</p>
 }
 else
 {
-  <div class="category-grid">
-    @foreach (var pet in filteredPets)
-    {
-      <NavLink class="category-card" href="@($"/pet/{pet.Id}")">
+  <section class="pet-details">
 
-        <div class="category-icon">
-          @pet.ImageUrl
+    <div class="pet-icon">@selectedPet.ImageUrl</div>
+
+    <h1>@selectedPet.Name</h1>
+
+    <p><strong>Category:</strong> @selectedPet.Category</p>
+    <p><strong>Age:</strong> @selectedPet.Age</p>
+
+    <p>@selectedPet.Description</p>
+
+    @if (!isSignedIn)
+    {
+      <div class="pet-help-box">
+
+        <p>Please sign in if you'd like to help @selectedPet.Name.</p>
+
+        <NavLink class="signin-button" href="/signin">
+          Sign In
+        </NavLink>
+
+      </div>
+    }
+    else
+    {
+      <div class="pet-help-box">
+
+        <h3>How would you like to help @selectedPet.Name?</h3>
+
+        <div class="help-buttons">
+
+          <button class="help-button">Adopt</button>
+
+          <button class="help-button">Foster</button>
+
+          <button class="help-button">Sponsor</button>
+
         </div>
 
-        <h3>@pet.Name</h3>
-
-        <p>@pet.Description</p>
-
-        <p><strong>Age:</strong> @pet.Age</p>
-
-      </NavLink>
+      </div>
     }
-  </div>
+
+  </section>
 }
 
 @code {
-
   [Parameter]
-  public string? category { get; set; }
+  public int id { get; set; }
+
+  private Pet? selectedPet;
 
   private List<Pet> allPets = new()
     {
         new Pet { Id = 1, Name = "Max", Category = "dogs", Description = "A playful and loyal dog.", ImageUrl = "🐶", Age = 3 },
         new Pet { Id = 2, Name = "Bella", Category = "dogs", Description = "Loves long walks and treats.", ImageUrl = "🐶", Age
 = 2 },
-
         new Pet { Id = 3, Name = "Luna", Category = "cats", Description = "A calm cat who loves naps.", ImageUrl = "🐱", Age = 4
 },
         new Pet { Id = 4, Name = "Milo", Category = "cats", Description = "Curious and full of energy.", ImageUrl = "🐱", Age =
 1 },
-
         new Pet { Id = 5, Name = "Draco", Category = "dragons", Description = "A tiny dragon with a big personality.", ImageUrl
 = "🐉", Age = 100 },
-
         new Pet { Id = 6, Name = "Sparkle", Category = "unicorns", Description = "Gentle and magical.", ImageUrl = "🦄", Age = 7
 },
-
         new Pet { Id = 7, Name = "Sunny", Category = "birds", Description = "Bright and cheerful singer.", ImageUrl = "🐦", Age
 = 2 },
-
         new Pet { Id = 8, Name = "Daisy", Category = "elephants", Description = "A kind giant with a sweet nature.", ImageUrl =
 "🐘", Age = 12 }
     };
 
-  private List<Pet> filteredPets = new();
-
-  private string PageTitleText =>
-      string.IsNullOrWhiteSpace(category)
-      ? "Pets"
-      : char.ToUpper(category[0]) + category.Substring(1);
+  bool isSignedIn = false; // Replace with real authentication logic in a future update
 
   protected override void OnParametersSet()
   {
-    filteredPets = allPets
-        .Where(p => p.Category.Equals(category, StringComparison.OrdinalIgnoreCase))
-        .ToList();
+    selectedPet = allPets.FirstOrDefault(p => p.Id == id);
   }
 }

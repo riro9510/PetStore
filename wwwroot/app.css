@@ -165,3 +165,62 @@ main {
 .pets-menu:hover .pets-list {
     display: flex;
 }
+
+.pet-details {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 2rem;
+}
+
+.pet-icon {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+}
+
+.pet-help-box {
+    margin-top: 2rem;
+    padding: 1.25rem;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+}
+
+.signin-button {
+    display: inline-block;
+    margin-top: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    background-color: #2563eb;
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.signin-button:hover {
+    background-color: #1d4ed8;
+}
+
+.help-buttons {
+    margin-top: 1rem;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.help-button {
+    padding: 0.7rem 1.2rem;
+    border-radius: 10px;
+    border: none;
+    background-color: #2563eb;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.help-button:hover {
+    background-color: #1d4ed8;
+}
