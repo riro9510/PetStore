@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PetStore.Components;
 using PetStore.Data;
+using PetStore.Services;
 using PetStore.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddDbContext<PetStoreContext>(options =>
+    options.UseSqlite("Data Source=petstore.db"));
+
+builder.Services.AddScoped<PetService>();
+
 builder.Services.AddCascadingAuthenticationState();
 
 var app = builder.Build();
@@ -39,6 +45,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -53,5 +60,11 @@ app.MapStaticAssets();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<PetStoreContext>();
+    db.Database.EnsureCreated();
+}
 
 app.Run();
