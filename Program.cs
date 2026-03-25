@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PetStore.Components;
-using Microsoft.EntityFrameworkCore;
 using PetStore.Data;
 using PetStore.Services;
 using PetStore.Models;
