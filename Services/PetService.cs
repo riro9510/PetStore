@@ -33,4 +33,21 @@ public class PetService
   {
     return _context.Pets.FirstOrDefault(p => p.Id == id);
   }
+
+  public void AddPet(Pet pet)
+  {
+    _context.Pets.Add(pet);
+    _context.SaveChanges();
+  }
+
+  public void DeletePet(int id)
+  {
+    var pet = _context.Pets.FirstOrDefault(p => p.Id == id);
+
+    if (pet != null)
+    {
+      _context.Pets.Remove(pet);
+      _context.SaveChanges();
+    }
+  }
 }
