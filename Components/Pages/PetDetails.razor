@@ -1,6 +1,8 @@
 @page "/pet/{id:int}"
 @using PetStore.Models
 @using PetStore.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject PetService PetService
 
 <PageTitle>Pet Details</PageTitle>
@@ -20,25 +22,28 @@ else
     <p><strong>Age:</strong> @selectedPet.Age</p>
     <p>@selectedPet.Description</p>
 
-    @if (!isSignedIn)
-    {
-      <div class="pet-help-box">
-        <p>Please sign in if you'd like to help @selectedPet.Name.</p>
-        <NavLink class="signin-button" href="/signin">Sign In</NavLink>
-      </div>
-    }
-    else
-    {
-      <div class="pet-help-box">
-        <h3>How would you like to help @selectedPet.Name?</h3>
+<AuthorizeView>
 
-        <div class="help-buttons">
-          <button class="help-button">Adopt</button>
-          <button class="help-button">Foster</button>
-          <button class="help-button">Sponsor</button>
+      <NotAuthorized>
+        <div class="pet-help-box">
+          <p>Please sign in if you'd like to help @selectedPet.Name.</p>
+          <NavLink class="signin-button" href="/signin">Sign In</NavLink>
         </div>
-      </div>
-    }
+      </NotAuthorized>
+
+      <Authorized>
+        <div class="pet-help-box">
+          <h3>How would you like to help @selectedPet.Name?</h3>
+
+          <div class="help-buttons">
+            <button class="help-button">Adopt</button>
+            <button class="help-button">Foster</button>
+            <button class="help-button">Sponsor</button>
+          </div>
+        </div>
+      </Authorized>
+
+    </AuthorizeView>
   </section>
 }
 
@@ -47,7 +52,6 @@ else
   public int id { get; set; }
 
   private Pet? selectedPet;
-  bool isSignedIn = false;
 
   protected override void OnParametersSet()
   {
