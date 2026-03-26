@@ -1,5 +1,92 @@
 @page "/about"
+@rendermode InteractiveServer
 
 <PageTitle>About Us</PageTitle>
 
 <h1>About Pawsitive Friends</h1>
+
+<p class="about-text">
+  We are a non-profit organization that has partnered with shelters worldwide to bring
+  attention to animals in need of love, care, and a forever home. Our mission is to
+  connect people with shelters and help shine a light on animals waiting for a second chance.
+</p>
+
+<div class="card-grid">
+  @foreach (var shelter in shelters)
+  {
+    <div class="flip-card" @onclick="() => shelter.IsFlipped = !shelter.IsFlipped">
+      <div class="flip-card-inner @(shelter.IsFlipped ? "flipped" : "")">
+                
+        <div class="flip-card-front">
+          <h3>@shelter.Name</h3>
+          <p>Click to view shelter info</p>
+        </div>
+
+        <div class="flip-card-back">
+          <h3>@shelter.Name</h3>
+          <p><strong>Animal Specialty:</strong> @shelter.Specialty</p>
+          <p><strong>Location:</strong> @shelter.Location</p>
+          <p><strong>Email:</strong> @shelter.Email</p>
+        </div>
+
+      </div>
+    </div>
+  }
+</div>
+
+@code {
+  private List<ShelterCard> shelters = new()
+    {
+        new ShelterCard
+        {
+            Name = "Golden Paws Rescue",
+            Specialty = "Dogs",
+            Location = "Pennsylvania, USA",
+            Email = "contact@goldenpawsrescue.org"
+        },
+        new ShelterCard
+        {
+            Name = "Whisker Haven",
+            Specialty = "Cats",
+            Location = "Toronto, Canada",
+            Email = "hello@whiskerhaven.org"
+        },
+        new ShelterCard
+        {
+            Name = "Safe Wings Sanctuary",
+            Specialty = "Birds",
+            Location = "Sydney, Australia",
+            Email = "info@safewingssanctuary.org"
+        },
+        new ShelterCard
+        {
+            Name = "Cloud in the Sky",
+            Specialty = "Fantasy",
+            Location = "Mérida, Venezuela",
+            Email = "support@cloudinthesky.org"
+        },
+        new ShelterCard
+        {
+            Name = "Wild Heart Refuge",
+            Specialty = "Exotic Animals",
+            Location = "Cape Town, South Africa",
+            Email = "team@wildheartrefuge.org"
+        },
+        new ShelterCard
+        {
+            Name = "Hope Tails Shelter",
+            Specialty = "Small Animals",
+            Location = "León, Mexico",
+            Email = "care@hopetailsshelter.org"
+        }
+    };
+
+  public class ShelterCard
+  {
+    public string Name { get; set; } = "";
+    public string Specialty { get; set; } = "";
+    public string Location { get; set; } = "";
+    public string Email { get; set; } = "";
+    public bool IsFlipped { get; set; }
+  }
+}
