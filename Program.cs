@@ -29,11 +29,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddDbContext<PetStoreContext>(options =>
-    options.UseSqlite("Data Source=petstore.db"));
-
 builder.Services.AddScoped<PetService>();
-
 builder.Services.AddCascadingAuthenticationState();
 
 var app = builder.Build();
@@ -51,7 +47,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAntiforgery();           
+app.UseAntiforgery();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -64,7 +60,7 @@ app.MapRazorComponents<App>()
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<PetStoreContext>();
-    db.Database.EnsureCreated();
+    db.Database.Migrate();
 }
 
 app.Run();
