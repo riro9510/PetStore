@@ -23,19 +23,56 @@
 
 <hr />
 
+@if (editCategory is not null)
+{
+  <h3>Edit Category</h3>
+
+  <EditForm Model="editCategory" OnValidSubmit="SaveEdit" FormName="EditCategoryForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+      <label>Name:</label>
+      <InputText @bind-Value="editCategory.Name" />
+    </div>
+
+    <button type="submit">Save Changes</button>
+    <button type="button" @onclick="CancelEdit">Cancel</button>
+  </EditForm>
+
+  <hr />
+}
+
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+  <p style="color:red;">@errorMessage</p>
+}
+
 <h3>Current Categories</h3>
 
 <table class="table">
   <thead>
     <tr>
       <th>Name</th>
+      <th>Actions</th>
     </tr>
   </thead>
+
   <tbody>
     @foreach (var category in categories)
     {
       <tr>
-        <td>@category.Name</td>
+        <td>@FormatCategoryName(category.Name)</td>
+
+        <td>
+          <button type="button" class="btn btn-warning me-2" @onclick="() => StartEdit(category)">
+            Edit
+          </button>
+
+          <button type="button" class="btn btn-danger" @onclick="() => DeleteCategory(category.Id)">
+            Delete
+          </button>
+        </td>
       </tr>
     }
   </tbody>
@@ -45,7 +82,11 @@
   [SupplyParameterFromForm]
   private PetCategory newCategory { get; set; } = new();
 
+  [SupplyParameterFromForm]
+  private PetCategory? editCategory { get; set; }
+
   private List<PetCategory> categories = new();
+  private string errorMessage = "";
 
   protected override void OnInitialized()
   {
@@ -59,8 +100,67 @@
 
   private void AddCategory()
   {
+    errorMessage = "";
+    newCategory.Name = newCategory.Name.Trim().ToLower();
+
     PetService.AddCategory(newCategory);
     newCategory = new PetCategory();
     LoadCategories();
+  }
+
+  private void StartEdit(PetCategory category)
+  {
+    errorMessage = "";
+
+    editCategory = new PetCategory
+    {
+      Id = category.Id,
+      Name = category.Name,
+      Description = category.Description,
+      Icon = category.Icon,
+      Route = category.Route
+    };
+  }
+
+  private void SaveEdit()
+  {
+    if (editCategory is not null)
+    {
+      errorMessage = "";
+      editCategory.Name = editCategory.Name.Trim().ToLower();
+
+      PetService.UpdateCategory(editCategory);
+      editCategory = null;
+      LoadCategories();
+    }
+  }
+
+  private void CancelEdit()
+  {
+    editCategory = null;
+    errorMessage = "";
+  }
+
+  private void DeleteCategory(int id)
+  {
+    bool deleted = PetService.DeleteCategory(id);
+
+    if (!deleted)
+    {
+      errorMessage = "Cannot delete this category because pets are still using it.";
+    }
+    else
+    {
+      errorMessage = "";
+      LoadCategories();
+    }
+  }
+
+  private string FormatCategoryName(string name)
+  {
+    if (string.IsNullOrWhiteSpace(name))
+      return "";
+
+    return char.ToUpper(name[0]) + name.Substring(1).ToLower();
   }
 }

@@ -25,8 +25,8 @@ public class PetService
     }
 
     return _context.Pets
-        .Where(p => p.Category.ToLower() == category.ToLower())
-        .ToList();
+      .Where(p => p.Category.ToLower() == category.ToLower())
+      .ToList();
   }
 
   public Pet? GetPetById(int id)
@@ -36,6 +36,8 @@ public class PetService
 
   public void AddPet(Pet pet)
   {
+    pet.Category = pet.Category.Trim().ToLower();
+
     _context.Pets.Add(pet);
     _context.SaveChanges();
   }
@@ -47,7 +49,7 @@ public class PetService
     if (pet != null)
     {
       pet.Name = updatedPet.Name;
-      pet.Category = updatedPet.Category;
+      pet.Category = updatedPet.Category.Trim().ToLower();
       pet.Breed = updatedPet.Breed;
       pet.Age = updatedPet.Age;
       pet.Description = updatedPet.Description;
@@ -75,7 +77,64 @@ public class PetService
 
   public void AddCategory(PetCategory category)
   {
-    _context.PetCategories.Add(category);
+    category.Name = category.Name.Trim().ToLower();
+    category.Route = category.Route?.Trim().ToLower() ?? "";
+
+    bool exists = _context.PetCategories.Any(c => c.Name == category.Name);
+
+    if (!exists)
+    {
+      _context.PetCategories.Add(category);
+      _context.SaveChanges();
+    }
+  }
+
+  public bool DeleteCategory(int id)
+  {
+    var category = _context.PetCategories.FirstOrDefault(c => c.Id == id);
+
+    if (category == null)
+    {
+      return false;
+    }
+
+    bool categoryInUse = _context.Pets.Any(p => p.Category.ToLower() == category.Name.ToLower());
+
+    if (categoryInUse)
+    {
+      return false;
+    }
+
+    _context.PetCategories.Remove(category);
     _context.SaveChanges();
+
+    return true;
+  }
+
+  public void UpdateCategory(PetCategory updatedCategory)
+  {
+    var category = _context.PetCategories.FirstOrDefault(c => c.Id == updatedCategory.Id);
+
+    if (category != null)
+    {
+      string oldName = category.Name;
+      string newName = updatedCategory.Name.Trim().ToLower();
+
+      category.Name = newName;
+      category.Description = updatedCategory.Description;
+      category.Icon = updatedCategory.Icon;
+      category.Route = updatedCategory.Route?.Trim().ToLower() ?? "";
+
+      var petsToUpdate = _context.Pets
+        .Where(p => p.Category.ToLower() == oldName.ToLower())
+        .ToList();
+
+      foreach (var pet in petsToUpdate)
+      {
+        pet.Category = newName;
+      }
+
+      _context.SaveChanges();
+    }
   }
 }
