@@ -20,7 +20,7 @@
     {
       <NavLink class="category-card" href="@($"/petdisplay/{GetCategoryRoute(category)}")">
         <div class="category-icon">@category.Icon</div>
-        <h3>@category.Name</h3>
+        <h3>@(char.ToUpper(category.Name[0]) + category.Name.Substring(1))</h3>
         <p>@category.Description</p>
       </NavLink>
     }
@@ -42,5 +42,13 @@
       return category.Route;
 
     return category.Name.ToLower();
+  }
+
+  private string FormatName(string name)
+  {
+    if (string.IsNullOrWhiteSpace(name))
+      return "";
+
+    return char.ToUpper(name[0]) + name.Substring(1).ToLower();
   }
 }

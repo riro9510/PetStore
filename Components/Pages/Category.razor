@@ -3,43 +3,36 @@
 
 @using PetStore.Models
 @using PetStore.Services
-@using Microsoft.AspNetCore.Components
-@using Microsoft.AspNetCore.Components.Forms
 @inject PetService PetService
 
 <h1>Category Management</h1>
 
-<EditForm Model="newCategory" OnValidSubmit="AddCategory" FormName="AddCategoryForm">
+<EditForm Model="newCategory" OnValidSubmit="AddCategory">
   <DataAnnotationsValidator />
-  <ValidationSummary />
 
-  <div>
-    <label>Name:</label>
-    <InputText @bind-Value="newCategory.Name" />
+  <div class="mb-3">
+    <label class="form-label">Name</label>
+    <InputText class="form-control" @bind-Value="newCategory.Name" />
+    <ValidationMessage class="text-danger" For="@(() => newCategory.Name)" />
   </div>
 
-  <button type="submit">Add Category</button>
+  <button type="submit" class="btn btn-primary">Add Category</button>
 </EditForm>
 
 <hr />
 
 @if (!string.IsNullOrWhiteSpace(errorMessage))
 {
-  <p style="color:red;">@errorMessage</p>
+  <p class="text-danger">@errorMessage</p>
 }
 
 <h3>Current Categories</h3>
-
-@if (!string.IsNullOrWhiteSpace(errorMessage))
-{
-  <p style="color:red;">@errorMessage</p>
-}
 
 <table class="table">
   <thead>
     <tr>
       <th>Name</th>
-      <th>Actions</th>
+      <th style="width:200px;">Actions</th>
     </tr>
   </thead>
 
@@ -47,18 +40,18 @@
     @foreach (var category in categories)
     {
       <tr>
-        @if (editCategory is not null && editCategory.Id == category.Id)
+        @if (editCategory?.Id == category.Id)
         {
           <td>
-            <InputText @bind-Value="editCategory.Name" />
+            <InputText class="form-control" @bind-Value="editCategory.Name" />
           </td>
 
           <td>
-            <button type="button" class="btn btn-success me-2" @onclick="SaveEdit">
+            <button class="btn btn-success me-2" @onclick="SaveEdit">
               Save
             </button>
 
-            <button type="button" class="btn btn-secondary" @onclick="CancelEdit">
+            <button class="btn btn-secondary" @onclick="CancelEdit">
               Cancel
             </button>
           </td>
@@ -68,11 +61,11 @@
           <td>@FormatCategoryName(category.Name)</td>
 
           <td>
-            <button type="button" class="btn btn-warning me-2" @onclick="() => StartEdit(category)">
+            <button class="btn btn-warning me-2" @onclick="() => StartEdit(category)">
               Edit
             </button>
 
-            <button type="button" class="btn btn-danger" @onclick="() => DeleteCategory(category.Id)">
+            <button class="btn btn-danger" @onclick="() => DeleteCategory(category.Id)">
               Delete
             </button>
           </td>
@@ -83,11 +76,9 @@
 </table>
 
 @code {
-  [SupplyParameterFromForm]
-  private PetCategory newCategory { get; set; } = new();
 
-  [SupplyParameterFromForm]
-  private PetCategory? editCategory { get; set; }
+  private PetCategory newCategory = new();
+  private PetCategory? editCategory;
 
   private List<PetCategory> categories = new();
   private string errorMessage = "";
@@ -105,10 +96,12 @@
   private void AddCategory()
   {
     errorMessage = "";
+
     newCategory.Name = newCategory.Name.Trim().ToLower();
 
     PetService.AddCategory(newCategory);
-    newCategory = new PetCategory();
+
+    newCategory = new();
     LoadCategories();
   }
 
@@ -128,15 +121,17 @@
 
   private void SaveEdit()
   {
-    if (editCategory is not null)
-    {
-      errorMessage = "";
-      editCategory.Name = editCategory.Name.Trim().ToLower();
+    if (editCategory == null) return;
 
-      PetService.UpdateCategory(editCategory);
-      editCategory = null;
-      LoadCategories();
-    }
+    errorMessage = "";
+
+    editCategory.Name = editCategory.Name.Trim().ToLower();
+
+    PetService.UpdateCategory(editCategory);
+
+    editCategory = null;
+
+    LoadCategories();
   }
 
   private void CancelEdit()
