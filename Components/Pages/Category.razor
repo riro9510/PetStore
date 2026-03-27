@@ -1,0 +1,66 @@
+@page "/management/categories"
+@rendermode InteractiveServer
+
+@using PetStore.Models
+@using PetStore.Services
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Forms
+@inject PetService PetService
+
+<h1>Category Management</h1>
+
+<EditForm Model="newCategory" OnValidSubmit="AddCategory" FormName="AddCategoryForm">
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
+  <div>
+    <label>Name:</label>
+    <InputText @bind-Value="newCategory.Name" />
+  </div>
+
+  <button type="submit">Add Category</button>
+</EditForm>
+
+<hr />
+
+<h3>Current Categories</h3>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var category in categories)
+    {
+      <tr>
+        <td>@category.Name</td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+@code {
+  [SupplyParameterFromForm]
+  private PetCategory newCategory { get; set; } = new();
+
+  private List<PetCategory> categories = new();
+
+  protected override void OnInitialized()
+  {
+    LoadCategories();
+  }
+
+  private void LoadCategories()
+  {
+    categories = PetService.GetAllCategories();
+  }
+
+  private void AddCategory()
+  {
+    PetService.AddCategory(newCategory);
+    newCategory = new PetCategory();
+    LoadCategories();
+  }
+}

@@ -7,7 +7,9 @@
 @inject NavigationManager NavigationManager
 
 <h1>Pet Management</h1>
+
 <button class="btn btn-success me-2" type="button" @onclick="CreatePet">Add Pet</button>
+<button type="button" @onclick="AddCategory">Manage Categories</button>
 
 <table class="table">
   <thead>
@@ -63,5 +65,10 @@
   {
     PetService.DeletePet(id);
     LoadPets();
+  }
+
+  private void AddCategory()
+  {
+    NavigationManager.NavigateTo("/management/categories");
   }
 }

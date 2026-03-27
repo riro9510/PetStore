@@ -26,7 +26,13 @@ else
 
     <div>
       <label>Category:</label>
-      <InputText @bind-Value="editPet.Category" />
+      <InputSelect @bind-Value="editPet.Category">
+        <option value="">Select a category</option>
+        @foreach (var category in categories)
+        {
+          <option value="@category.Name">@category.Name</option>
+        }
+      </InputSelect>
     </div>
 
     <div>
@@ -61,8 +67,12 @@ else
   [SupplyParameterFromForm]
   private Pet? editPet { get; set; }
 
+  private List<PetCategory> categories = new();
+
   protected override void OnInitialized()
   {
+    categories = PetService.GetAllCategories();
+
     var pet = PetService.GetPetById(Id);
 
     if (pet is not null)
