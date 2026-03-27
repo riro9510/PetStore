@@ -15,13 +15,13 @@
 
   <div>
     <label>Name:</label>
-    <InputText @bind-Value="newPet.Name" />
+    <InputText class="form-control" @bind-Value="newPet.Name" />
     <ValidationMessage For="@(() => newPet.Name)" />
   </div>
 
   <div>
     <label>Category:</label>
-    <InputSelect @bind-Value="newPet.Category">
+    <InputSelect class="form-control" @bind-Value="newPet.Category">
       <option value="">Select a category</option>
       @foreach (var category in categories)
       {
@@ -33,13 +33,13 @@
 
   <div>
     <label>Breed:</label>
-    <InputText @bind-Value="newPet.Breed" />
+    <InputText class="form-control" @bind-Value="newPet.Breed" />
     <ValidationMessage For="@(() => newPet.Breed)" />
   </div>
 
   <div>
     <label>Age:</label>
-    <InputNumber @bind-Value="newPet.Age" />
+    <InputNumber class="form-control" @bind-Value="newPet.Age" />
     <ValidationMessage For="@(() => newPet.Age)" />
   </div>
   <div>
