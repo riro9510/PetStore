@@ -11,11 +11,12 @@
 
 <EditForm Model="newPet" OnValidSubmit="SavePet" FormName="AddPetForm">
   <DataAnnotationsValidator />
-  <ValidationSummary />
+
 
   <div>
     <label>Name:</label>
     <InputText @bind-Value="newPet.Name" />
+    <ValidationMessage For="@(() => newPet.Name)" />
   </div>
 
   <div>
@@ -27,18 +28,20 @@
         <option value="@category.Name">@category.Name</option>
       }
     </InputSelect>
+    <ValidationMessage For="@(() => newPet.Category)" />
   </div>
 
   <div>
     <label>Breed:</label>
     <InputText @bind-Value="newPet.Breed" />
+    <ValidationMessage For="@(() => newPet.Breed)" />
   </div>
 
   <div>
     <label>Age:</label>
     <InputNumber @bind-Value="newPet.Age" />
+    <ValidationMessage For="@(() => newPet.Age)" />
   </div>
-
   <div>
     <label>Description:</label>
     <InputText @bind-Value="newPet.Description" />
@@ -46,7 +49,7 @@
 
   <div>
     <label>Image URL:</label>
-    <InputText @bind-Value="newPet.ImageUrl" placeholder="Leave blank for default image" />
+    <InputText @bind-Value="newPet.ImageUrl" placeholder="Default used if empty" />
   </div>
 
   <button type="submit">Save</button>

@@ -17,11 +17,12 @@ else
 {
   <EditForm Model="editPet" OnValidSubmit="SavePet" FormName="EditPetForm">
     <DataAnnotationsValidator />
-    <ValidationSummary />
+
 
     <div>
       <label>Name:</label>
       <InputText @bind-Value="editPet.Name" />
+      <ValidationMessage For="@(() => editPet.Name)" />
     </div>
 
     <div>
@@ -33,16 +34,19 @@ else
           <option value="@category.Name">@category.Name</option>
         }
       </InputSelect>
+      <ValidationMessage For="@(() => editPet.Category)" />
     </div>
 
     <div>
       <label>Breed:</label>
       <InputText @bind-Value="editPet.Breed" />
+      <ValidationMessage For="@(() => editPet.Breed)" />
     </div>
 
     <div>
       <label>Age:</label>
       <InputNumber @bind-Value="editPet.Age" />
+      <ValidationMessage For="@(() => editPet.Age)" />
     </div>
 
     <div>
