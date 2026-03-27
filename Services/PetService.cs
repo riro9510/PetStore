@@ -40,6 +40,23 @@ public class PetService
     _context.SaveChanges();
   }
 
+  public void UpdatePet(Pet updatedPet)
+  {
+    var pet = _context.Pets.FirstOrDefault(p => p.Id == updatedPet.Id);
+
+    if (pet != null)
+    {
+      pet.Name = updatedPet.Name;
+      pet.Category = updatedPet.Category;
+      pet.Breed = updatedPet.Breed;
+      pet.Age = updatedPet.Age;
+      pet.Description = updatedPet.Description;
+      pet.ImageUrl = updatedPet.ImageUrl;
+
+      _context.SaveChanges();
+    }
+  }
+
   public void DeletePet(int id)
   {
     var pet = _context.Pets.FirstOrDefault(p => p.Id == id);
@@ -49,5 +66,16 @@ public class PetService
       _context.Pets.Remove(pet);
       _context.SaveChanges();
     }
+  }
+
+  public List<PetCategory> GetAllCategories()
+  {
+    return _context.PetCategories.ToList();
+  }
+
+  public void AddCategory(PetCategory category)
+  {
+    _context.PetCategories.Add(category);
+    _context.SaveChanges();
   }
 }

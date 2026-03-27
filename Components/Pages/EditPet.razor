@@ -1,0 +1,96 @@
+@page "/management/edit/{id:int}"
+@rendermode InteractiveServer
+
+@using PetStore.Models
+@using PetStore.Services
+@using Microsoft.AspNetCore.Components.Forms
+@inject PetService PetService
+@inject NavigationManager NavigationManager
+
+<h1>Edit Pet</h1>
+
+@if (editPet is null)
+{
+  <p>Pet not found.</p>
+}
+else
+{
+  <EditForm Model="editPet" OnValidSubmit="SavePet" FormName="EditPetForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+      <label>Name:</label>
+      <InputText @bind-Value="editPet.Name" />
+    </div>
+
+    <div>
+      <label>Category:</label>
+      <InputText @bind-Value="editPet.Category" />
+    </div>
+
+    <div>
+      <label>Breed:</label>
+      <InputText @bind-Value="editPet.Breed" />
+    </div>
+
+    <div>
+      <label>Age:</label>
+      <InputNumber @bind-Value="editPet.Age" />
+    </div>
+
+    <div>
+      <label>Description:</label>
+      <InputText @bind-Value="editPet.Description" />
+    </div>
+
+    <div>
+      <label>Image URL:</label>
+      <InputText @bind-Value="editPet.ImageUrl" />
+    </div>
+
+    <button type="submit">Save Changes</button>
+    <button type="button" @onclick="Cancel">Cancel</button>
+  </EditForm>
+}
+
+@code {
+  [Parameter]
+  public int Id { get; set; }
+
+  [SupplyParameterFromForm]
+  private Pet? editPet { get; set; }
+
+  protected override void OnInitialized()
+  {
+    var pet = PetService.GetPetById(Id);
+
+    if (pet is not null)
+    {
+      editPet = new Pet
+      {
+        Id = pet.Id,
+        Name = pet.Name,
+        Category = pet.Category,
+        Breed = pet.Breed,
+        Age = pet.Age,
+        Description = pet.Description,
+        ImageUrl = pet.ImageUrl
+      };
+    }
+  }
+
+  private void SavePet()
+  {
+    if (editPet is not null)
+    {
+      PetService.UpdatePet(editPet);
+      NavigationManager.NavigateTo("/management");
+    }
+  }
+
+  private void Cancel()
+  {
+    NavigationManager.NavigateTo("/management");
+  }
+}

@@ -1,31 +1,13 @@
 @page "/management"
+@rendermode InteractiveServer
 
 @using PetStore.Models
 @using PetStore.Services
-@using Microsoft.AspNetCore.Components.Forms
 @inject PetService PetService
+@inject NavigationManager NavigationManager
 
 <h1>Pet Management</h1>
-
-<h3>Add Pet</h3>
-
-<EditForm Model="newPet" OnValidSubmit="AddPet" FormName="AddPetForm">
-  <DataAnnotationsValidator />
-  <ValidationSummary />
-
-  <InputText @bind-Value="newPet.Name" placeholder="Name" />
-  <InputText @bind-Value="newPet.Category" placeholder="Category" />
-  <InputText @bind-Value="newPet.Breed" placeholder="Breed" />
-  <InputNumber @bind-Value="newPet.Age" />
-  <InputText @bind-Value="newPet.ImageUrl" placeholder="Image URL" />
-  <InputText @bind-Value="newPet.Description" placeholder="Description" />
-
-  <button type="submit">Add Pet</button>
-</EditForm>
-
-<hr />
-
-<h3>All Pets</h3>
+<button class="btn btn-success me-2" type="button" @onclick="CreatePet">Add Pet</button>
 
 <table class="table">
   <thead>
@@ -37,7 +19,6 @@
       <th>Actions</th>
     </tr>
   </thead>
-
   <tbody>
     @foreach (var pet in pets)
     {
@@ -47,7 +28,8 @@
         <td>@pet.Breed</td>
         <td>@pet.Age</td>
         <td>
-          <button @onclick="() => DeletePet(pet.Id)">Delete</button>
+          <button class="btn btn-success me-2" type="button" @onclick="() => EditPet(pet.Id)">Edit</button>
+          <button class="btn btn-danger me-2" type="button" @onclick="() => DeletePet(pet.Id)">Delete</button>
         </td>
       </tr>
     }
@@ -57,24 +39,29 @@
 @code {
   private List<Pet> pets = new();
 
-  [SupplyParameterFromForm]
-  private Pet newPet { get; set; } = new();
-
   protected override void OnInitialized()
+  {
+    LoadPets();
+  }
+
+  private void LoadPets()
   {
     pets = PetService.GetAllPets();
   }
 
-  private void AddPet()
+  private void CreatePet()
   {
-    PetService.AddPet(newPet);
-    pets = PetService.GetAllPets();
-    newPet = new Pet();
+    NavigationManager.NavigateTo("/management/add");
+  }
+
+  private void EditPet(int id)
+  {
+    NavigationManager.NavigateTo($"/management/edit/{id}");
   }
 
   private void DeletePet(int id)
   {
     PetService.DeletePet(id);
-    pets = PetService.GetAllPets();
+    LoadPets();
   }
 }

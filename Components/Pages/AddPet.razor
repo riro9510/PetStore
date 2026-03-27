@@ -1,0 +1,77 @@
+@page "/management/add"
+@rendermode InteractiveServer
+
+@using PetStore.Models
+@using PetStore.Services
+@using Microsoft.AspNetCore.Components.Forms
+@inject PetService PetService
+@inject NavigationManager NavigationManager
+
+<h1>Add Pet</h1>
+
+<EditForm Model="newPet" OnValidSubmit="SavePet" FormName="AddPetForm">
+  <DataAnnotationsValidator />
+  <ValidationSummary />
+
+  <div>
+    <label>Name:</label>
+    <InputText @bind-Value="newPet.Name" />
+  </div>
+
+  <div>
+    <label>Category:</label>
+    <InputSelect @bind-Value="newPet.Category">
+      <option value="">Select a category</option>
+      @foreach (var category in categories)
+      {
+        <option value="@category.Name">@category.Name</option>
+      }
+    </InputSelect>
+  </div>
+
+  <div>
+    <label>Breed:</label>
+    <InputText @bind-Value="newPet.Breed" />
+  </div>
+
+  <div>
+    <label>Age:</label>
+    <InputNumber @bind-Value="newPet.Age" />
+  </div>
+
+  <div>
+    <label>Description:</label>
+    <InputText @bind-Value="newPet.Description" />
+  </div>
+
+  <div>
+    <label>Image URL:</label>
+    <InputText @bind-Value="newPet.ImageUrl" />
+  </div>
+
+  <button type="submit">Save</button>
+  <button type="button" @onclick="Cancel">Cancel</button>
+</EditForm>
+
+@code {
+  [SupplyParameterFromForm]
+  private Pet newPet { get; set; } = new();
+
+  private List<PetCategory> categories = new();
+
+  protected override void OnInitialized()
+  {
+    categories = PetService.GetAllCategories();
+  }
+
+  private void SavePet()
+  {
+    PetService.AddPet(newPet);
+    NavigationManager.NavigateTo("/management");
+  }
+
+  private void Cancel()
+  {
+    NavigationManager.NavigateTo("/management");
+  }
+}
