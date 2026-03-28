@@ -1,0 +1,75 @@
+@page "/management"
+@rendermode InteractiveServer
+@attribute [Authorize(Roles = "Admin")]
+
+@using PetStore.Models
+@using PetStore.Services
+@inject PetService PetService
+@inject NavigationManager NavigationManager
+
+<h1>Pet Management</h1>
+
+<button type="button" @onclick="CreatePet">Add Pet</button>
+<button type="button" @onclick="AddCategory">Manage Categories</button>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Breed</th>
+      <th>Age</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var pet in pets)
+    {
+      <tr>
+        <td>@pet.Name</td>
+        <td>@pet.Category</td>
+        <td>@pet.Breed</td>
+        <td>@pet.Age</td>
+        <td>
+          <button class="btn btn-success me-2" type="button" @onclick="() => EditPet(pet.Id)">Edit</button>
+          <button class="btn btn-danger me-2" type="button" @onclick="() => DeletePet(pet.Id)">Delete</button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+@code {
+  private List<Pet> pets = new();
+
+  protected override void OnInitialized()
+  {
+    LoadPets();
+  }
+
+  private void LoadPets()
+  {
+    pets = PetService.GetAllPets();
+  }
+
+  private void CreatePet()
+  {
+    NavigationManager.NavigateTo("/management/add");
+  }
+
+  private void EditPet(int id)
+  {
+    NavigationManager.NavigateTo($"/management/edit/{id}");
+  }
+
+  private void DeletePet(int id)
+  {
+    PetService.DeletePet(id);
+    LoadPets();
+  }
+
+  private void AddCategory()
+  {
+    NavigationManager.NavigateTo("/management/categories");
+  }
+}

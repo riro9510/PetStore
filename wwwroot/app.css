@@ -328,3 +328,13 @@ h1 {
 .flip-card-back h3 {
     margin-bottom: 1rem;
 }
+
+input.invalid,
+select.invalid {
+    border: 2px solid red;
+}
+
+.validation-message {
+    color: red;
+    size: 10px;
+}

@@ -1,0 +1,86 @@
+@page "/management/add"
+@rendermode InteractiveServer
+@attribute [Authorize(Roles = "Admin")]
+
+@using PetStore.Models
+@using PetStore.Services
+@using Microsoft.AspNetCore.Components.Forms
+@inject PetService PetService
+@inject NavigationManager NavigationManager
+
+<h1>Add Pet</h1>
+
+<EditForm Model="newPet" OnValidSubmit="SavePet" FormName="AddPetForm">
+  <DataAnnotationsValidator />
+
+
+  <div>
+    <label>Name:</label>
+    <InputText class="form-control" @bind-Value="newPet.Name" />
+    <ValidationMessage For="@(() => newPet.Name)" />
+  </div>
+
+  <div>
+    <label>Category:</label>
+    <InputSelect class="form-control" @bind-Value="newPet.Category">
+      <option value="">Select a category</option>
+      @foreach (var category in categories)
+      {
+        <option value="@category.Name">@category.Name</option>
+      }
+    </InputSelect>
+    <ValidationMessage For="@(() => newPet.Category)" />
+  </div>
+
+  <div>
+    <label>Breed:</label>
+    <InputText class="form-control" @bind-Value="newPet.Breed" />
+    <ValidationMessage For="@(() => newPet.Breed)" />
+  </div>
+
+  <div>
+    <label>Age:</label>
+    <InputNumber class="form-control" @bind-Value="newPet.Age" />
+    <ValidationMessage For="@(() => newPet.Age)" />
+  </div>
+  <div>
+    <label>Description:</label>
+    <InputText @bind-Value="newPet.Description" />
+  </div>
+
+  <div>
+    <label>Image URL:</label>
+    <InputText @bind-Value="newPet.ImageUrl" placeholder="Default used if empty" />
+  </div>
+
+  <button type="submit">Save</button>
+  <button type="button" @onclick="Cancel">Cancel</button>
+</EditForm>
+
+@code {
+  [SupplyParameterFromForm]
+  private Pet newPet { get; set; } = new();
+
+  private List<PetCategory> categories = new();
+
+  protected override void OnInitialized()
+  {
+    categories = PetService.GetAllCategories();
+  }
+
+  private void SavePet()
+  {
+    if (string.IsNullOrWhiteSpace(newPet.ImageUrl))
+    {
+      newPet.ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/unavailable.jpg";
+    }
+
+    PetService.AddPet(newPet);
+    NavigationManager.NavigateTo("/management");
+  }
+
+  private void Cancel()
+  {
+    NavigationManager.NavigateTo("/management");
+  }
+}

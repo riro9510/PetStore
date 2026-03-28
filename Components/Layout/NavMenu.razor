@@ -1,4 +1,8 @@
-﻿<nav class="nav-menu">
+﻿@using PetStore.Services
+@using PetStore.Models
+@inject PetService PetService
+
+<nav class="nav-menu">
 
     <NavLink href="/" Match="NavLinkMatch.All">
         Home
@@ -8,12 +12,12 @@
         <span>Pets</span>
 
         <div class="pets-list">
-            <NavLink href="/petdisplay/dogs">Dogs</NavLink>
-            <NavLink href="/petdisplay/cats">Cats</NavLink>
-            <NavLink href="/petdisplay/dragons">Dragons</NavLink>
-            <NavLink href="/petdisplay/unicorns">Unicorns</NavLink>
-            <NavLink href="/petdisplay/birds">Birds</NavLink>
-            <NavLink href="/petdisplay/elephants">Elephants</NavLink>
+            @foreach (var category in categories)
+            {
+                <NavLink href="@($"/petdisplay/{GetCategoryRoute(category)}")">
+                    @FormatCategoryName(category.Name)
+                </NavLink>
+            }
         </div>
     </div>
 
@@ -21,4 +25,38 @@
         About Us
     </NavLink>
 
+    <AuthorizeView Roles="Admin">
+        <Authorized>
+            <NavLink href="/management">
+                Update Animals
+            </NavLink>
+        </Authorized>
+    </AuthorizeView>
+
 </nav>
+
+@code {
+
+    private List<PetCategory> categories = new();
+
+    protected override void OnInitialized()
+    {
+        categories = PetService.GetAllCategories();
+    }
+
+    private string FormatCategoryName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return "";
+
+        return char.ToUpper(name[0]) + name.Substring(1).ToLower();
+    }
+
+    private string GetCategoryRoute(PetCategory category)
+    {
+        if (!string.IsNullOrWhiteSpace(category.Route))
+            return category.Route;
+
+        return category.Name.ToLower();
+    }
+}
