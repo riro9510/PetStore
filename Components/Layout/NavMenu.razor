@@ -25,17 +25,13 @@
         About Us
     </NavLink>
 
-    <NavLink href="/management">
-        Update Animals
-    </NavLink>
-
-    @* <AuthorizeView Roles="Admin">
+    <AuthorizeView Roles="Admin">
         <Authorized>
             <NavLink href="/management">
                 Update Animals
             </NavLink>
         </Authorized>
-    </AuthorizeView> *@
+    </AuthorizeView>
 
 </nav>
 

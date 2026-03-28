@@ -1,5 +1,6 @@
 @page "/management/add"
 @rendermode InteractiveServer
+@attribute [Authorize(Roles = "Admin")]
 
 @using PetStore.Models
 @using PetStore.Services
