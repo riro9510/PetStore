@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace PetStore.Migrations
 {
     /// <inheritdoc />
-    public partial class AuthPetDetail : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -61,14 +63,29 @@ namespace PetStore.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: false),
-                    Icon = table.Column<string>(type: "TEXT", nullable: false),
-                    Route = table.Column<string>(type: "TEXT", nullable: false)
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PetCategories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Pets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Category = table.Column<string>(type: "TEXT", nullable: false),
+                    Breed = table.Column<string>(type: "TEXT", nullable: false),
+                    Age = table.Column<int>(type: "INTEGER", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    ImageUrl = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pets", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -177,6 +194,28 @@ namespace PetStore.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "PetCategories",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "dogs" },
+                    { 2, "cats" },
+                    { 3, "dragons" },
+                    { 4, "unicorns" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Pets",
+                columns: new[] { "Id", "Age", "Breed", "Category", "Description", "ImageUrl", "Name" },
+                values: new object[,]
+                {
+                    { 1, 3, "Golden Retriever", "dogs", "Friendly, loyal, and ready for a home.", "https://raw.githubusercontent.com/vsyang/pet-images/main/goldenr.jpg", "Max" },
+                    { 2, 2, "Siamese", "cats", "Curious, calm, and full of personality.", "https://raw.githubusercontent.com/vsyang/pet-images/main/siamese.jpg", "Luna" },
+                    { 3, 100, "Mini Flame", "dragons", "Magical companion with fiery charm.", "https://raw.githubusercontent.com/vsyang/pet-images/main/toothless.jpg", "Toothless" },
+                    { 4, 5, "Silver Mane", "unicorns", "Rare, graceful, and full of wonder.", "https://raw.githubusercontent.com/vsyang/pet-images/main/unicorn.jpg", "Sparkle" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -235,6 +274,9 @@ namespace PetStore.Migrations
 
             migrationBuilder.DropTable(
                 name: "PetCategories");
+
+            migrationBuilder.DropTable(
+                name: "Pets");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
