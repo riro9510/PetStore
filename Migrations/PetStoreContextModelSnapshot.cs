@@ -312,25 +312,35 @@ namespace PetStore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Icon")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Route")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.ToTable("PetCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "dogs"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "cats"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "dragons"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "unicorns"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

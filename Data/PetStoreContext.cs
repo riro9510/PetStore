@@ -18,6 +18,7 @@ public class PetStoreContext : IdentityDbContext<ApplicationUser>
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     base.OnModelCreating(modelBuilder);
+
     modelBuilder.Entity<Pet>().HasData(
         new Pet
         {
@@ -60,6 +61,28 @@ public class PetStoreContext : IdentityDbContext<ApplicationUser>
           ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/unicorn.jpg"
         }
     );
-  }
 
+    modelBuilder.Entity<PetCategory>().HasData(
+        new PetCategory
+        {
+          Id = 1,
+          Name = "dogs"
+        },
+        new PetCategory
+        {
+          Id = 2,
+          Name = "cats"
+        },
+        new PetCategory
+        {
+          Id = 3,
+          Name = "dragons"
+        },
+        new PetCategory
+        {
+          Id = 4,
+          Name = "unicorns"
+        }
+    );
+  }
 }

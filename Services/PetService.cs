@@ -78,7 +78,6 @@ public class PetService
   public void AddCategory(PetCategory category)
   {
     category.Name = category.Name.Trim().ToLower();
-    category.Route = category.Name?.Trim().ToLower() ?? "";
 
     bool exists = _context.PetCategories.Any(c => c.Name == category.Name);
 
@@ -121,9 +120,6 @@ public class PetService
       string newName = updatedCategory.Name.Trim().ToLower();
 
       category.Name = newName;
-      category.Description = updatedCategory.Description;
-      category.Icon = updatedCategory.Icon;
-      category.Route = newName;
 
       var petsToUpdate = _context.Pets
           .Where(p => p.Category.ToLower() == oldName.ToLower())
