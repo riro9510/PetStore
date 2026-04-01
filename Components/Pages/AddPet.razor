@@ -21,15 +21,15 @@
   </div>
 
   <div>
-    <label>Category:</label>
-    <InputSelect class="form-control" @bind-Value="newPet.Category">
-      <option value="">Select a category</option>
-      @foreach (var category in categories)
+    <label>Type:</label>
+    <InputSelect class="form-control" @bind-Value="newPet.Type">
+      <option value="">Select a Type</option>
+      @foreach (var type in categories)
       {
-        <option value="@category.Name">@category.Name</option>
+        <option value="@type.Name">@type.Name</option>
       }
     </InputSelect>
-    <ValidationMessage For="@(() => newPet.Category)" />
+    <ValidationMessage For="@(() => newPet.Type)" />
   </div>
 
   <div>
@@ -39,9 +39,9 @@
   </div>
 
   <div>
-    <label>Age:</label>
-    <InputNumber class="form-control" @bind-Value="newPet.Age" />
-    <ValidationMessage For="@(() => newPet.Age)" />
+    <label>Year of Birth:</label>
+    <InputNumber class="form-control" @bind-Value="newPet.YearOfBirth" />
+    <ValidationMessage For="@(() => newPet.YearOfBirth)" />
   </div>
   <div>
     <label>Description:</label>

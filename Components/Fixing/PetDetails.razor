@@ -1,4 +1,4 @@
-@page "/pet/{id:int}"
+@page "/pet/{id}"
 @using PetStore.Models
 @using PetStore.Services
 @using Microsoft.AspNetCore.Components.Authorization
@@ -19,8 +19,8 @@ else
 
     <h1>@selectedPet.Name</h1>
 
-    <p><strong>Category:</strong> @selectedPet.Category</p>
-    <p><strong>Age:</strong> @selectedPet.Age</p>
+    <p><strong>Category:</strong> @selectedPet.Type</p>
+    @* <p><strong>Age:</strong> @selectedPet.Age</p> *@
     <p><strong>Breed:</strong> @selectedPet.Breed</p>
     <p>@selectedPet.Description</p>
 
@@ -56,7 +56,7 @@ else
 
 @code {
   [Parameter]
-  public int id { get; set; }
+  public required string id { get; set; }
 
   private Pet? selectedPet;
   void GoToApplication()

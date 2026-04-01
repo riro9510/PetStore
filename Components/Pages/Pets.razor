@@ -1,0 +1,130 @@
+@page "/pets"
+
+@using Microsoft.VisualBasic
+@using PetStore.Models
+@using PetStore.Services
+@inject PetService PetService
+@inject NavigationManager NavManager
+
+<PageTitle>Pets</PageTitle>
+
+<h1>@PageTitleText</h1>
+
+
+<div class="pet-filters">
+  <a href="/pets">All</a>
+
+  @foreach (var t in availableTypes)
+  {
+      <a href="/pets?type=@t">
+          @mayus(t) 
+      </a>
+  }
+</div>
+<div class="pets-container">
+  
+
+@if (filteredPets.Count == 0)
+{
+    <p>No pets found in this category.</p>
+}
+else
+{
+  <div class="pets-grid">
+
+    @foreach (var pet in filteredPets)
+    {
+      <div class="pet-card">
+
+
+        <div>
+
+          <div class="pet-image-container">
+          <img src="@pet.ImageUrl" alt="@pet.Name image" />
+          </div>
+
+        <h3>@pet.Name</h3>
+
+        @{
+          int age = DateTime.Now.Year - pet.YearOfBirth;
+        }
+    
+        <p>
+          <strong>Age: </strong> 
+          @if (age < 1)
+          {
+            <span>Less than a year old</span>
+          }
+          else
+          {
+            <span>@age @(age == 1 ? "year" : "years") old</span>
+          }
+        </p>
+
+        </div>
+
+      <div>
+        @* <h3>@pet.Name</h3> This is suppose to appear if it flips...  *@
+        <p><strong>Breed: </strong>@pet.Breed</p>
+        <p>
+          <strong>Energy: </strong>
+          @for (int i = 1; i <= 5; i++) 
+          {
+            if (i <= pet.Energy)
+            {
+              @* Yellow for positive *@
+              <span style="color: #FFD700;">⚡</span> 
+            }
+            else
+            {
+              @* Gray for the rest *@
+              <span style="color: #ccc; opacity: 0.2;">⚡</span>
+            }
+          }
+        </p>
+        <p><strong>Description:</strong> @pet.Description</p>
+      </div>
+
+      </div>
+    }
+  </div>
+}
+</div>
+
+
+@code {
+  [Parameter]
+  [SupplyParameterFromQuery(Name = "type")] 
+  public string? type { get; set; }
+
+  private List<Pet> filteredPets = new();
+  private List<string> availableTypes = new();
+
+  private string PageTitleText =>
+      string.IsNullOrWhiteSpace(type)
+          ? "Pets"
+          : mayus(type);
+
+  string mayus(string text){
+    if (string.IsNullOrEmpty(text)) return text;
+    return char.ToUpper(text[0]) + text.Substring(1);
+  }
+
+  protected override void OnParametersSet()
+  {
+      availableTypes = PetService.GetAllPets()
+          .Select(p => p.Type)
+          .Distinct(StringComparer.OrdinalIgnoreCase)
+          .OrderBy(t => t)
+          .ToList();
+
+      if (string.IsNullOrWhiteSpace(type))
+      {
+          filteredPets = PetService.GetAllPets();
+      }
+      else
+      {
+          filteredPets = PetService.GetPetsByCategory(type);
+      }
+  }
+}

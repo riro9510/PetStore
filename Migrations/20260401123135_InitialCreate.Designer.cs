@@ -11,7 +11,7 @@ using PetStore.Data;
 namespace PetStore.Migrations
 {
     [DbContext(typeof(PetStoreContext))]
-    [Migration("20260401022923_InitialCreate")]
+    [Migration("20260401123135_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -233,34 +233,53 @@ namespace PetStore.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("PetStore.Models.Pet", b =>
+            modelBuilder.Entity("PetStore.Pet", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Age")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Breed")
                         .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Category")
-                        .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("Energy")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("Is_Adopt")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Is_Foster")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Is_Friendly")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("Shelter_id")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("YearOfBirth")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -269,87 +288,127 @@ namespace PetStore.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Age = 3,
+                            Id = "1",
                             Breed = "Golden Retriever",
-                            Category = "dogs",
                             Description = "Friendly, loyal, and ready for a home.",
+                            Energy = 4,
                             ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/goldenr.jpg",
-                            Name = "Max"
+                            Is_Adopt = true,
+                            Is_Foster = true,
+                            Is_Friendly = true,
+                            Name = "Max",
+                            Shelter_id = "SHELTER-01",
+                            Type = "dogs",
+                            YearOfBirth = 2021
                         },
                         new
                         {
-                            Id = 2,
-                            Age = 2,
+                            Id = "2",
                             Breed = "Siamese",
-                            Category = "cats",
                             Description = "Curious, calm, and full of personality.",
+                            Energy = 3,
                             ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/siamese.jpg",
-                            Name = "Luna"
+                            Is_Adopt = true,
+                            Is_Foster = false,
+                            Is_Friendly = true,
+                            Name = "Luna",
+                            Shelter_id = "SHELTER-01",
+                            Type = "cats",
+                            YearOfBirth = 2022
                         },
                         new
                         {
-                            Id = 3,
-                            Age = 100,
+                            Id = "3",
                             Breed = "Mini Flame",
-                            Category = "dragons",
                             Description = "Magical companion with fiery charm.",
+                            Energy = 5,
                             ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/toothless.jpg",
-                            Name = "Toothless"
+                            Is_Adopt = false,
+                            Is_Foster = true,
+                            Is_Friendly = true,
+                            Name = "Toothless",
+                            Shelter_id = "SHELTER-02",
+                            Type = "dragons",
+                            YearOfBirth = 2010
                         },
                         new
                         {
-                            Id = 4,
-                            Age = 5,
+                            Id = "4",
                             Breed = "Silver Mane",
-                            Category = "unicorns",
                             Description = "Rare, graceful, and full of wonder.",
+                            Energy = 2,
                             ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/unicorn.jpg",
-                            Name = "Sparkle"
+                            Is_Adopt = true,
+                            Is_Foster = true,
+                            Is_Friendly = true,
+                            Name = "Sparkle",
+                            Shelter_id = "SHELTER-02",
+                            Type = "unicorns",
+                            YearOfBirth = 2019
                         },
                         new
                         {
-                            Id = 5,
-                            Age = 1,
+                            Id = "5",
                             Breed = "Maltese",
-                            Category = "dogs",
                             Description = "Intelligent and handsome. He just loves to be with you.",
+                            Energy = 3,
                             ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/maltese.jpg",
-                            Name = "Cloud"
+                            Is_Adopt = true,
+                            Is_Foster = true,
+                            Is_Friendly = true,
+                            Name = "Cloud",
+                            Shelter_id = "SHELTER-01",
+                            Type = "dogs",
+                            YearOfBirth = 2023
                         },
                         new
                         {
-                            Id = 6,
-                            Age = 4,
+                            Id = "6",
                             Breed = "Asian Elephant",
-                            Category = "elephants",
                             Description = "Curious, adorable, and intelligent.",
+                            Energy = 2,
                             ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/elephant.jpg",
-                            Name = "Jimbo"
+                            Is_Adopt = false,
+                            Is_Foster = false,
+                            Is_Friendly = true,
+                            Name = "Jimbo",
+                            Shelter_id = "SHELTER-03",
+                            Type = "elephants",
+                            YearOfBirth = 2020
                         },
                         new
                         {
-                            Id = 7,
-                            Age = 7,
+                            Id = "7",
                             Breed = "Siberian Tiger",
-                            Category = "cats",
-                            Description = "Majestic, regal, and content. All she wants is to bathe in the sun.",
+                            Description = "Majestic, regal, and content. All she wants is to bathe.",
+                            Energy = 1,
                             ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/tiger.jpg",
-                            Name = "Raja"
+                            Is_Adopt = false,
+                            Is_Foster = false,
+                            Is_Friendly = false,
+                            Name = "Raja",
+                            Shelter_id = "SHELTER-03",
+                            Type = "cats",
+                            YearOfBirth = 2017
                         },
                         new
                         {
-                            Id = 8,
-                            Age = 10,
+                            Id = "8",
                             Breed = "White Cockatoo",
-                            Category = "birds",
                             Description = "Loves to talk, sing, and dance.",
+                            Energy = 5,
                             ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/white-parrot.jpg",
-                            Name = "Marshmallow"
+                            Is_Adopt = true,
+                            Is_Foster = true,
+                            Is_Friendly = true,
+                            Name = "Marshmallow",
+                            Shelter_id = "SHELTER-01",
+                            Type = "birds",
+                            YearOfBirth = 2014
                         });
                 });
 
-            modelBuilder.Entity("PetStore.Models.PetCategory", b =>
+            modelBuilder.Entity("PetStore.PetCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -393,6 +452,99 @@ namespace PetStore.Migrations
                         {
                             Id = 6,
                             Name = "elephants"
+                        });
+                });
+
+            modelBuilder.Entity("PetStore.Shelter", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("City")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("User_id")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Shelters");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "SHELTER-01",
+                            Country = "US",
+                            Email = "contact@goldenpawsrescue.org",
+                            Name = "Golden Paws Rescue",
+                            State = "Pennsylvania",
+                            User_id = "user_01"
+                        },
+                        new
+                        {
+                            Id = "SHELTER-02",
+                            Country = "CA",
+                            Email = "hello@whiskerhaven.org",
+                            Name = "Whisker Haven",
+                            State = "Ontario",
+                            User_id = "user_02"
+                        },
+                        new
+                        {
+                            Id = "SHELTER-03",
+                            Country = "AU",
+                            Email = "info@safewingssanctuary.org",
+                            Name = "Safe Wings Sanctuary",
+                            State = "New South Wales",
+                            User_id = "user_03"
+                        },
+                        new
+                        {
+                            Id = "SHELTER-04",
+                            Country = "VE",
+                            Email = "support@cloudinthesky.org",
+                            Name = "Cloud in the Sky",
+                            State = "Mérida",
+                            User_id = "user_04"
+                        },
+                        new
+                        {
+                            Id = "SHELTER-05",
+                            Country = "ZA",
+                            Email = "team@wildheartrefuge.org",
+                            Name = "Wild Heart Refuge",
+                            State = "Western Cape",
+                            User_id = "user_05"
+                        },
+                        new
+                        {
+                            Id = "SHELTER-06",
+                            Country = "MX",
+                            Email = "care@hopetailsshelter.org",
+                            Name = "Hope Tails Shelter",
+                            State = "Guanajuato",
+                            User_id = "user_06"
                         });
                 });
 

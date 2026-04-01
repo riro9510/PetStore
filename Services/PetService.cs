@@ -25,18 +25,18 @@ public class PetService
     }
 
     return _context.Pets
-      .Where(p => p.Category.ToLower() == category.ToLower())
+      .Where(p => p.Type.ToLower() == category.ToLower())
       .ToList();
   }
 
-  public Pet? GetPetById(int id)
+  public Pet? GetPetById(string id)
   {
     return _context.Pets.FirstOrDefault(p => p.Id == id);
   }
 
   public void AddPet(Pet pet)
   {
-    pet.Category = pet.Category.Trim().ToLower();
+    pet.Type = pet.Type.Trim().ToLower();
 
     _context.Pets.Add(pet);
     _context.SaveChanges();
@@ -49,9 +49,9 @@ public class PetService
     if (pet != null)
     {
       pet.Name = updatedPet.Name;
-      pet.Category = updatedPet.Category.Trim().ToLower();
+      pet.Type = updatedPet.Type.Trim().ToLower();
       pet.Breed = updatedPet.Breed;
-      pet.Age = updatedPet.Age;
+      pet.YearOfBirth = updatedPet.YearOfBirth;
       pet.Description = updatedPet.Description;
       pet.ImageUrl = updatedPet.ImageUrl;
 
@@ -59,7 +59,7 @@ public class PetService
     }
   }
 
-  public void DeletePet(int id)
+  public void DeletePet(string id)
   {
     var pet = _context.Pets.FirstOrDefault(p => p.Id == id);
 
@@ -97,7 +97,7 @@ public class PetService
       return false;
     }
 
-    bool categoryInUse = _context.Pets.Any(p => p.Category.ToLower() == category.Name.ToLower());
+    bool categoryInUse = _context.Pets.Any(p => p.Type.ToLower() == category.Name.ToLower());
 
     if (categoryInUse)
     {
@@ -122,15 +122,39 @@ public class PetService
       category.Name = newName;
 
       var petsToUpdate = _context.Pets
-          .Where(p => p.Category.ToLower() == oldName.ToLower())
+          .Where(p => p.Type.ToLower() == oldName.ToLower())
           .ToList();
 
       foreach (var pet in petsToUpdate)
       {
-        pet.Category = newName;
+        pet.Type = newName;
       }
 
       _context.SaveChanges();
     }
   }
+
+
+public List<Shelter> GetAllShelters()
+  {
+    return _context.Shelters.ToList();
+  }
+
+  public List<Shelter> GetSheltersByCountry(string? country)
+  {
+    if (string.IsNullOrWhiteSpace(country))
+    {
+      return new List<Shelter>();
+    }
+
+    return _context.Shelters
+      .Where(s => s.Country.ToLower() == country.ToLower())
+      .ToList();
+  }
+
+  public Shelter? GetShelterById(string id)
+  {
+    return _context.Shelters.FirstOrDefault(s => s.Id == id);
+  }
+
 }
