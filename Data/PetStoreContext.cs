@@ -59,6 +59,46 @@ public class PetStoreContext : IdentityDbContext<ApplicationUser>
           Age = 5,
           Description = "Rare, graceful, and full of wonder.",
           ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/unicorn.jpg"
+        },
+        new Pet
+        {
+          Id = 5,
+          Name = "Cloud",
+          Category = "dogs",
+          Breed = "Maltese",
+          Age = 1,
+          Description = "Intelligent and handsome. He just loves to be with you.",
+          ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/maltese.jpg"
+        },
+        new Pet
+        {
+          Id = 6,
+          Name = "Jimbo",
+          Category = "elephants",
+          Breed = "Asian Elephant",
+          Age = 4,
+          Description = "Curious, adorable, and intelligent.",
+          ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/elephant.jpg"
+        },
+        new Pet
+        {
+          Id = 7,
+          Name = "Raja",
+          Category = "cats",
+          Breed = "Siberian Tiger",
+          Age = 7,
+          Description = "Majestic, regal, and content. All she wants is to bathe in the sun.",
+          ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/tiger.jpg"
+        },
+        new Pet
+        {
+          Id = 8,
+          Name = "Marshmallow",
+          Category = "birds",
+          Breed = "White Cockatoo",
+          Age = 10,
+          Description = "Loves to talk, sing, and dance.",
+          ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/white-parrot.jpg"
         }
     );
 
@@ -82,6 +122,16 @@ public class PetStoreContext : IdentityDbContext<ApplicationUser>
         {
           Id = 4,
           Name = "unicorns"
+        },
+        new PetCategory
+        {
+          Id = 5,
+          Name = "birds"
+        },
+        new PetCategory
+        {
+          Id = 6,
+          Name = "elephants"
         }
     );
   }

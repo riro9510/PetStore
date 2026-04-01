@@ -11,7 +11,7 @@ using PetStore.Data;
 namespace PetStore.Migrations
 {
     [DbContext(typeof(PetStoreContext))]
-    [Migration("20260330233954_InitialCreate")]
+    [Migration("20260401022923_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -306,6 +306,46 @@ namespace PetStore.Migrations
                             Description = "Rare, graceful, and full of wonder.",
                             ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/unicorn.jpg",
                             Name = "Sparkle"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Age = 1,
+                            Breed = "Maltese",
+                            Category = "dogs",
+                            Description = "Intelligent and handsome. He just loves to be with you.",
+                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/maltese.jpg",
+                            Name = "Cloud"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Age = 4,
+                            Breed = "Asian Elephant",
+                            Category = "elephants",
+                            Description = "Curious, adorable, and intelligent.",
+                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/elephant.jpg",
+                            Name = "Jimbo"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Age = 7,
+                            Breed = "Siberian Tiger",
+                            Category = "cats",
+                            Description = "Majestic, regal, and content. All she wants is to bathe in the sun.",
+                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/tiger.jpg",
+                            Name = "Raja"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Age = 10,
+                            Breed = "White Cockatoo",
+                            Category = "birds",
+                            Description = "Loves to talk, sing, and dance.",
+                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/white-parrot.jpg",
+                            Name = "Marshmallow"
                         });
                 });
 
@@ -343,6 +383,16 @@ namespace PetStore.Migrations
                         {
                             Id = 4,
                             Name = "unicorns"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "birds"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "elephants"
                         });
                 });
 

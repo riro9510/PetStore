@@ -202,7 +202,9 @@ namespace PetStore.Migrations
                     { 1, "dogs" },
                     { 2, "cats" },
                     { 3, "dragons" },
-                    { 4, "unicorns" }
+                    { 4, "unicorns" },
+                    { 5, "birds" },
+                    { 6, "elephants" }
                 });
 
             migrationBuilder.InsertData(
@@ -213,7 +215,11 @@ namespace PetStore.Migrations
                     { 1, 3, "Golden Retriever", "dogs", "Friendly, loyal, and ready for a home.", "https://raw.githubusercontent.com/vsyang/pet-images/main/goldenr.jpg", "Max" },
                     { 2, 2, "Siamese", "cats", "Curious, calm, and full of personality.", "https://raw.githubusercontent.com/vsyang/pet-images/main/siamese.jpg", "Luna" },
                     { 3, 100, "Mini Flame", "dragons", "Magical companion with fiery charm.", "https://raw.githubusercontent.com/vsyang/pet-images/main/toothless.jpg", "Toothless" },
-                    { 4, 5, "Silver Mane", "unicorns", "Rare, graceful, and full of wonder.", "https://raw.githubusercontent.com/vsyang/pet-images/main/unicorn.jpg", "Sparkle" }
+                    { 4, 5, "Silver Mane", "unicorns", "Rare, graceful, and full of wonder.", "https://raw.githubusercontent.com/vsyang/pet-images/main/unicorn.jpg", "Sparkle" },
+                    { 5, 1, "Maltese", "dogs", "Intelligent and handsome. He just loves to be with you.", "https://raw.githubusercontent.com/vsyang/pet-images/main/maltese.jpg", "Cloud" },
+                    { 6, 4, "Asian Elephant", "elephants", "Curious, adorable, and intelligent.", "https://raw.githubusercontent.com/vsyang/pet-images/main/elephant.jpg", "Jimbo" },
+                    { 7, 7, "Siberian Tiger", "cats", "Majestic, regal, and content. All she wants is to bathe in the sun.", "https://raw.githubusercontent.com/vsyang/pet-images/main/tiger.jpg", "Raja" },
+                    { 8, 10, "White Cockatoo", "birds", "Loves to talk, sing, and dance.", "https://raw.githubusercontent.com/vsyang/pet-images/main/white-parrot.jpg", "Marshmallow" }
                 });
 
             migrationBuilder.CreateIndex(
