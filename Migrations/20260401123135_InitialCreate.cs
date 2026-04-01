@@ -74,18 +74,40 @@ namespace PetStore.Migrations
                 name: "Pets",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Category = table.Column<string>(type: "TEXT", nullable: false),
-                    Breed = table.Column<string>(type: "TEXT", nullable: false),
-                    Age = table.Column<int>(type: "INTEGER", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: false),
-                    ImageUrl = table.Column<string>(type: "TEXT", nullable: false)
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Type = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Breed = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    YearOfBirth = table.Column<int>(type: "INTEGER", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    ImageUrl = table.Column<string>(type: "TEXT", nullable: false),
+                    Energy = table.Column<int>(type: "INTEGER", nullable: false),
+                    Is_Friendly = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Is_Adopt = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Is_Foster = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Shelter_id = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Pets", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Shelters",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
+                    Country = table.Column<string>(type: "TEXT", maxLength: 2, nullable: false),
+                    State = table.Column<string>(type: "TEXT", nullable: false),
+                    City = table.Column<string>(type: "TEXT", nullable: true),
+                    Email = table.Column<string>(type: "TEXT", nullable: true),
+                    Phone = table.Column<string>(type: "TEXT", nullable: true),
+                    User_id = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Shelters", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -209,17 +231,30 @@ namespace PetStore.Migrations
 
             migrationBuilder.InsertData(
                 table: "Pets",
-                columns: new[] { "Id", "Age", "Breed", "Category", "Description", "ImageUrl", "Name" },
+                columns: new[] { "Id", "Breed", "Description", "Energy", "ImageUrl", "Is_Adopt", "Is_Foster", "Is_Friendly", "Name", "Shelter_id", "Type", "YearOfBirth" },
                 values: new object[,]
                 {
-                    { 1, 3, "Golden Retriever", "dogs", "Friendly, loyal, and ready for a home.", "https://raw.githubusercontent.com/vsyang/pet-images/main/goldenr.jpg", "Max" },
-                    { 2, 2, "Siamese", "cats", "Curious, calm, and full of personality.", "https://raw.githubusercontent.com/vsyang/pet-images/main/siamese.jpg", "Luna" },
-                    { 3, 100, "Mini Flame", "dragons", "Magical companion with fiery charm.", "https://raw.githubusercontent.com/vsyang/pet-images/main/toothless.jpg", "Toothless" },
-                    { 4, 5, "Silver Mane", "unicorns", "Rare, graceful, and full of wonder.", "https://raw.githubusercontent.com/vsyang/pet-images/main/unicorn.jpg", "Sparkle" },
-                    { 5, 1, "Maltese", "dogs", "Intelligent and handsome. He just loves to be with you.", "https://raw.githubusercontent.com/vsyang/pet-images/main/maltese.jpg", "Cloud" },
-                    { 6, 4, "Asian Elephant", "elephants", "Curious, adorable, and intelligent.", "https://raw.githubusercontent.com/vsyang/pet-images/main/elephant.jpg", "Jimbo" },
-                    { 7, 7, "Siberian Tiger", "cats", "Majestic, regal, and content. All she wants is to bathe in the sun.", "https://raw.githubusercontent.com/vsyang/pet-images/main/tiger.jpg", "Raja" },
-                    { 8, 10, "White Cockatoo", "birds", "Loves to talk, sing, and dance.", "https://raw.githubusercontent.com/vsyang/pet-images/main/white-parrot.jpg", "Marshmallow" }
+                    { "1", "Golden Retriever", "Friendly, loyal, and ready for a home.", 4, "https://raw.githubusercontent.com/vsyang/pet-images/main/goldenr.jpg", true, true, true, "Max", "SHELTER-01", "dogs", 2021 },
+                    { "2", "Siamese", "Curious, calm, and full of personality.", 3, "https://raw.githubusercontent.com/vsyang/pet-images/main/siamese.jpg", true, false, true, "Luna", "SHELTER-01", "cats", 2022 },
+                    { "3", "Mini Flame", "Magical companion with fiery charm.", 5, "https://raw.githubusercontent.com/vsyang/pet-images/main/toothless.jpg", false, true, true, "Toothless", "SHELTER-02", "dragons", 2010 },
+                    { "4", "Silver Mane", "Rare, graceful, and full of wonder.", 2, "https://raw.githubusercontent.com/vsyang/pet-images/main/unicorn.jpg", true, true, true, "Sparkle", "SHELTER-02", "unicorns", 2019 },
+                    { "5", "Maltese", "Intelligent and handsome. He just loves to be with you.", 3, "https://raw.githubusercontent.com/vsyang/pet-images/main/maltese.jpg", true, true, true, "Cloud", "SHELTER-01", "dogs", 2023 },
+                    { "6", "Asian Elephant", "Curious, adorable, and intelligent.", 2, "https://raw.githubusercontent.com/vsyang/pet-images/main/elephant.jpg", false, false, true, "Jimbo", "SHELTER-03", "elephants", 2020 },
+                    { "7", "Siberian Tiger", "Majestic, regal, and content. All she wants is to bathe.", 1, "https://raw.githubusercontent.com/vsyang/pet-images/main/tiger.jpg", false, false, false, "Raja", "SHELTER-03", "cats", 2017 },
+                    { "8", "White Cockatoo", "Loves to talk, sing, and dance.", 5, "https://raw.githubusercontent.com/vsyang/pet-images/main/white-parrot.jpg", true, true, true, "Marshmallow", "SHELTER-01", "birds", 2014 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Shelters",
+                columns: new[] { "Id", "City", "Country", "Email", "Name", "Phone", "State", "User_id" },
+                values: new object[,]
+                {
+                    { "SHELTER-01", null, "US", "contact@goldenpawsrescue.org", "Golden Paws Rescue", null, "Pennsylvania", "user_01" },
+                    { "SHELTER-02", null, "CA", "hello@whiskerhaven.org", "Whisker Haven", null, "Ontario", "user_02" },
+                    { "SHELTER-03", null, "AU", "info@safewingssanctuary.org", "Safe Wings Sanctuary", null, "New South Wales", "user_03" },
+                    { "SHELTER-04", null, "VE", "support@cloudinthesky.org", "Cloud in the Sky", null, "Mérida", "user_04" },
+                    { "SHELTER-05", null, "ZA", "team@wildheartrefuge.org", "Wild Heart Refuge", null, "Western Cape", "user_05" },
+                    { "SHELTER-06", null, "MX", "care@hopetailsshelter.org", "Hope Tails Shelter", null, "Guanajuato", "user_06" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -283,6 +318,9 @@ namespace PetStore.Migrations
 
             migrationBuilder.DropTable(
                 name: "Pets");
+
+            migrationBuilder.DropTable(
+                name: "Shelters");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

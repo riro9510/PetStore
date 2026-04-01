@@ -131,55 +131,79 @@ h1 {
     font-size: 1.8rem;
 }
 
-.category-grid {
+.pets-grid,
+.shelter-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 1.25rem;
+    justify-items: center;
+
+
+    .pet-card,
+    .shelter-card {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        background-color: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 1.5rem;
+        text-align: center;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        max-width: 250px;
+
+        &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        h3 {
+            margin: 0.5rem 0;
+            font-size: 1.25rem;
+        }
+
+        p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        .pet-image-container {
+            width: 100%;
+            max-width: 150px;
+            margin: 0 auto 15px auto;
+    
+            img {
+                width: 100%;
+                height: auto;
+                border-radius: 12px;
+            }
+        }    
+    }
 }
 
-.category-card {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-    background-color: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-    padding: 1.5rem;
-    text-align: center;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+.pet-filters,
+.shelter-filters {
+    display: flex;
+    flex-flow: wrap;
+    margin-top: 1rem;
+    justify-content: center;
+    gap: 0.5rem;
+
+    a {
+        padding: 0.5rem 2rem;
+        text-decoration: none;
+        background-color: white;
+        border: 1px solid black;
+        border-radius: 1rem;
+        color: black;
+    }
 }
 
-.category-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
-
-.category-icon {
-    font-size: 3rem;
-    margin-bottom: 0.75rem;
-}
-
-.category-card h3 {
-    margin: 0.5rem 0;
-    font-size: 1.25rem;
-}
-
-.category-card p {
-    margin: 0;
-    color: #6b7280;
-    font-size: 0.95rem;
-}
-
-.pet-image-container {
-    width: 100%;
-    max-width: 150px;
-    margin: 0 auto 15px auto;
-}
-
-.pet-image-container img {
-    width: 100%;
-    height: auto;
-    border-radius: 12px;
+.pets-container,
+.shelters-container {
+    margin: 1rem;
+    padding: 1rem;
 }
 
 .pet-details {

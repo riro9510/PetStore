@@ -9,17 +9,21 @@
     </NavLink>
 
     <div class="pets-menu">
-        <span>Pets</span>
+        <NavLink href="@($"/pets")">Pets</NavLink>
 
         <div class="pets-list">
             @foreach (var category in categories)
             {
-                <NavLink href="@($"/petdisplay/{category.Name}")">
+                <NavLink href="@($"/pets?type={category.Name}")">
                     @FormatCategoryName(category.Name)
                 </NavLink>
             }
         </div>
     </div>
+
+    <NavLink href="/shelters">
+        Shelters
+    </NavLink>
 
     <NavLink href="/about">
         About Us

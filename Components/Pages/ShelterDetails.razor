@@ -1,0 +1,38 @@
+@page "/shelters/{id}"
+@using PetStore.Models
+@using PetStore.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject PetService PetService
+@inject NavigationManager Navigation
+
+<PageTitle>Details</PageTitle>
+
+@if (selectedShelter is null)
+{
+  <p>Shelter not found.</p>
+}
+else
+{
+  <section class="shelter-details">
+    
+    <h1>@selectedShelter.Name</h1>
+
+  </section>
+}
+
+@code {
+  [Parameter]
+  public required string id { get; set; }
+
+  private Shelter? selectedShelter;
+  void GoToApplication()
+  {
+    Navigation.NavigateTo("/application");
+  }
+
+  protected override void OnParametersSet()
+  {
+    selectedShelter = PetService.GetShelterById(id);
+  }
+}
