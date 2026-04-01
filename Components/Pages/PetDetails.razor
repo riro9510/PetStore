@@ -4,6 +4,7 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject PetService PetService
+@inject NavigationManager Navigation
 
 <PageTitle>Pet Details</PageTitle>
 
@@ -20,25 +21,31 @@ else
 
     <p><strong>Category:</strong> @selectedPet.Category</p>
     <p><strong>Age:</strong> @selectedPet.Age</p>
+    <p><strong>Breed:</strong> @selectedPet.Breed</p>
     <p>@selectedPet.Description</p>
 
-<AuthorizeView>
+    <AuthorizeView>
 
       <NotAuthorized>
         <div class="pet-help-box">
           <p>Please sign in if you'd like to help @selectedPet.Name.</p>
           <NavLink class="signin-button" href="/signin">Sign In</NavLink>
         </div>
+        @* <div class="help-buttons">
+          <button class="help-button" @onclick="GoToApplication">
+            I'd Love To Help!
+          </button>
+        </div> *@
       </NotAuthorized>
 
       <Authorized>
         <div class="pet-help-box">
-          <h3>How would you like to help @selectedPet.Name?</h3>
+          <h3>Would you like to help @selectedPet.Name?</h3>
 
           <div class="help-buttons">
-            <button class="help-button">Adopt</button>
-            <button class="help-button">Foster</button>
-            <button class="help-button">Sponsor</button>
+            <button class="help-button" @onclick="GoToApplication">
+              I'd Love To Help!
+            </button>
           </div>
         </div>
       </Authorized>
@@ -52,6 +59,10 @@ else
   public int id { get; set; }
 
   private Pet? selectedPet;
+  void GoToApplication()
+  {
+    Navigation.NavigateTo("/application");
+  }
 
   protected override void OnParametersSet()
   {
