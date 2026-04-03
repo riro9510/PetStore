@@ -8,12 +8,14 @@
 
 <h1>Pet Application</h1>
 
+<!-- Main application form for adopting, fostering, or sponsoring a pet -->
 <EditForm Model="application" OnValidSubmit="HandleSubmit">
   <DataAnnotationsValidator />
 
   <div class="form-section">
     <h3>Personal Information</h3>
 
+    <!-- Basic user information -->
     <div class="form-group">
       <label>Full Name</label>
       <InputText class="form-control" @bind-Value="application.FullName" />
@@ -42,18 +44,22 @@
   <div class="form-section">
     <h3>How Would You Like To Help?</h3>
 
+    <!-- Radio selection determines which section appears below -->
     <InputRadioGroup @bind-Value="application.HelpType">
       <ValidationMessage For="@(() => application.HelpType)" />
+
       <div>
         <label>
           <InputRadio Value='@("Adopt")' /> Adopt
         </label>
       </div>
+
       <div>
         <label>
           <InputRadio Value='@("Foster")' /> Foster
         </label>
       </div>
+
       <div>
         <label>
           <InputRadio Value='@("Sponsor")' /> Sponsor
@@ -64,6 +70,7 @@
 
   @if (application.HelpType == "Adopt")
   {
+    <!-- Conditional section for adoption-specific questions -->
     <div class="form-section">
       <h3>Adoption Questions</h3>
 
@@ -85,6 +92,7 @@
   }
   else if (application.HelpType == "Foster")
   {
+    <!-- Conditional section for fostering questions -->
     <div class="form-section">
       <h3>Foster Questions</h3>
 
@@ -101,6 +109,7 @@
   }
   else if (application.HelpType == "Sponsor")
   {
+    <!-- Conditional section for sponsorship questions -->
     <div class="form-section">
       <h3>Sponsorship Questions</h3>
 
@@ -117,6 +126,7 @@
   }
 
   <div class="form-section">
+    <!-- Required confirmation checkbox -->
     <label>
       <InputCheckbox @bind-Value="application.AgreeToTerms" />
       I confirm all information is accurate
@@ -129,9 +139,13 @@
 </EditForm>
 
 @code {
+  // Holds all user input from the application form
   private ApplicationForm application = new();
+
+  // Tracks submission state (can be used for future enhancements)
   private bool submitted = false;
 
+  /// Handles form submission and redirects user to a confirmation page. Passes the selected "help type" as a query parameter.
   private void HandleSubmit()
   {
     Navigation.NavigateTo($"/thankyou?type={application.HelpType}");
