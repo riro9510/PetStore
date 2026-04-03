@@ -1,6 +1,6 @@
 @page "/management/add"
 @rendermode InteractiveServer
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize(Roles = Roles.Admin)]
 
 @using PetStore.Models
 @using PetStore.Services
@@ -88,14 +88,14 @@
   // Message shown after selecting a file
   private string uploadMessage = "";
 
+  // Load all categories when the page initializes
   protected override void OnInitialized()
   {
-    // Load all categories when the page initializes
     categories = PetService.GetAllCategories();
   }
 
-  /// Handles file selection from the InputFile component.
-  /// Stores the file for later processing.
+  // Handles file selection from the InputFile component.
+  // Stores the file for later processing.
   private void HandleFileSelected(InputFileChangeEventArgs e)
   {
     selectedFile = e.File;
@@ -105,9 +105,9 @@
         : "";
   }
 
-  /// Saves the pet to the database.
-  /// If an image is uploaded, it is stored in wwwroot and linked.
-  /// Otherwise, a default image is used.
+   // Saves the pet to the database.
+   // If an image is uploaded, it is stored in wwwroot and linked.
+   // Otherwise, a default image is used.
   private async Task SavePet()
   {
     if (selectedFile is not null)
@@ -145,7 +145,7 @@
     NavigationManager.NavigateTo("/management");
   }
 
-  /// Cancels the operation and returns to management page.
+   // Cancels the operation and returns to management page.
   private void Cancel()
   {
     NavigationManager.NavigateTo("/management");

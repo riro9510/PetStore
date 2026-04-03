@@ -1,6 +1,6 @@
 @page "/management/edit/{id:int}"
 @rendermode InteractiveServer
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize(Roles = Roles.Admin)]
 
 @using PetStore.Models
 @using PetStore.Services
@@ -123,8 +123,8 @@ else
     }
   }
 
-  /// Stores the file selected by the user for upload.
-  /// The file is not saved until the form is submitted.
+   // Stores the file selected by the user for upload.
+   // The file is not saved until the form is submitted.
  
   private void HandleFileSelected(InputFileChangeEventArgs e)
   {
@@ -136,9 +136,9 @@ else
   }
 
  
-  /// Saves the edited pet information.
-  /// If a new image is uploaded, it replaces the previous image path.
-  /// If no new image is uploaded, the current image remains unchanged.
+   // Saves the edited pet information.
+   // If a new image is uploaded, it replaces the previous image path.
+   // If no new image is uploaded, the current image remains unchanged.
  
   private async Task SavePet()
   {
@@ -183,7 +183,7 @@ else
   }
 
  
-  /// Cancels editing and returns to the management page.
+   // Cancels editing and returns to the management page.
   private void Cancel()
   {
     NavigationManager.NavigateTo("/management");

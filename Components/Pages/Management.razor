@@ -1,6 +1,6 @@
 @page "/management"
 @rendermode InteractiveServer
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize(Roles = Roles.Admin)]
 
 @using PetStore.Models
 @using PetStore.Services
@@ -83,7 +83,7 @@
     NavigationManager.NavigateTo("/management/categories");
   }
 
-  /// Converts a birth year into an approximate age.
+   // Converts a birth year into an approximate age.
   private int GetAge(int yearOfBirth)
   {
     return DateTime.Now.Year - yearOfBirth;
