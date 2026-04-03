@@ -1,13 +1,13 @@
 @page "/management/categories"
 @rendermode InteractiveServer
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize(Roles = Roles.Admin)]
 
 @using PetStore.Models
 @using PetStore.Services
 @inject PetService PetService
 
 <h1>Category Management</h1>
-
+<!-- Form to create a new category -->
 <EditForm Model="newCategory" OnValidSubmit="AddCategory">
   <DataAnnotationsValidator />
 
@@ -21,7 +21,7 @@
 </EditForm>
 
 <hr />
-
+<!-- Displays error messages (example: "Cannot delete category in use") -->
 @if (!string.IsNullOrWhiteSpace(errorMessage))
 {
   <p class="text-danger">@errorMessage</p>
@@ -43,6 +43,7 @@
       <tr>
         @if (editCategory?.Id == category.Id)
         {
+          <!-- Allows admin to edit inline instead of going to a new page -->
           <td>
             <InputText class="form-control" @bind-Value="editCategory.Name" />
           </td>
@@ -59,6 +60,7 @@
         }
         else
         {
+          <!-- Normal display -->
           <td>@FormatCategoryName(category.Name)</td>
 
           <td>
@@ -77,23 +79,31 @@
 </table>
 
 @code {
-
+  // Holds the new category being created from the form
   private PetCategory newCategory = new();
+
+  // Stores the category being edited and is null when not being edited
   private PetCategory? editCategory;
 
+  // List of all the categories displayed in the table
   private List<PetCategory> categories = new();
+
+  // Error message shown to the admin (Example: delete restriction)
   private string errorMessage = "";
 
+  // Load categories when page initializes
   protected override void OnInitialized()
   {
     LoadCategories();
   }
 
+  // Gets all categories from service/db
   private void LoadCategories()
   {
     categories = PetService.GetAllCategories();
   }
 
+  // Adds a new category and converts to lowercase for consistency
   private void AddCategory()
   {
     errorMessage = "";
@@ -106,6 +116,7 @@
     LoadCategories();
   }
 
+  // Begins editing mode for selected category. This will create a copy so changes aren't applied until saved
   private void StartEdit(PetCategory category)
   {
     errorMessage = "";
@@ -117,6 +128,7 @@
     };
   }
 
+  // Saves the edited category and updates the list, while converting to lowercase for consistency
   private void SaveEdit()
   {
     if (editCategory == null) return;
@@ -132,12 +144,14 @@
     LoadCategories();
   }
 
+  // Cancels edit mode and resets state
   private void CancelEdit()
   {
     editCategory = null;
     errorMessage = "";
   }
 
+  // Deletes a category as long as no pets are using; if there is a pet in the category, error message will display
   private void DeleteCategory(int id)
   {
     bool deleted = PetService.DeleteCategory(id);
@@ -153,6 +167,7 @@
     }
   }
 
+  // Formats category names for display; capitalize the first letter and lowercase the rest of word
   private string FormatCategoryName(string name)
   {
     if (string.IsNullOrWhiteSpace(name))
