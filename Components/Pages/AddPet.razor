@@ -1,6 +1,6 @@
 @page "/management/add"
 @rendermode InteractiveServer
-@attribute [Authorize(Roles = "Admin")]
+@* @attribute [Authorize(Roles = "Admin")] *@
 
 @using PetStore.Models
 @using PetStore.Services
@@ -45,12 +45,12 @@
   </div>
   <div>
     <label>Description:</label>
-    <InputText @bind-Value="newPet.Description" />
+    <InputText class="form-control" @bind-Value="newPet.Description" />
   </div>
 
   <div>
     <label>Image URL:</label>
-    <InputText @bind-Value="newPet.ImageUrl" placeholder="Default used if empty" />
+    <InputText class="form-control" @bind-Value="newPet.ImageUrl" placeholder="Default used if empty" />
   </div>
 
   <button type="submit">Save</button>
