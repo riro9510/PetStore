@@ -30,12 +30,13 @@
         <td>@pet.Name</td>
         <td>@pet.Type</td>
         <td>@pet.Breed</td>
-        @* <td>@pet.Age</td> *@
+        <!-- Convert YearOfBirth to approximate age -->
+        <td>@GetAge(pet.YearOfBirth)</td>
         <!-- Edit navigates to edit page with pet id, and delete removes pet and refreshes list -->
-        @* <td>
+        <td>
           <button class="btn btn-success me-2" type="button" @onclick="() => EditPet(pet.Id)">Edit</button>
           <button class="btn btn-danger me-2" type="button" @onclick="() => DeletePet(pet.Id)">Delete</button>
-        </td> *@
+        </td>
       </tr>
     }
   </tbody>
@@ -80,5 +81,11 @@
   private void AddCategory()
   {
     NavigationManager.NavigateTo("/management/categories");
+  }
+
+  /// Converts a birth year into an approximate age.
+  private int GetAge(int yearOfBirth)
+  {
+    return DateTime.Now.Year - yearOfBirth;
   }
 }

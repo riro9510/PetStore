@@ -7,7 +7,7 @@
 @inject PetService PetService
 
 <h1>Category Management</h1>
-
+<!-- Form to create a new category -->
 <EditForm Model="newCategory" OnValidSubmit="AddCategory">
   <DataAnnotationsValidator />
 
@@ -21,7 +21,7 @@
 </EditForm>
 
 <hr />
-
+<!-- Displays error messages (example: "Cannot delete category in use") -->
 @if (!string.IsNullOrWhiteSpace(errorMessage))
 {
   <p class="text-danger">@errorMessage</p>
@@ -43,6 +43,7 @@
       <tr>
         @if (editCategory?.Id == category.Id)
         {
+          <!-- Allows admin to edit inline instead of going to a new page -->
           <td>
             <InputText class="form-control" @bind-Value="editCategory.Name" />
           </td>
