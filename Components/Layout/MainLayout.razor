@@ -1,25 +1,47 @@
-﻿@inherits LayoutComponentBase
+﻿@using System.Linq
+@using System.Security.Claims
+@inherits LayoutComponentBase
 
 <div class="page">
-  <aside class="sidebar">
-    <NavMenu />
-  </aside>
-
   <main>
+    <!-- Top navigation area shown on every page -->
     <header class="top-row px-4">
       <div class="top-row-right">
-        <a class="signin-link" href="/signin">Sign In</a>
+        
+        <!-- Show different content depending on if the user is signed in -->
+        <AuthorizeView>
+          <Authorized>
+            @{
+
+              <!-- Get user's first name from info from Google. If it's not available, get the account name. If neither exists, show a default greeting "User" -->
+              var firstName = context.User.FindFirst(ClaimTypes.GivenName)?.Value
+                              ?? context.User.Identity?.Name
+                              ?? "User";
+            }
+
+            <!-- Personalized greeting for signed-in users -->
+            <span class="user-greeting">
+              Hello @firstName
+            </span>
+
+            <!-- Sign-out link for authenticated users -->
+            <a class="signin-link" href="/logout">Log Out</a>
+          </Authorized>
+
+          <NotAuthorized>
+            <!-- Sign-in link shown when no user is logged in -->
+            <a class="signin-link" href="/signin">Sign In</a>
+          </NotAuthorized>
+        </AuthorizeView>
       </div>
     </header>
 
+    <!-- Main content area where each page is rendered inside the layout -->
     <article class="content px-4">
       @Body
     </article>
   </main>
 </div>
 
-<div id="blazor-error-ui" data-nosnippet>
-  An unhandled error has occurred.
-  <a href="." class="reload">Reload</a>
-  <span class="dismiss">🗙</span>
-</div>
+@code {
+}
