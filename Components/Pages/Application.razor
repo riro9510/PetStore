@@ -1,0 +1,153 @@
+@page "/application"
+@using PetStore.Models
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@attribute [Authorize(Roles = $"{Roles.Admin},{Roles.Client}")]
+
+<PageTitle>Pet Application</PageTitle>
+
+<h1>Pet Application</h1>
+
+<!-- Main application form for adopting, fostering, or sponsoring a pet -->
+<EditForm Model="application" OnValidSubmit="HandleSubmit">
+  <DataAnnotationsValidator />
+
+  <div class="form-section">
+    <h3>Personal Information</h3>
+
+    <!-- Basic user information -->
+    <div class="form-group">
+      <label>Full Name</label>
+      <InputText class="form-control" @bind-Value="application.FullName" />
+      <ValidationMessage For="@(() => application.FullName)" />
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <InputText class="form-control" @bind-Value="application.Email" />
+      <ValidationMessage For="@(() => application.Email)" />
+    </div>
+
+    <div class="form-group">
+      <label>Phone Number</label>
+      <InputText class="form-control" @bind-Value="application.PhoneNumber" />
+      <ValidationMessage For="@(() => application.PhoneNumber)" />
+    </div>
+
+    <div class="form-group">
+      <label>Address</label>
+      <InputText class="form-control" @bind-Value="application.Address" />
+      <ValidationMessage For="@(() => application.Address)" />
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3>How Would You Like To Help?</h3>
+
+    <!-- Radio selection determines which section appears below -->
+    <InputRadioGroup @bind-Value="application.HelpType">
+      <ValidationMessage For="@(() => application.HelpType)" />
+
+      <div>
+        <label>
+          <InputRadio Value='@("Adopt")' /> Adopt
+        </label>
+      </div>
+
+      <div>
+        <label>
+          <InputRadio Value='@("Foster")' /> Foster
+        </label>
+      </div>
+
+      <div>
+        <label>
+          <InputRadio Value='@("Sponsor")' /> Sponsor
+        </label>
+      </div>
+    </InputRadioGroup>
+  </div>
+
+  @if (application.HelpType == "Adopt")
+  {
+    <!-- Conditional section for adoption-specific questions -->
+    <div class="form-section">
+      <h3>Adoption Questions</h3>
+
+      <div class="form-group">
+        <label>Do you own or rent?</label>
+        <InputText class="form-control" @bind-Value="application.HousingStatus" />
+      </div>
+
+      <div class="form-group">
+        <label>Do you have other pets?</label>
+        <InputText class="form-control" @bind-Value="application.OtherPets" />
+      </div>
+
+      <div class="form-group">
+        <label>Why do you want to adopt?</label>
+        <InputTextArea class="form-control" @bind-Value="application.Reason" />
+      </div>
+    </div>
+  }
+  else if (application.HelpType == "Foster")
+  {
+    <!-- Conditional section for fostering questions -->
+    <div class="form-section">
+      <h3>Foster Questions</h3>
+
+      <div class="form-group">
+        <label>How long can you foster?</label>
+        <InputText class="form-control" @bind-Value="application.FosterLength" />
+      </div>
+
+      <div class="form-group">
+        <label>Experience with animals?</label>
+        <InputTextArea class="form-control" @bind-Value="application.Experience" />
+      </div>
+    </div>
+  }
+  else if (application.HelpType == "Sponsor")
+  {
+    <!-- Conditional section for sponsorship questions -->
+    <div class="form-section">
+      <h3>Sponsorship Questions</h3>
+
+      <div class="form-group">
+        <label>Monthly contribution</label>
+        <InputNumber class="form-control" @bind-Value="application.MonthlyAmount" />
+      </div>
+
+      <div class="form-group">
+        <label>Why do you want to sponsor?</label>
+        <InputTextArea class="form-control" @bind-Value="application.Reason" />
+      </div>
+    </div>
+  }
+
+  <div class="form-section">
+    <!-- Required confirmation checkbox -->
+    <label>
+      <InputCheckbox @bind-Value="application.AgreeToTerms" />
+      I confirm all information is accurate
+    </label>
+    <ValidationMessage For="@(() => application.AgreeToTerms)" />
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+
+</EditForm>
+
+@code {
+  // Holds all user input from the application form
+  private ApplicationForm application = new();
+
+  // Tracks submission state (can be used for future enhancements)
+  private bool submitted = false;
+
+  /// Handles form submission and redirects user to a confirmation page. Passes the selected "help type" as a query parameter.
+  private void HandleSubmit()
+  {
+    Navigation.NavigateTo($"/thankyou?type={application.HelpType}");
+  }
+}

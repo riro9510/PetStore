@@ -223,10 +223,9 @@ namespace PetStore.Migrations
                 {
                     { 1, "dogs" },
                     { 2, "cats" },
-                    { 3, "dragons" },
-                    { 4, "unicorns" },
-                    { 5, "birds" },
-                    { 6, "elephants" }
+                    { 3, "rabbits" },
+                    { 4, "birds" },
+                    { 5, "exotics" }
                 });
 
             migrationBuilder.InsertData(
@@ -235,13 +234,13 @@ namespace PetStore.Migrations
                 values: new object[,]
                 {
                     { "1", "Golden Retriever", "Friendly, loyal, and ready for a home.", 4, "https://raw.githubusercontent.com/vsyang/pet-images/main/goldenr.jpg", true, true, true, "Max", "SHELTER-01", "dogs", 2021 },
-                    { "2", "Siamese", "Curious, calm, and full of personality.", 3, "https://raw.githubusercontent.com/vsyang/pet-images/main/siamese.jpg", true, false, true, "Luna", "SHELTER-01", "cats", 2022 },
-                    { "3", "Mini Flame", "Magical companion with fiery charm.", 5, "https://raw.githubusercontent.com/vsyang/pet-images/main/toothless.jpg", false, true, true, "Toothless", "SHELTER-02", "dragons", 2010 },
-                    { "4", "Silver Mane", "Rare, graceful, and full of wonder.", 2, "https://raw.githubusercontent.com/vsyang/pet-images/main/unicorn.jpg", true, true, true, "Sparkle", "SHELTER-02", "unicorns", 2019 },
+                    { "2", "Persian", "Curious, calm, and full of personality.", 3, "https://raw.githubusercontent.com/vsyang/pet-images/main/persian.jpg", true, false, true, "Majesty", "SHELTER-02", "cats", 2022 },
+                    { "3", "Netherland Dwarf", "Magical companion with fiery charm.", 5, "https://raw.githubusercontent.com/vsyang/pet-images/main/netherland-dwarf.jpg", false, true, true, "Tiny", "SHELTER-06", "rabbits", 2010 },
+                    { "4", "Hedgehog", "Rare, shy, and full of wonder.", 2, "https://raw.githubusercontent.com/vsyang/pet-images/main/hedgehog.jpg", true, true, true, "Sparkle", "SHELTER-04", "exotics", 2019 },
                     { "5", "Maltese", "Intelligent and handsome. He just loves to be with you.", 3, "https://raw.githubusercontent.com/vsyang/pet-images/main/maltese.jpg", true, true, true, "Cloud", "SHELTER-01", "dogs", 2023 },
-                    { "6", "Asian Elephant", "Curious, adorable, and intelligent.", 2, "https://raw.githubusercontent.com/vsyang/pet-images/main/elephant.jpg", false, false, true, "Jimbo", "SHELTER-03", "elephants", 2020 },
-                    { "7", "Siberian Tiger", "Majestic, regal, and content. All she wants is to bathe.", 1, "https://raw.githubusercontent.com/vsyang/pet-images/main/tiger.jpg", false, false, false, "Raja", "SHELTER-03", "cats", 2017 },
-                    { "8", "White Cockatoo", "Loves to talk, sing, and dance.", 5, "https://raw.githubusercontent.com/vsyang/pet-images/main/white-parrot.jpg", true, true, true, "Marshmallow", "SHELTER-01", "birds", 2014 }
+                    { "6", "Bearded Dragon", "Curious, adorable, and intelligent.", 2, "https://raw.githubusercontent.com/vsyang/pet-images/main/bearded-dragon.jpg", false, false, false, "Jimbo", "SHELTER-05", "exotics", 2020 },
+                    { "7", "Orange Tabby", "Majestic, regal, and content. All she wants is to lay in the sun.", 1, "https://raw.githubusercontent.com/vsyang/pet-images/main/orange-cat.jpg", false, false, true, "Raja", "SHELTER-02", "cats", 2017 },
+                    { "8", "White Cockatoo", "Loves to talk, sing, and dance.", 5, "https://raw.githubusercontent.com/vsyang/pet-images/main/white-parrot.jpg", true, true, true, "Marshmallow", "SHELTER-03", "birds", 2014 }
                 });
 
             migrationBuilder.InsertData(

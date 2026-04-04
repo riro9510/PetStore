@@ -12,7 +12,7 @@
 
 <h1>@PageTitleText</h1>
 
-
+<!-- Filter links for viewing shelters by country -->
 <div class="shelter-filters">
   <a href="/shelters">All</a>
 
@@ -27,7 +27,7 @@
 <div class="shelters-container">
   
   <div class="shelter-grid">
-
+    <!-- Each shelter card links to its own details page -->
     @foreach (var shelter in filteredShelters)
     {
           <NavLink class="shelter-card" href="@($"/shelters/{shelter.Id}")">
@@ -45,29 +45,38 @@
 
 
 @code {
+  // Query parameter from URL
   [Parameter]
   [SupplyParameterFromQuery(Name = "country")] 
   public string? country { get; set; }
 
+  // List of shelters displayed after filtering
   private List<Shelter> filteredShelters = new();
+
+  // Unique list of available country codes for filtering links
   private List<string> availableCountries = new();
+
+  // Helper used to convert country codes into full country names
   private CountryHelper _helper = new CountryHelper();
 
+  // Updates the page title based on the selected country filter
   private string PageTitleText =>
       string.IsNullOrWhiteSpace(country)
           ? "Shelters"
           : "Shelters in " + GetCountry(country);
 
+	// Formats to capitalize fist letter of string for display purposes
   string mayus(string text){
     if (string.IsNullOrEmpty(text)) return text;
     return char.ToUpper(text[0]) + text.Substring(1);
   }
 
+	// Converts country code to a readable country name
   string GetCountry(string code){
       return mayus(_helper.GetCountryByCode(code).CountryName);
   }
 
-
+	// Build list of available country from shelter data and filter by selected country; show all if no country is selected
   protected override void OnParametersSet()
   {
       availableCountries = PetService.GetAllShelters()

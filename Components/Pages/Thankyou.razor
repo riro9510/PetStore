@@ -1,0 +1,33 @@
+@page "/thankyou"
+@inject NavigationManager Navigation
+
+<PageTitle>Thank You</PageTitle>
+
+<h1>Thank You!</h1>
+
+<!-- Displays confirmation message using selected help type -->
+<p>
+  We have successfully received your application to @helpType?.ToLower().
+  We will review your application and reach out to you within 7-10 business days.
+</p>
+
+<!-- Navigation back to home page -->
+<NavLink href="/">Return to Home</NavLink>
+
+@code {
+  // Stores the help type passed from the application page (Adopt, Foster, Sponsor)
+  private string? helpType;
+
+  protected override void OnInitialized()
+  {
+    // Get the current URL and extract query parameters
+    var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+    var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+
+    // Retrieve the "help type" parameter from the query string
+    if (query.TryGetValue("type", out var value))
+    {
+      helpType = value;
+    }
+  }
+}
