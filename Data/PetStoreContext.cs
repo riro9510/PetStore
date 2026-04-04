@@ -54,7 +54,7 @@ public class PetStoreContext : IdentityDbContext<ApplicationUser>
               Is_Friendly = true,
               Is_Adopt = true,
               Is_Foster = false,
-              Shelter_id = "SHELTER-01"
+              Shelter_id = "SHELTER-02"
           },
           new Pet
           {
@@ -69,7 +69,7 @@ public class PetStoreContext : IdentityDbContext<ApplicationUser>
               Is_Friendly = true,
               Is_Adopt = false,
               Is_Foster = true,
-              Shelter_id = "SHELTER-02"
+              Shelter_id = "SHELTER-06"
           },
           new Pet
           {
@@ -84,7 +84,7 @@ public class PetStoreContext : IdentityDbContext<ApplicationUser>
               Is_Friendly = true,
               Is_Adopt = true,
               Is_Foster = true,
-              Shelter_id = "SHELTER-02"
+              Shelter_id = "SHELTER-04"
           },
           new Pet
           {
@@ -114,7 +114,7 @@ public class PetStoreContext : IdentityDbContext<ApplicationUser>
               Is_Friendly = false,
               Is_Adopt = false,
               Is_Foster = false,
-              Shelter_id = "SHELTER-03"
+              Shelter_id = "SHELTER-05"
           },
           new Pet
           {
@@ -129,7 +129,7 @@ public class PetStoreContext : IdentityDbContext<ApplicationUser>
               Is_Friendly = true,
               Is_Adopt = false,
               Is_Foster = false,
-              Shelter_id = "SHELTER-03"
+              Shelter_id = "SHELTER-02"
           },
           new Pet
           {
@@ -144,7 +144,7 @@ public class PetStoreContext : IdentityDbContext<ApplicationUser>
               Is_Friendly = true,
               Is_Adopt = true,
               Is_Foster = true,
-              Shelter_id = "SHELTER-01"
+              Shelter_id = "SHELTER-03"
           }
         );
 

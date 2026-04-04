@@ -11,7 +11,7 @@ using PetStore.Data;
 namespace PetStore.Migrations
 {
     [DbContext(typeof(PetStoreContext))]
-    [Migration("20260404173353_InitialCreate")]
+    [Migration("20260404183028_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -312,7 +312,7 @@ namespace PetStore.Migrations
                             Is_Foster = false,
                             Is_Friendly = true,
                             Name = "Majesty",
-                            Shelter_id = "SHELTER-01",
+                            Shelter_id = "SHELTER-02",
                             Type = "cats",
                             YearOfBirth = 2022
                         },
@@ -327,7 +327,7 @@ namespace PetStore.Migrations
                             Is_Foster = true,
                             Is_Friendly = true,
                             Name = "Tiny",
-                            Shelter_id = "SHELTER-02",
+                            Shelter_id = "SHELTER-06",
                             Type = "rabbits",
                             YearOfBirth = 2010
                         },
@@ -342,7 +342,7 @@ namespace PetStore.Migrations
                             Is_Foster = true,
                             Is_Friendly = true,
                             Name = "Sparkle",
-                            Shelter_id = "SHELTER-02",
+                            Shelter_id = "SHELTER-04",
                             Type = "exotics",
                             YearOfBirth = 2019
                         },
@@ -372,7 +372,7 @@ namespace PetStore.Migrations
                             Is_Foster = false,
                             Is_Friendly = false,
                             Name = "Jimbo",
-                            Shelter_id = "SHELTER-03",
+                            Shelter_id = "SHELTER-05",
                             Type = "exotics",
                             YearOfBirth = 2020
                         },
@@ -387,7 +387,7 @@ namespace PetStore.Migrations
                             Is_Foster = false,
                             Is_Friendly = true,
                             Name = "Raja",
-                            Shelter_id = "SHELTER-03",
+                            Shelter_id = "SHELTER-02",
                             Type = "cats",
                             YearOfBirth = 2017
                         },
@@ -402,7 +402,7 @@ namespace PetStore.Migrations
                             Is_Foster = true,
                             Is_Friendly = true,
                             Name = "Marshmallow",
-                            Shelter_id = "SHELTER-01",
+                            Shelter_id = "SHELTER-03",
                             Type = "birds",
                             YearOfBirth = 2014
                         });
