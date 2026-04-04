@@ -1,18 +1,32 @@
 ﻿@page "/"
-@using PetStore.Services
-@using PetStore.Models
-@inject PetService PetService
+@inject NavigationManager NavManager
 
-<PageTitle>Pawsitive Friends</PageTitle>
+<PageTitle>Home | PetStore</PageTitle>
 
-<section class="home-hero">
-  <h1>Welcome to Pawsitive Friends</h1>
-  <p>
-    Browse animals by category and find a pet you would love to adopt, foster, or sponsor.
-  </p>
-</section>
+<div class="hero-section">
+    <h1>Search to find your new best friend.</h1>
+    <p>Find your new best friend today.</p>
+    
+    <ShelterSelector OnShelterSelected="HandleShelterSelection" />
+</div>
 
+@if (!string.IsNullOrEmpty(selectedShelterId))
+{
+    <div class="results-area">
+        <p>Showing pets for shelter ID: <strong>@selectedShelterId</strong></p>
+    </div>
+}
 
 @code {
+    private string selectedShelterId = string.Empty;
 
+    private void HandleShelterSelection(string id)
+    {
+        selectedShelterId = id;
+        
+        if (!string.IsNullOrEmpty(id))
+        {
+            // NavManager.NavigateTo($"/shelters/{id}");
+        }
+    }
 }
