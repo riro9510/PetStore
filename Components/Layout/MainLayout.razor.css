@@ -1,24 +1,25 @@
 /* Components/Layout/MainLayout.razor.css */
 
 @media (min-width: 641px) {
-    .page {
-        flex-direction: column; 
-    }
+  .page {
+    flex-direction: column;
+  }
 
-    .top-row, article {
-        padding-left: 1.5rem !important; 
-        padding-right: 1.5rem !important;
-    }
+  .top-row,
+  article {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
 }
 
 .top-row ::deep .nav-link {
-    color: var(--brand-pine-teal);
-    font-weight: 600;
-    margin-left: 1rem;
-    text-decoration: none;
+  color: var(--brand-pine-teal);
+  font-weight: 600;
+  margin-left: 1rem;
+  text-decoration: none;
 }
 
 .top-row ::deep .nav-link:hover {
-    color: var(--brand-emerald);
-    text-decoration: underline;
+  color: var(--brand-emerald);
+  text-decoration: underline;
 }

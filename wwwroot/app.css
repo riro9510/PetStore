@@ -4,7 +4,7 @@
     --brand-emerald: #2dcc70;
     --brand-amber-gold: #ffbf00;
     --brand-orange: #fb8500;
-    --brand-off-white: #fff9ec;
+    --brand-off-white: rgb(255 249 236 / 42%);
 
     /* Semantic Mappings */
     --primary: var(--brand-pine-teal);
@@ -192,7 +192,7 @@ h1 {
     color: var(--brand-orange);
 }
 
-.hero-text-section p {
+.hero-text-section p, .mission-text p {
     color: #4b5563;
     font-size: 1.2rem;
 }

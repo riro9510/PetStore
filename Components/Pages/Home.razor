@@ -1,7 +1,9 @@
 ﻿@page "/"
+@using PetStore.Services
 @inject NavigationManager NavManager
 @inject IJSRuntime JSRuntime
 @implements IAsyncDisposable
+@inject PetService PetService
 
 <PageTitle>Pawsitive Friends | Home</PageTitle>
 
@@ -14,7 +16,7 @@
             </p>
             
             <div class="selector-wrapper">
-                <ShelterSelector OnShelterSelected="HandleShelterSelection" />
+                <ShelterSelector Shelters="allShelters" OnShelterSelected="HandleShelterSelection" />
             </div>
         </div>
 
@@ -32,7 +34,7 @@
     <div class="row g-4">
         <div class="col-md-4">
             <ActionCard Title="Adopt" Description="Find your perfect match and give a pet a forever home."
-                        LinkText="View Pets" TargetUrl="/adopt" />
+                        LinkText="View Pets" TargetUrl="/pets" />
         </div>
         <div class="col-md-4">
             <ActionCard Title="Donate" Description="Support our mission with food, medicine, and shelter."
@@ -53,6 +55,25 @@
         </div>
     </div>
 }
+<section class="impact-section container-centered py-5">
+    <div class="row align-items-center">
+        <div class="col-lg-6 mb-5 mb-lg-0">
+            <div class="impact-image-container">
+                <img src="images/banner/our-mission.webp" alt="Our Mission" class="impact-img-3d" />
+            </div>
+        </div>
+
+        <div class="col-lg-6 ps-lg-5 mission-text">
+            <h2 class="section-title">Our Mission</h2>
+            <p class="section-description">
+                Every animal deserves a safe place to call home. We partner with local shelters
+                to provide care and find forever families, ensuring every tail finds its happy ending.
+            </p>
+            
+            <GlobalStats />
+        </div>
+    </div>
+</section>
 
 @code {
     private ElementReference heroImageRef;
@@ -77,8 +98,16 @@
     }
     private string selectedShelterId = string.Empty;
 
+    private List<Shelter> allShelters = new();
+    private string selectedId = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        allShelters = PetService.GetAllShelters();
+    }
+
     private void HandleShelterSelection(string id)
     {
-        selectedShelterId = id;
+        selectedId = id;
     }
 }
