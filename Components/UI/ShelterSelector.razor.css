@@ -1,0 +1,42 @@
+.shelter-selector-container {
+    margin: 1.5rem 0;
+    padding: 0; 
+}
+
+.selector-label {
+    display: block;
+    color: var(--brand-pine-teal);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.custom-select {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    border: 3px solid var(--brand-pine-teal); 
+    border-radius: 1.5rem; 
+    background-color: #ffffff;
+    color: var(--brand-pine-teal);
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    appearance: none; 
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%231b4332' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+}
+
+.custom-select:focus {
+    border-color: var(--brand-orange);
+    color: var(--brand-orange);
+    box-shadow: 0 0 0 4px rgba(251, 133, 0, 0.2); 
+    transform: translateY(-2px); 
+}
+
+.custom-select:hover {
+    border-color: var(--brand-orange);
+}

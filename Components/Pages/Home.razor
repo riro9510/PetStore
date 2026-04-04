@@ -1,32 +1,84 @@
 ﻿@page "/"
 @inject NavigationManager NavManager
+@inject IJSRuntime JSRuntime
+@implements IAsyncDisposable
 
-<PageTitle>Home | PetStore</PageTitle>
+<PageTitle>Pawsitive Friends | Home</PageTitle>
 
-<div class="hero-section">
-    <h1>Search to find your new best friend.</h1>
-    <p>Find your new best friend today.</p>
-    
-    <ShelterSelector OnShelterSelected="HandleShelterSelection" />
+<div class="container-centered">
+    <div class="row align-items-center hero-split">
+        @* Find a Shelter *@
+        <div class="col-lg-6 hero-text-section">
+            <h1 class="display-4 fw-bold">Search to find your <span class="text-highlight">new best friend.</span></h1>
+            <p class="lead mb-4">Connecting loving families with pets in need. Start by selecting a shelter near you.
+            </p>
+            
+            <div class="selector-wrapper">
+                <ShelterSelector OnShelterSelected="HandleShelterSelection" />
+            </div>
+        </div>
+
+        @* Hero *@
+        <div class="col-lg-6 d-none d-lg-block">
+            <div class="hero-image-container">
+                <img src="images/heroes/default-hero-home.webp" alt="Pawsitive Friends Hero"
+                     class="img-fluid hero-image appearing-image" @ref="heroImageRef" id="hero-dog-image" />
+            </div>
+        </div>
+    </div>
 </div>
+
+<section class="container-centered">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <ActionCard Title="Adopt" Description="Find your perfect match and give a pet a forever home."
+                        LinkText="View Pets" TargetUrl="/adopt" />
+        </div>
+        <div class="col-md-4">
+            <ActionCard Title="Donate" Description="Support our mission with food, medicine, and shelter."
+                        LinkText="Give Today" TargetUrl="/donate" />
+        </div>
+        <div class="col-md-4">
+            <ActionCard Title="Volunteer" Description="Share your time and love with animals in need."
+                        LinkText="Join Us" TargetUrl="/volunteer" />
+        </div>
+    </div>
+</section>
 
 @if (!string.IsNullOrEmpty(selectedShelterId))
 {
-    <div class="results-area">
-        <p>Showing pets for shelter ID: <strong>@selectedShelterId</strong></p>
+    <div class="container-centered mt-5">
+        <div class="results-area p-4 rounded-3 bg-white shadow-sm border-start border-primary border-4">
+            <p class="mb-0">Showing pets for shelter ID: <strong>@selectedShelterId</strong></p>
+        </div>
     </div>
 }
 
 @code {
+    private ElementReference heroImageRef;
+    private IJSObjectReference? scrollModule;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            scrollModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/heroScroll.js");
+            await scrollModule.InvokeVoidAsync("initHeroScroll", "hero-dog-image");
+        }
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        if (scrollModule is not null)
+        {
+            await scrollModule.InvokeVoidAsync("disposeHeroScroll");
+            await scrollModule.DisposeAsync();
+        }
+    }
     private string selectedShelterId = string.Empty;
 
     private void HandleShelterSelection(string id)
     {
         selectedShelterId = id;
-        
-        if (!string.IsNullOrEmpty(id))
-        {
-            // NavManager.NavigateTo($"/shelters/{id}");
-        }
     }
 }

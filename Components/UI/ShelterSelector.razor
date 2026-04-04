@@ -1,16 +1,15 @@
 @using PetStore.Models
 @using PetStore.Services
-
 @inject PetService PetService
 
 <div class="shelter-selector-container">
-    <label for="shelter-select" class="selector-label">Find your nearest shelter:</label>
+    <label for="shelter-select" class="selector-label">Find your nearest shelter</label>
     
     <select id="shelter-select" class="custom-select" @onchange="OnShelterChanged">
-        <option value="">-- Select a Shelter --</option>
+        <option value="">-- Choose a location --</option>
         @foreach (var shelter in shelters)
         {
-            <option value="@shelter.Id">@shelter.Name (@shelter.City, @shelter.Country)</option>
+            <option value="@shelter.Id">@shelter.Name</option>
         }
     </select>
 </div>
@@ -18,13 +17,11 @@
 @code {
     private List<Shelter> shelters = new();
 
-    // EventCallback para notificar al componente padre el cambio
     [Parameter]
     public EventCallback<string> OnShelterSelected { get; set; }
 
     protected override void OnInitialized()
     {
-        // Aumentamos las probabilidades de éxito cargando los datos al iniciar
         shelters = PetService.GetAllShelters();
     }
 
@@ -34,35 +31,3 @@
         await OnShelterSelected.InvokeAsync(selectedId);
     }
 }
-
-<style>
-    .shelter-selector-container {
-        margin: 20px 0;
-        padding: 15px;
-        background-color: var(--brand-off-white);
-        border-left: 5px solid var(--brand-emerald);
-        border-radius: 8px;
-    }
-
-    .selector-label {
-        display: block;
-        color: var(--brand-pine-teal);
-        font-weight: bold;
-        margin-bottom: 8px;
-    }
-
-    .custom-select {
-        width: 100%;
-        padding: 10px;
-        border: 2px solid var(--brand-pine-teal);
-        border-radius: 5px;
-        background-color: white;
-        color: var(--brand-pine-teal);
-        outline: none;
-    }
-
-    .custom-select:focus {
-        border-color: var(--brand-orange);
-        box-shadow: 0 0 5px var(--brand-amber-gold);
-    }
-</style>
