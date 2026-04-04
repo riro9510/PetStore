@@ -10,22 +10,28 @@
 
 @if (selectedShelter is null)
 {
+  <!-- Display message if shelter is not found -->
   <p>Shelter not found.</p>
 }
 else
 {
   <section class="shelter-details">
     
+    <!-- Display selected shelter name -->
     <h1>@selectedShelter.Name</h1>
 
   </section>
 }
 
 @code {
+  // Route parameter used to identify which shelter to display
   [Parameter]
   public required string id { get; set; }
 
+  // Holds the selected shelter data
   private Shelter? selectedShelter;
+
+  // Navigates the user to the application page.
   void GoToApplication()
   {
     Navigation.NavigateTo("/application");
@@ -33,6 +39,7 @@ else
 
   protected override void OnParametersSet()
   {
+    // Retrieve shelter data based on the shelter ID
     selectedShelter = PetService.GetShelterById(id);
   }
 }

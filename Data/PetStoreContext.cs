@@ -40,12 +40,12 @@ public class PetStoreContext : IdentityDbContext<ApplicationUser>
       new Pet
       {
           Id = "2",
-          Name = "Luna",
+          Name = "Majesty",
           Type = "cats",
-          Breed = "Siamese",
+          Breed = "Persian",
           YearOfBirth = 2022,
           Description = "Curious, calm, and full of personality.",
-          ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/siamese.jpg",
+          ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/persian.jpg",
           Energy = 3,
           Is_Friendly = true,
           Is_Adopt = true,
@@ -55,12 +55,12 @@ public class PetStoreContext : IdentityDbContext<ApplicationUser>
       new Pet
       {
           Id = "3",
-          Name = "Toothless",
-          Type = "dragons",
-          Breed = "Mini Flame",
+          Name = "Tiny",
+          Type = "rabbits",
+          Breed = "Netherland Dwarf",
           YearOfBirth = 2010, // Ajustado al rango permitido (2010-2026)
           Description = "Magical companion with fiery charm.",
-          ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/toothless.jpg",
+          ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/netherland-dwarf.jpg",
           Energy = 5,
           Is_Friendly = true,
           Is_Adopt = false,
@@ -71,11 +71,11 @@ public class PetStoreContext : IdentityDbContext<ApplicationUser>
       {
           Id = "4",
           Name = "Sparkle",
-          Type = "unicorns",
-          Breed = "Silver Mane",
+          Type = "exotics",
+          Breed = "Hedgehog",
           YearOfBirth = 2019,
-          Description = "Rare, graceful, and full of wonder.",
-          ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/unicorn.jpg",
+          Description = "Rare, shy, and full of wonder.",
+          ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/hedgehog.jpg",
           Energy = 2,
           Is_Friendly = true,
           Is_Adopt = true,
@@ -101,13 +101,13 @@ public class PetStoreContext : IdentityDbContext<ApplicationUser>
       {
           Id = "6",
           Name = "Jimbo",
-          Type = "elephants",
-          Breed = "Asian Elephant",
+          Type = "exotics",
+          Breed = "Bearded Dragon",
           YearOfBirth = 2020,
           Description = "Curious, adorable, and intelligent.",
-          ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/elephant.jpg",
+          ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/bearded-dragon.jpg",
           Energy = 2,
-          Is_Friendly = true,
+          Is_Friendly = false,
           Is_Adopt = false,
           Is_Foster = false,
           Shelter_id = "SHELTER-03"
@@ -117,12 +117,12 @@ public class PetStoreContext : IdentityDbContext<ApplicationUser>
           Id = "7",
           Name = "Raja",
           Type = "cats",
-          Breed = "Siberian Tiger",
+          Breed = "Orange Tabby",
           YearOfBirth = 2017,
-          Description = "Majestic, regal, and content. All she wants is to bathe.",
-          ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/tiger.jpg",
+          Description = "Majestic, regal, and content. All she wants is to lay in the sun.",
+          ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/orange-cat.jpg",
           Energy = 1,
-          Is_Friendly = false,
+          Is_Friendly = true,
           Is_Adopt = false,
           Is_Foster = false,
           Shelter_id = "SHELTER-03"
@@ -158,22 +158,17 @@ public class PetStoreContext : IdentityDbContext<ApplicationUser>
         new PetCategory
         {
           Id = 3,
-          Name = "dragons"
+          Name = "rabbits"
         },
         new PetCategory
         {
           Id = 4,
-          Name = "unicorns"
-        },
-        new PetCategory
-        {
-          Id = 5,
           Name = "birds"
         },
         new PetCategory
         {
-          Id = 6,
-          Name = "elephants"
+          Id = 5,
+          Name = "exotics"
         }
     );
 

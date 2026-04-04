@@ -301,14 +301,14 @@ namespace PetStore.Migrations
                         new
                         {
                             Id = "2",
-                            Breed = "Siamese",
+                            Breed = "Persian",
                             Description = "Curious, calm, and full of personality.",
                             Energy = 3,
-                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/siamese.jpg",
+                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/persian.jpg",
                             Is_Adopt = true,
                             Is_Foster = false,
                             Is_Friendly = true,
-                            Name = "Luna",
+                            Name = "Majesty",
                             Shelter_id = "SHELTER-01",
                             Type = "cats",
                             YearOfBirth = 2022
@@ -316,31 +316,31 @@ namespace PetStore.Migrations
                         new
                         {
                             Id = "3",
-                            Breed = "Mini Flame",
+                            Breed = "Netherland Dwarf",
                             Description = "Magical companion with fiery charm.",
                             Energy = 5,
-                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/toothless.jpg",
+                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/netherland-dwarf.jpg",
                             Is_Adopt = false,
                             Is_Foster = true,
                             Is_Friendly = true,
-                            Name = "Toothless",
+                            Name = "Tiny",
                             Shelter_id = "SHELTER-02",
-                            Type = "dragons",
+                            Type = "rabbits",
                             YearOfBirth = 2010
                         },
                         new
                         {
                             Id = "4",
-                            Breed = "Silver Mane",
-                            Description = "Rare, graceful, and full of wonder.",
+                            Breed = "Hedgehog",
+                            Description = "Rare, shy, and full of wonder.",
                             Energy = 2,
-                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/unicorn.jpg",
+                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/hedgehog.jpg",
                             Is_Adopt = true,
                             Is_Foster = true,
                             Is_Friendly = true,
                             Name = "Sparkle",
                             Shelter_id = "SHELTER-02",
-                            Type = "unicorns",
+                            Type = "exotics",
                             YearOfBirth = 2019
                         },
                         new
@@ -361,28 +361,28 @@ namespace PetStore.Migrations
                         new
                         {
                             Id = "6",
-                            Breed = "Asian Elephant",
+                            Breed = "Bearded Dragon",
                             Description = "Curious, adorable, and intelligent.",
                             Energy = 2,
-                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/elephant.jpg",
+                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/bearded-dragon.jpg",
                             Is_Adopt = false,
                             Is_Foster = false,
-                            Is_Friendly = true,
+                            Is_Friendly = false,
                             Name = "Jimbo",
                             Shelter_id = "SHELTER-03",
-                            Type = "elephants",
+                            Type = "exotics",
                             YearOfBirth = 2020
                         },
                         new
                         {
                             Id = "7",
-                            Breed = "Siberian Tiger",
-                            Description = "Majestic, regal, and content. All she wants is to bathe.",
+                            Breed = "Orange Tabby",
+                            Description = "Majestic, regal, and content. All she wants is to lay in the sun.",
                             Energy = 1,
-                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/tiger.jpg",
+                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/orange-cat.jpg",
                             Is_Adopt = false,
                             Is_Foster = false,
-                            Is_Friendly = false,
+                            Is_Friendly = true,
                             Name = "Raja",
                             Shelter_id = "SHELTER-03",
                             Type = "cats",
@@ -433,22 +433,17 @@ namespace PetStore.Migrations
                         new
                         {
                             Id = 3,
-                            Name = "dragons"
+                            Name = "rabbits"
                         },
                         new
                         {
                             Id = 4,
-                            Name = "unicorns"
-                        },
-                        new
-                        {
-                            Id = 5,
                             Name = "birds"
                         },
                         new
                         {
-                            Id = 6,
-                            Name = "elephants"
+                            Id = 5,
+                            Name = "exotics"
                         });
                 });
 

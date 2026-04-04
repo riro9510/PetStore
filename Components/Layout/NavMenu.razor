@@ -2,15 +2,19 @@
 @using PetStore.Models
 @inject PetService PetService
 
+<!-- Navigation menu for the application -->
 <nav class="nav-menu">
 
+    <!-- Home link -->
     <NavLink href="/" Match="NavLinkMatch.All">
         Home
     </NavLink>
 
+    <!-- Pets dropdown menu -->
     <div class="pets-menu">
         <NavLink href="@($"/pets")">Pets</NavLink>
 
+        <!-- Dynamically generated list of pet categories -->
         <div class="pets-list">
             @foreach (var category in categories)
             {
@@ -21,14 +25,17 @@
         </div>
     </div>
 
+    <!-- Shelters page -->
     <NavLink href="/shelters">
         Shelters
     </NavLink>
 
+    <!-- About us page -->
     <NavLink href="/about">
         About Us
     </NavLink>
 
+    <!-- Only visible to Admin users -->
     <AuthorizeView Roles="Admin">
         <Authorized>
             <NavLink href="/management">
@@ -41,12 +48,17 @@
 
 @code {
 
+    // List of categories used to populate the Pets dropdown menu
     private List<PetCategory> categories = new();
 
     protected override void OnInitialized()
     {
+        // Load categories when the navigation menu initializes
         categories = PetService.GetAllCategories();
     }
+
+
+    // Formats category names by capitalizing the first letter; Improves display in the navigation menu.
 
     private string FormatCategoryName(string name)
     {
