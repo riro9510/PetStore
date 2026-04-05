@@ -17,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Retrieve database connection string from configuration
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+    ?? "Data Source=PetStore.db";
 
 // Configure Entity Framework with SQLite database
 builder.Services.AddDbContext<PetStoreContext>(options =>
