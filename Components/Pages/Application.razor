@@ -65,6 +65,12 @@
           <InputRadio Value='@("Sponsor")' /> Sponsor
         </label>
       </div>
+
+      <div>
+        <label>
+          <InputRadio Value='@("Volunteer")' /> Volunteer
+        </label>
+      </div>
     </InputRadioGroup>
   </div>
 
@@ -109,7 +115,7 @@
   }
   else if (application.HelpType == "Sponsor")
   {
-    <!-- Conditional section for sponsorship questions -->
+    <!-- Section for sponsorship questions -->
     <div class="form-section">
       <h3>Sponsorship Questions</h3>
 
@@ -120,6 +126,23 @@
 
       <div class="form-group">
         <label>Why do you want to sponsor?</label>
+        <InputTextArea class="form-control" @bind-Value="application.Reason" />
+      </div>
+    </div>
+  }
+  else if (application.HelpType == "Volunteer")
+  {
+    <!-- Section for volunteer questions -->
+    <div class="form-section">
+      <h3>Volunteer Questions</h3>
+
+      <div class="form-group">
+        <label>What kind of volunteer work are you interested in?</label>
+        <InputText class="form-control" @bind-Value="application.Experience" />
+      </div>
+
+      <div class="form-group">
+        <label>Why do you want to volunteer?</label>
         <InputTextArea class="form-control" @bind-Value="application.Reason" />
       </div>
     </div>
