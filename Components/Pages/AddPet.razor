@@ -17,7 +17,6 @@
 
 <EditForm Model="newPet" OnValidSubmit="SavePet" >
   <DataAnnotationsValidator />
-  <ValidationSummary/>
 
   <div>
     <label>Name:</label>
@@ -63,7 +62,7 @@
 
   <div>
     <!-- Allows user to upload an image file from their computer -->
-    <label>Upload Image:</label>
+    <label>OR<br /> Upload Image:<br /></label>
     <InputFile OnChange="HandleFileSelected" accept="image/*" />
 
     @if (!string.IsNullOrWhiteSpace(uploadMessage))
@@ -80,32 +79,34 @@
   </div>
 
   <div>
-    <!-- Allows admin to let client know if pet is friendly or not -->
-    <label>Friendly:</label>
-    <InputCheckbox @bind-Value="newPet.Is_Friendly" />
-    <ValidationMessage For="@(() => newPet.Is_Friendly)" />
-  </div>
-
-  <div>
-    <!-- Admin lets client know if pet is available to adopt -->
-    <label>Available for Adoption:</label>
-    <InputCheckbox @bind-Value="newPet.Is_Adopt" />
-    <ValidationMessage For="@(() => newPet.Is_Adopt)" />
-  </div>
-
-  <div>
-    <!-- Admin lets client know if pet is ready to foster -->
-    <label>Available for Foster:</label>
-    <InputCheckbox @bind-Value="newPet.Is_Foster" />
-    <ValidationMessage For="@(() => newPet.Is_Foster)" />
-  </div>
-
-  <div>
     <label>Shelter ID:</label>
     <InputText class="form-control" @bind-Value="newPet.Shelter_id" />
     <ValidationMessage For="@(() => newPet.Shelter_id)" />
   </div>
 
+  <div>
+    <!-- Allows admin to let client know if pet is friendly or not -->
+    <label>
+    <InputCheckbox @bind-Value="newPet.Is_Friendly" />
+    Friendly:</label>
+    <ValidationMessage For="@(() => newPet.Is_Friendly)" />
+  </div>
+
+  <div>
+    <!-- Admin lets client know if pet is available to adopt -->
+    <label>
+    <InputCheckbox @bind-Value="newPet.Is_Adopt" />
+    Available for Adoption:</label>
+    <ValidationMessage For="@(() => newPet.Is_Adopt)" />
+  </div>
+
+  <div>
+    <!-- Admin lets client know if pet is ready to foster -->
+    <label>
+    <InputCheckbox @bind-Value="newPet.Is_Foster" />
+    Available for Foster:</label>
+    <ValidationMessage For="@(() => newPet.Is_Foster)" />
+  </div>
   <button type="submit">Save</button>
   <button type="button" @onclick="Cancel">Cancel</button>
 </EditForm>
