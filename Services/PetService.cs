@@ -37,6 +37,11 @@ public class PetService
 
   public void AddPet(Pet pet)
   {
+    if (string.IsNullOrWhiteSpace(pet.Id))
+    {
+      pet.Id = Guid.NewGuid().ToString();
+    }
+
     pet.Type = pet.Type.Trim().ToLower();
 
     _context.Pets.Add(pet);
