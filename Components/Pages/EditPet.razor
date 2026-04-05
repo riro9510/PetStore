@@ -66,16 +66,44 @@ else
       <InputText class="form-control" @bind-Value="editPet.ImageUrl" />
     </div>
 
-    <div>
-      <!-- Lets admin replace the current image with one from their computer -->
-      <label>Upload New Image:</label>
-      <InputFile OnChange="HandleFileSelected" accept="image/*" />
+    <div class="mb-3">
+      <label class="form-label">OR<br />Upload New Image</label>
+      <InputFile class="form-control" OnChange="HandleFileSelected" accept="image/*" />
 
       @if (!string.IsNullOrWhiteSpace(uploadMessage))
       {
-        <p>@uploadMessage</p>
+        <p class="mt-2">@uploadMessage</p>
       }
     </div>
+
+    <div>
+      <label>Energy Level (1 to 5):</label>
+      <InputNumber class="form-control" @bind-Value="editPet.Energy" />
+      <ValidationMessage For="@(() => editPet.Energy)" />
+    </div>
+
+    <div>
+      <label>Shelter ID:</label>
+      <InputText class="form-control" @bind-Value="editPet.Shelter_id" />
+      <ValidationMessage For="@(() => editPet.Shelter_id)" />
+    </div>
+
+    <div class="form-check">
+      <InputCheckbox class="form-check-input" @bind-Value="editPet.Is_Friendly" />
+      <label class="form-check-label">Friendly</label>
+    </div>
+
+    <div class="form-check">
+      <InputCheckbox class="form-check-input" @bind-Value="editPet.Is_Adopt" />
+      <label class="form-check-label">Available for Adoption</label>
+    </div>
+
+    <div class="form-check">
+      <InputCheckbox class="form-check-input" @bind-Value="editPet.Is_Foster" />
+      <label class="form-check-label">Available for Foster</label>
+    </div>
+
+    <br />
 
     <button type="submit">Save Changes</button>
     <button type="button" @onclick="Cancel">Cancel</button>
@@ -83,7 +111,7 @@ else
 }
 
 @code {
-  // Route parameter from /management/edit/{"id"}
+  // Route parameter from /management/edit/{id}
   [Parameter]
   public required string Id { get; set; }
 
@@ -105,10 +133,10 @@ else
     // Load categories for the dropdown
     categories = PetService.GetAllCategories();
 
-    // Find the pet being edited using the id
-    var pet = PetService.GetPetById("Id");
+    // Find the pet being edited using the route id
+    var pet = PetService.GetPetById(Id);
 
-    // Creates a copy so the form edits the pet data 
+    // Creates a copy so the form edits the pet data
     if (pet is not null)
     {
       editPet = new Pet
@@ -119,14 +147,17 @@ else
         Breed = pet.Breed,
         YearOfBirth = pet.YearOfBirth,
         Description = pet.Description,
-        ImageUrl = pet.ImageUrl
+        ImageUrl = pet.ImageUrl,
+        Energy = pet.Energy,
+        Shelter_id = pet.Shelter_id,
+        Is_Friendly = pet.Is_Friendly,
+        Is_Adopt = pet.Is_Adopt,
+        Is_Foster = pet.Is_Foster
       };
     }
   }
 
-   // Stores the file selected by the user for upload.
-   // The file is not saved until the form is submitted.
- 
+  // Stores the file selected by the user for upload. The file is not saved until the form is submitted.
   private void HandleFileSelected(InputFileChangeEventArgs e)
   {
     selectedFile = e.File;
@@ -136,11 +167,7 @@ else
         : "";
   }
 
- 
-   // Saves the edited pet information.
-   // If a new image is uploaded, it replaces the previous image path.
-   // If no new image is uploaded, the current image remains unchanged.
- 
+  // Saves the edited pet information. If a new image is uploaded, it replaces the previous image path. If no new image is uploaded, the current image remains unchanged.
   private async Task SavePet()
   {
     if (editPet is null)
@@ -183,8 +210,7 @@ else
     NavigationManager.NavigateTo("/management");
   }
 
- 
-   // Cancels editing and returns to the management page.
+  // Cancels editing and returns to the management page.
   private void Cancel()
   {
     NavigationManager.NavigateTo("/management");
