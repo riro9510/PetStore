@@ -130,15 +130,14 @@
     categories = PetService.GetAllCategories();
   }
 
-  // Handles file selection from the InputFile component.
-  // Stores the file for later processing.
+  // Handles file selection from the InputFile component.  Stores the file for later processing.
   private void HandleFileSelected(InputFileChangeEventArgs e)
   {
     selectedFile = e.File;
 
     uploadMessage = selectedFile is not null
-        ? $"Selected file: {selectedFile.Name}"
-        : "";
+      ? $"Selected file: {selectedFile.Name}"
+      : "";
   }
 
    // Saves the pet to the database. If an image is uploaded, it is stored in wwwroot and linked. Otherwise, a default image is used.
