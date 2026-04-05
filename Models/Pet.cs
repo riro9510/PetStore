@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace PetStore
+namespace PetStore.Models
 {
 
   public class Pet
