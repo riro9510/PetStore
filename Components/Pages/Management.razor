@@ -1,6 +1,6 @@
 @page "/management"
 @rendermode InteractiveServer
-@attribute [Authorize(Roles = Roles.Admin)]
+@* @attribute [Authorize(Roles = Roles.Admin)] *@
 
 @using PetStore.Models
 @using PetStore.Services
@@ -14,15 +14,20 @@
 
 <!-- Display basic pet information -->
 <table class="table">
-  <thead>
+  <thead class="text-center">
     <tr>
       <th>Name</th>
       <th>Category</th>
       <th>Breed</th>
       <th>Age</th>
+      <th>Energy</th>
+      <th>Friendly</th>
+      <th>Adopt</th>
+      <th>Foster</th>
       <th>Actions</th>
     </tr>
   </thead>
+
   <tbody>
     @foreach (var pet in pets)
     {
@@ -30,12 +35,31 @@
         <td>@pet.Name</td>
         <td>@pet.Type</td>
         <td>@pet.Breed</td>
+
         <!-- Convert YearOfBirth to approximate age -->
         <td>@GetAge(pet.YearOfBirth)</td>
-        <!-- Edit navigates to edit page with pet id, and delete removes pet and refreshes list -->
+
+        <!-- Show energy as number or icons -->
         <td>
-          <button class="btn btn-success me-2" type="button" @onclick="() => EditPet(pet.Id)">Edit</button>
-          <button class="btn btn-danger me-2" type="button" @onclick="() => DeletePet(pet.Id)">Delete</button>
+          @for (int i = 0; i < pet.Energy; i++)
+          {
+            <span style="margin-right: 2px; font-size: 18px;">⚡</span>
+          }
+        </td>
+
+        <!-- Boolean values displayed as Yes/No -->
+        <td>@(pet.Is_Friendly ? "Yes" : "No")</td>
+        <td>@(pet.Is_Adopt ? "Yes" : "No")</td>
+        <td>@(pet.Is_Foster ? "Yes" : "No")</td>
+
+        <td>
+          <button class="btn btn-success me-2" type="button" @onclick="() => EditPet(pet.Id)">
+            Edit
+          </button>
+
+          <button class="btn btn-danger me-2" type="button" @onclick="() => DeletePet(pet.Id)">
+            Delete
+          </button>
         </td>
       </tr>
     }

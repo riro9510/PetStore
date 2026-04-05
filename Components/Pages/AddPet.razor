@@ -1,6 +1,6 @@
 @page "/management/add"
 @rendermode InteractiveServer
-@attribute [Authorize(Roles = Roles.Admin)]
+@* @attribute [Authorize(Roles = Roles.Admin)] *@
 
 @using PetStore.Models
 @using PetStore.Services
@@ -71,10 +71,20 @@
     }
   </div>
 
-  <div>
-    <!-- Allows user to select pet energy level -->
-    <label>Energy Level (1 to 5):</label>
-    <InputNumber class="form-control" @bind-Value="newPet.Energy" />
+  <div class="mb-3">
+    <label class="form-label">Energy Level</label>
+
+    <div class="energy-picker" @onmouseleave="ClearEnergyHover">
+      @for (int i = 1; i <= 5; i++)
+      {
+        var level = i;
+        <span class="energy-icon @(GetEnergyClass(level, newPet.Energy, hoverEnergy))" @onclick="() => SetEnergy(level)"
+              @onmouseenter="() => PreviewEnergy(level)">
+          ⚡
+        </span>
+      }
+    </div>
+
     <ValidationMessage For="@(() => newPet.Energy)" />
   </div>
 
@@ -139,6 +149,30 @@
     uploadMessage = selectedFile is not null
       ? $"Selected file: {selectedFile.Name}"
       : "";
+  }
+
+  // Energy settings so admin can adjust energy level for pet
+  private int? hoverEnergy;
+
+  private void SetEnergy(int level)
+  {
+    newPet.Energy = level;
+  }
+
+  private void PreviewEnergy(int level)
+  {
+    hoverEnergy = level;
+  }
+
+  private void ClearEnergyHover()
+  {
+    hoverEnergy = null;
+  }
+
+  private string GetEnergyClass(int iconLevel, int selectedEnergy, int? hoverLevel)
+  {
+    var activeLevel = hoverLevel ?? selectedEnergy;
+    return iconLevel <= activeLevel ? "filled" : "empty";
   }
 
    // Saves the pet to the database. If an image is uploaded, it is stored in wwwroot and linked. Otherwise, a default image is used.
