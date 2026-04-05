@@ -1,10 +1,10 @@
-// This file configures the entire application including services,
-// authentication, middleware pipeline, and custom routes.
+// This file configures the entire application including services, authentication, middleware pipeline, and custom routes.
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.HttpOverrides;
 using PetStore.Components;
 using PetStore.Data;
 using PetStore.Services;
@@ -74,6 +74,12 @@ if (!app.Environment.IsDevelopment())
 
 // Handle 404 errors by redirecting to custom "not found" page
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
+
+// Overwrite HTTP to HTTPS
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+  ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 // Standard middleware setup
 app.UseHttpsRedirection();
