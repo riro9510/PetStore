@@ -4,20 +4,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PetStore.Services;
 
+// This service handles pet, category, and shelter data operations. It acts as the main connection between the UI and the database context.
 public class PetService
 {
   private readonly PetStoreContext _context;
 
+  // Inject the database context so this service can read and update data.
   public PetService(PetStoreContext context)
   {
     _context = context;
   }
 
+  // Return all pets stored in the database.
   public List<Pet> GetAllPets()
   {
     return _context.Pets.ToList();
   }
 
+  // Return pets that match a selected category. If no category is provided, return an empty list.
   public List<Pet> GetPetsByCategory(string? category)
   {
     if (string.IsNullOrWhiteSpace(category))
@@ -25,16 +29,19 @@ public class PetService
       return new List<Pet>();
     }
 
+    // Compare categories in lowercase so filtering is case-insensitive.
     return _context.Pets
       .Where(p => p.Type.ToLower() == category.ToLower())
       .ToList();
   }
 
+  // Find one pet by its unique id. Returns null if no matching pet is found.
   public Pet? GetPetById(string id)
   {
     return _context.Pets.FirstOrDefault(p => p.Id == id);
   }
 
+  // Add a new pet to the database. The pet type is cleaned first to keep category names consistent.
   public void AddPet(Pet pet)
   {
     if (string.IsNullOrWhiteSpace(pet.Id))
@@ -48,6 +55,7 @@ public class PetService
     _context.SaveChanges();
   }
 
+  // Update an existing pet's information. Only save changes if the pet already exists in the database.
   public void UpdatePet(Pet updatedPet)
   {
     var pet = _context.Pets.FirstOrDefault(p => p.Id == updatedPet.Id);
@@ -65,6 +73,7 @@ public class PetService
     }
   }
 
+  // Delete a pet by id if it exists.
   public void DeletePet(string id)
   {
     var pet = _context.Pets.FirstOrDefault(p => p.Id == id);
@@ -76,11 +85,13 @@ public class PetService
     }
   }
 
+  // Return all pet categories from the database.
   public List<PetCategory> GetAllCategories()
   {
     return _context.PetCategories.ToList();
   }
 
+  // Add a new category if it does not already exist.  The category name is normalized to prevent duplicates with different casing.
   public void AddCategory(PetCategory category)
   {
     category.Name = category.Name.Trim().ToLower();
@@ -94,6 +105,7 @@ public class PetService
     }
   }
 
+  // Delete a category only if it exists and is not currently being used by any pets. Returns true if deleted successfully, otherwise false.
   public bool DeleteCategory(int id)
   {
     var category = _context.PetCategories.FirstOrDefault(c => c.Id == id);
@@ -103,6 +115,7 @@ public class PetService
       return false;
     }
 
+    // Prevent deleting categories that are still assigned to pets.
     bool categoryInUse = _context.Pets.Any(p => p.Type.ToLower() == category.Name.ToLower());
 
     if (categoryInUse)
@@ -116,6 +129,7 @@ public class PetService
     return true;
   }
 
+  // Update a category name and also update all pets using the old category name. This keeps pet records consistent after a category rename.
   public void UpdateCategory(PetCategory updatedCategory)
   {
     var category = _context.PetCategories.FirstOrDefault(c => c.Id == updatedCategory.Id);
@@ -127,6 +141,7 @@ public class PetService
 
       category.Name = newName;
 
+      // Update all pets that were assigned to the old category name.
       var petsToUpdate = _context.Pets
           .Where(p => p.Type.ToLower() == oldName.ToLower())
           .ToList();
@@ -140,12 +155,13 @@ public class PetService
     }
   }
 
-
+  // Return all shelters in the database.
   public List<Shelter> GetAllShelters()
   {
     return _context.Shelters.ToList();
   }
 
+  // Return shelters filtered by country. If no country is provided, return an empty list.
   public List<Shelter> GetSheltersByCountry(string? country)
   {
     if (string.IsNullOrWhiteSpace(country))
@@ -153,16 +169,19 @@ public class PetService
       return new List<Shelter>();
     }
 
+    // Compare country names in lowercase so filtering is case-insensitive.
     return _context.Shelters
       .Where(s => s.Country.ToLower() == country.ToLower())
       .ToList();
   }
 
+  // Find one shelter by its unique id. Returns null if no matching shelter is found.
   public Shelter? GetShelterById(string id)
   {
     return _context.Shelters.FirstOrDefault(s => s.Id == id);
   }
 
+  // Return dashboard totals for pets and shelters. Async is used here because database counting operations can be awaited efficiently.
   public async Task<(int pets, int shelters)> GetGlobalTotalsAsync()
   {
     var petsCount = await _context.Pets.CountAsync();
