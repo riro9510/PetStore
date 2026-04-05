@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace PetStore.Data;
 
+// This seed is to create roles "Admin" and "Client" to app
 public static class IdentitySeeder
 {
   public static async Task SeedRolesAsync(IServiceProvider services)

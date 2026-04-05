@@ -8,21 +8,28 @@
 @inject NavigationManager NavigationManager
 
 <h1>Pet Management</h1>
+
 <!-- Navigation buttons for admin actions -->
 <button type="button" @onclick="CreatePet">Add Pet</button>
 <button type="button" @onclick="AddCategory">Manage Categories</button>
 
 <!-- Display basic pet information -->
 <table class="table">
-  <thead>
+  <thead class="text-center">
     <tr>
       <th>Name</th>
       <th>Category</th>
       <th>Breed</th>
       <th>Age</th>
+      <th>Energy</th>
+      <th>Shelter</th>
+      <th>Friendly</th>
+      <th>Adopt</th>
+      <th>Foster</th>
       <th>Actions</th>
     </tr>
   </thead>
+
   <tbody>
     @foreach (var pet in pets)
     {
@@ -30,12 +37,36 @@
         <td>@pet.Name</td>
         <td>@pet.Type</td>
         <td>@pet.Breed</td>
+
         <!-- Convert YearOfBirth to approximate age -->
-        <td>@GetAge(pet.YearOfBirth)</td>
-        <!-- Edit navigates to edit page with pet id, and delete removes pet and refreshes list -->
+        <td class="text-center">@GetAge(pet.YearOfBirth)</td>
+
+        <!-- Show energy with lightning icons -->
         <td>
-          <button class="btn btn-success me-2" type="button" @onclick="() => EditPet(pet.Id)">Edit</button>
-          <button class="btn btn-danger me-2" type="button" @onclick="() => DeletePet(pet.Id)">Delete</button>
+          @for (int i = 0; i < pet.Energy; i++)
+          {
+            <span style="margin-right: 2px; font-size: 18px;">⚡</span>
+          }
+        </td>
+
+        <!-- Show shelter id -->
+        <td title="@GetShelterName(pet.Shelter_id)">
+          @pet.Shelter_id
+        </td>
+
+        <!-- Boolean values displayed as Yes/No -->
+        <td>@(pet.Is_Friendly ? "Yes" : "No")</td>
+        <td>@(pet.Is_Adopt ? "Yes" : "No")</td>
+        <td>@(pet.Is_Foster ? "Yes" : "No")</td>
+
+        <td>
+          <button class="btn btn-success me-2 w-100" type="button" @onclick="() => EditPet(pet.Id)">
+            Edit
+          </button>
+
+          <button class="btn btn-danger me-2 w-100" type="button" @onclick="() => DeletePet(pet.Id)">
+            Delete
+          </button>
         </td>
       </tr>
     }
@@ -83,9 +114,15 @@
     NavigationManager.NavigateTo("/management/categories");
   }
 
-   // Converts a birth year into an approximate age.
+  // Converts a birth year into an approximate age.
   private int GetAge(int yearOfBirth)
   {
     return DateTime.Now.Year - yearOfBirth;
+  }
+
+  private string GetShelterName(string shelterId)
+  {
+    var shelter = PetService.GetShelterById(shelterId);
+    return shelter?.Name ?? "Unknown Shelter";
   }
 }

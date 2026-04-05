@@ -17,7 +17,6 @@
 
 <EditForm Model="newPet" OnValidSubmit="SavePet" >
   <DataAnnotationsValidator />
-  <ValidationSummary/>
 
   <div>
     <label>Name:</label>
@@ -63,49 +62,69 @@
 
   <div>
     <!-- Allows user to upload an image file from their computer -->
-    <label>Upload Image:</label>
+    <label>OR<br /> Upload Image:<br /></label>
     <InputFile OnChange="HandleFileSelected" accept="image/*" />
 
     @if (!string.IsNullOrWhiteSpace(uploadMessage))
     {
-      <p>@uploadMessage</p>
+      <p class="mt-2">@uploadMessage</p>
     }
   </div>
 
-  <div>
-    <!-- Allows user to select pet energy level -->
-    <label>Energy Level (1 to 5):</label>
-    <InputNumber class="form-control" @bind-Value="newPet.Energy" />
+  <!-- Energy picker will allow admin to hover over icon, and click to set the amount-->
+  <div class="mb-3">
+    <label class="form-label">Energy Level</label>
+
+    <div class="energy-picker" @onmouseleave="ClearEnergyHover">
+      @for (int i = 1; i <= 5; i++)
+      {
+        var level = i;
+        <span class="energy-icon @(GetEnergyClass(level, newPet.Energy, hoverEnergy))" @onclick="() => SetEnergy(level)"
+              @onmouseenter="() => PreviewEnergy(level)">
+          ⚡
+        </span>
+      }
+    </div>
+
     <ValidationMessage For="@(() => newPet.Energy)" />
+  </div>
+
+  <!-- Shelters presented as dropdown menu to avoid confusion with different shelters -->
+  <div>
+    <label>Shelter:</label>
+    <InputSelect class="form-control" @bind-Value="newPet.Shelter_id">
+      <option value="">Select a Shelter</option>
+      @foreach (var shelter in shelters)
+      {
+        <option value="@shelter.Id">@shelter.Name</option>
+      }
+    </InputSelect>
+    <ValidationMessage For="@(() => newPet.Shelter_id)" />
   </div>
 
   <div>
     <!-- Allows admin to let client know if pet is friendly or not -->
-    <label>Friendly:</label>
+    <label>
     <InputCheckbox @bind-Value="newPet.Is_Friendly" />
+    Friendly:</label>
     <ValidationMessage For="@(() => newPet.Is_Friendly)" />
   </div>
 
   <div>
     <!-- Admin lets client know if pet is available to adopt -->
-    <label>Available for Adoption:</label>
+    <label>
     <InputCheckbox @bind-Value="newPet.Is_Adopt" />
+    Available for Adoption:</label>
     <ValidationMessage For="@(() => newPet.Is_Adopt)" />
   </div>
 
   <div>
     <!-- Admin lets client know if pet is ready to foster -->
-    <label>Available for Foster:</label>
+    <label>
     <InputCheckbox @bind-Value="newPet.Is_Foster" />
+    Available for Foster:</label>
     <ValidationMessage For="@(() => newPet.Is_Foster)" />
   </div>
-
-  <div>
-    <label>Shelter ID:</label>
-    <InputText class="form-control" @bind-Value="newPet.Shelter_id" />
-    <ValidationMessage For="@(() => newPet.Shelter_id)" />
-  </div>
-
   <button type="submit">Save</button>
   <button type="button" @onclick="Cancel">Cancel</button>
 </EditForm>
@@ -118,16 +137,20 @@
   // List of pet categories loaded from the service
   private List<PetCategory> categories = new();
 
+  // List of shelters loaded from service
+  private List<Shelter> shelters = new();
+
   // Holds the uploaded file temporarily
   private IBrowserFile? selectedFile;
 
   // Message shown after selecting a file
   private string uploadMessage = "";
 
-  // Load all categories when the page initializes
+  // Load all categories and shelters when the page initializes
   protected override void OnInitialized()
   {
     categories = PetService.GetAllCategories();
+    shelters = PetService.GetAllShelters();
   }
 
   // Handles file selection from the InputFile component.  Stores the file for later processing.
@@ -138,6 +161,30 @@
     uploadMessage = selectedFile is not null
       ? $"Selected file: {selectedFile.Name}"
       : "";
+  }
+
+  // Energy settings so admin can adjust energy level for pet
+  private int? hoverEnergy;
+
+  private void SetEnergy(int level)
+  {
+    newPet.Energy = level;
+  }
+
+  private void PreviewEnergy(int level)
+  {
+    hoverEnergy = level;
+  }
+
+  private void ClearEnergyHover()
+  {
+    hoverEnergy = null;
+  }
+
+  private string GetEnergyClass(int iconLevel, int selectedEnergy, int? hoverLevel)
+  {
+    var activeLevel = hoverLevel ?? selectedEnergy;
+    return iconLevel <= activeLevel ? "filled" : "empty";
   }
 
    // Saves the pet to the database. If an image is uploaded, it is stored in wwwroot and linked. Otherwise, a default image is used.

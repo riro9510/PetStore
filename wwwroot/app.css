@@ -562,3 +562,22 @@ select.invalid {
     color: red;
     size: 10px;
 }
+
+.energy-picker {
+    display: flex;
+    gap: 6px;
+}
+
+.energy-icon {
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+
+.energy-icon.empty {
+    opacity: 0.2;
+}
+
+.energy-icon.filled {
+    opacity: 1;
+}

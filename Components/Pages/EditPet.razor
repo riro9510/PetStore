@@ -12,7 +12,7 @@
 @inject NavigationManager NavigationManager
 @inject IWebHostEnvironment Env
 
-<!-- This page is for editing pet already in the system -->
+<!-- This page is for editing pets already in the system -->
 <h1>Edit Pet</h1>
 
 @if (editPet is null)
@@ -21,7 +21,7 @@
 }
 else
 {
-  <EditForm Model="editPet" OnValidSubmit="SavePet" FormName="EditPetForm">
+  <EditForm Model="editPet" OnValidSubmit="SavePet">
     <DataAnnotationsValidator />
 
     <div>
@@ -55,27 +55,71 @@ else
     </div>
 
     <div>
-      <!-- Text area for longer descriptions -->
       <label>Description:</label>
       <InputTextArea class="form-control" @bind-Value="editPet.Description" />
     </div>
 
     <div>
-      <!-- Admin can still manually paste an image URL if they want -->
       <label>Image URL:</label>
       <InputText class="form-control" @bind-Value="editPet.ImageUrl" />
     </div>
 
-    <div>
-      <!-- Lets admin replace the current image with one from their computer -->
-      <label>Upload New Image:</label>
-      <InputFile OnChange="HandleFileSelected" accept="image/*" />
+    <div class="mb-3">
+      <label class="form-label">OR <br/> Upload New Image</label>
+      <InputFile class="form-control" OnChange="HandleFileSelected" accept="image/*" />
 
       @if (!string.IsNullOrWhiteSpace(uploadMessage))
       {
-        <p>@uploadMessage</p>
+        <p class="mt-2">@uploadMessage</p>
       }
     </div>
+
+    <!-- Energy picker will allow admin to hover to see energy amount, and click to set it -->
+    <div class="mb-3">
+      <label class="form-label">Energy Level</label>
+
+      <div class="energy-picker" @onmouseleave="ClearEnergyHover">
+        @for (int i = 1; i <= 5; i++)
+        {
+          var level = i;
+          <span class="energy-icon @(GetEnergyClass(level, editPet!.Energy, hoverEnergy))" @onclick="() => SetEnergy(level)"
+                @onmouseenter="() => PreviewEnergy(level)">
+            ⚡
+          </span>
+        }
+      </div>
+
+      <ValidationMessage For="@(() => editPet!.Energy)" />
+    </div>
+
+    <div>
+      <label>Shelter:</label>
+      <InputSelect class="form-control" @bind-Value="editPet.Shelter_id">
+        <option value="">Select a Shelter</option>
+        @foreach (var shelter in shelters)
+        {
+          <option value="@shelter.Id">@shelter.Name</option>
+        }
+      </InputSelect>
+      <ValidationMessage For="@(() => editPet.Shelter_id)" />
+    </div>
+
+    <div class="form-check">
+      <InputCheckbox class="form-check-input" @bind-Value="editPet.Is_Friendly" />
+      <label class="form-check-label">Friendly</label>
+    </div>
+
+    <div class="form-check">
+      <InputCheckbox class="form-check-input" @bind-Value="editPet.Is_Adopt" />
+      <label class="form-check-label">Available for Adoption</label>
+    </div>
+
+    <div class="form-check">
+      <InputCheckbox class="form-check-input" @bind-Value="editPet.Is_Foster" />
+      <label class="form-check-label">Available for Foster</label>
+    </div>
+
+    <br />
 
     <button type="submit">Save Changes</button>
     <button type="button" @onclick="Cancel">Cancel</button>
@@ -83,32 +127,24 @@ else
 }
 
 @code {
-  // Route parameter from /management/edit/{"id"}
   [Parameter]
   public required string Id { get; set; }
 
-  // Model used by the edit form
-  [SupplyParameterFromForm]
   private Pet? editPet { get; set; }
-
-  // List of categories used in the category dropdown
   private List<PetCategory> categories = new();
 
-  // Temporarily stores the uploaded image file until save
-  private IBrowserFile? selectedFile;
+  private List<Shelter> shelters = new();
 
-  // Message shown after selecting a file
+  private IBrowserFile? selectedFile;
   private string uploadMessage = "";
 
   protected override void OnInitialized()
   {
-    // Load categories for the dropdown
     categories = PetService.GetAllCategories();
+    shelters = PetService.GetAllShelters();
 
-    // Find the pet being edited using the id
-    var pet = PetService.GetPetById("Id");
+    var pet = PetService.GetPetById(Id);
 
-    // Creates a copy so the form edits the pet data 
     if (pet is not null)
     {
       editPet = new Pet
@@ -119,72 +155,79 @@ else
         Breed = pet.Breed,
         YearOfBirth = pet.YearOfBirth,
         Description = pet.Description,
-        ImageUrl = pet.ImageUrl
+        ImageUrl = pet.ImageUrl,
+        Energy = pet.Energy,
+        Shelter_id = pet.Shelter_id,
+        Is_Friendly = pet.Is_Friendly,
+        Is_Adopt = pet.Is_Adopt,
+        Is_Foster = pet.Is_Foster
       };
     }
   }
 
-   // Stores the file selected by the user for upload.
-   // The file is not saved until the form is submitted.
- 
   private void HandleFileSelected(InputFileChangeEventArgs e)
   {
     selectedFile = e.File;
 
     uploadMessage = selectedFile is not null
-        ? $"Selected file: {selectedFile.Name}"
-        : "";
+      ? $"Selected file: {selectedFile.Name}"
+      : "";
   }
 
- 
-   // Saves the edited pet information.
-   // If a new image is uploaded, it replaces the previous image path.
-   // If no new image is uploaded, the current image remains unchanged.
- 
+  // ENERGY LOGIC
+  private int? hoverEnergy;
+
+  private void SetEnergy(int level)
+  {
+    if (editPet is not null)
+      editPet.Energy = level;
+  }
+
+  private void PreviewEnergy(int level)
+  {
+    hoverEnergy = level;
+  }
+
+  private void ClearEnergyHover()
+  {
+    hoverEnergy = null;
+  }
+
+  private string GetEnergyClass(int iconLevel, int selectedEnergy, int? hoverLevel)
+  {
+    var activeLevel = hoverLevel ?? selectedEnergy;
+    return iconLevel <= activeLevel ? "filled" : "empty";
+  }
+
   private async Task SavePet()
   {
-    if (editPet is null)
-    {
-      return;
-    }
+    if (editPet is null) return;
 
     if (selectedFile is not null)
     {
-      // Build the folder path where pet images will be stored
       var uploadsFolder = Path.Combine(Env.WebRootPath, "images", "pets");
 
       if (!Directory.Exists(uploadsFolder))
-      {
         Directory.CreateDirectory(uploadsFolder);
-      }
 
-      // Generate a unique filename so existing files are not overwritten
       var extension = Path.GetExtension(selectedFile.Name);
       var fileName = $"{Guid.NewGuid()}{extension}";
       var filePath = Path.Combine(uploadsFolder, fileName);
 
-      // Save the uploaded image with a 5 MB size limit
       await using FileStream fs = new(filePath, FileMode.Create);
-      await selectedFile.OpenReadStream(maxAllowedSize: 5 * 1024 * 1024).CopyToAsync(fs);
+      await selectedFile.OpenReadStream(5 * 1024 * 1024).CopyToAsync(fs);
 
-      // Save the relative image path to the pet record
       editPet.ImageUrl = $"/images/pets/{fileName}";
     }
     else if (string.IsNullOrWhiteSpace(editPet.ImageUrl))
     {
-      // Use a fallback image only if there is no current image at all
       editPet.ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/unavailable.jpg";
     }
 
-    // Update the pet using the service
     PetService.UpdatePet(editPet);
-
-    // Return to the management page after saving
     NavigationManager.NavigateTo("/management");
   }
 
- 
-   // Cancels editing and returns to the management page.
   private void Cancel()
   {
     NavigationManager.NavigateTo("/management");
