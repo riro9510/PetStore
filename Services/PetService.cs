@@ -44,6 +44,11 @@ public class PetService
   // Add a new pet to the database. The pet type is cleaned first to keep category names consistent.
   public void AddPet(Pet pet)
   {
+    if (string.IsNullOrWhiteSpace(pet.Id))
+    {
+      pet.Id = Guid.NewGuid().ToString();
+    }
+
     pet.Type = pet.Type.Trim().ToLower();
 
     _context.Pets.Add(pet);
