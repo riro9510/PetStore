@@ -10,10 +10,23 @@ using PetStore.Data;
 using PetStore.Services;
 using PetStore.Models;
 using System.Security.Claims;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ====================== Services ======================
+
+if (!builder.Environment.IsDevelopment())
+{
+    var keyVaultUri = builder.Configuration["KEYVAULT_URI"];
+
+    if (!string.IsNullOrWhiteSpace(keyVaultUri))
+    {
+        builder.Configuration.AddAzureKeyVault(
+            new Uri(keyVaultUri),
+            new DefaultAzureCredential());
+    }
+}
 
 // Retrieve database connection string from configuration
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
@@ -26,30 +39,44 @@ builder.Services.AddDbContext<PetStoreContext>(options =>
 // Configure Identity system for authentication and user management
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-  // Set password rules for users
   options.Password.RequireDigit = true;
   options.Password.RequireLowercase = true;
   options.Password.RequireUppercase = true;
   options.Password.RequireNonAlphanumeric = false;
   options.Password.RequiredLength = 6;
 
-  // Disable email confirmation requirement for easier login
   options.SignIn.RequireConfirmedAccount = false;
 })
 .AddEntityFrameworkStores<PetStoreContext>()
 .AddDefaultTokenProviders();
 
-// Configure external authentication using Google login
-builder.Services.AddAuthentication()
-    .AddGoogle(options =>
-    {
-      // Load Google OAuth credentials from configuration
-      options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
-      options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+// ====================== Authentication ======================
 
-      // Map Google "given_name" to ClaimTypes.GivenName for easy access
-      options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+// Siempre inicializamos Authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultChallengeScheme = IdentityConstants.ExternalScheme;
+});
+
+// Obtener credenciales desde configuración (appsettings o ENV)
+var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
+var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+
+if (!string.IsNullOrWhiteSpace(googleClientId) &&
+    !string.IsNullOrWhiteSpace(googleClientSecret))
+{
+    builder.Services.AddAuthentication().AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+    {
+        options.ClientId = googleClientId;
+        options.ClientSecret = googleClientSecret;
+        options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
     });
+}
+else
+{
+    Console.WriteLine("Google authentication secrets are missing. Google login disabled.");
+}
 
 // Enable Blazor components with server-side interactivity
 builder.Services.AddRazorComponents()
@@ -65,27 +92,22 @@ var app = builder.Build();
 
 // ====================== Middleware Pipeline ======================
 
-// Configure error handling for production environment
 if (!app.Environment.IsDevelopment())
 {
   app.UseExceptionHandler("/Error", createScopeForErrors: true);
   app.UseHsts();
 }
 
-// Handle 404 errors by redirecting to custom "not found" page
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
 
-// Standard middleware setup
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAntiforgery();
 
-// Enable authentication and authorization
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Map static assets and Razor components
 app.MapStaticAssets();
 
 app.MapRazorComponents<App>()
@@ -94,14 +116,21 @@ app.MapRazorComponents<App>()
 // ====================== Google Login Routes ======================
 
 // Route to initiate Google login
-app.MapGet("/login-google", async (HttpContext context) =>
+app.MapGet("/login-google", (IConfiguration config) =>
 {
-  await context.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties
+  var clientId = config["Authentication:Google:ClientId"];
+
+  if (string.IsNullOrWhiteSpace(clientId))
   {
-    // Redirect here after successful login
-    RedirectUri = "/signin-google-callback"
-  });
+    return Results.BadRequest("Google authentication is not configured.");
+  }
+
+  return Results.Challenge(
+      new AuthenticationProperties { RedirectUri = "/signin-google-callback" },
+      new[] { GoogleDefaults.AuthenticationScheme }
+  );
 });
+
 
 // Callback route after Google authentication completes
 app.MapGet("/signin-google-callback", async (
@@ -110,16 +139,13 @@ app.MapGet("/signin-google-callback", async (
     SignInManager<ApplicationUser> signInManager,
     IConfiguration config) =>
 {
-  // Retrieve external login result from Google
   var result = await context.AuthenticateAsync(IdentityConstants.ExternalScheme);
 
-  // If authentication failed, send user back to sign-in page
   if (!result.Succeeded || result.Principal == null)
   {
     return Results.Redirect("/signin");
   }
 
-  // Extract user info from Google claims
   var email = result.Principal.FindFirstValue(ClaimTypes.Email);
   var fullName = result.Principal.FindFirstValue(ClaimTypes.Name);
   var firstName = result.Principal.FindFirstValue(ClaimTypes.GivenName);
@@ -129,10 +155,8 @@ app.MapGet("/signin-google-callback", async (
     return Results.Redirect("/signin");
   }
 
-  // Check if user already exists in database
   var user = await userManager.FindByEmailAsync(email);
 
-  // If user does not exist, create a new account
   if (user == null)
   {
     user = new ApplicationUser
@@ -151,7 +175,6 @@ app.MapGet("/signin-google-callback", async (
 
   // ====================== Claim Management ======================
 
-  // Store or update first name from Google
   if (!string.IsNullOrWhiteSpace(firstName))
   {
     var existingClaims = await userManager.GetClaimsAsync(user);
@@ -170,7 +193,6 @@ app.MapGet("/signin-google-callback", async (
     }
   }
 
-  // Store or update full name
   if (!string.IsNullOrWhiteSpace(fullName))
   {
     var existingClaims = await userManager.GetClaimsAsync(user);
@@ -191,7 +213,6 @@ app.MapGet("/signin-google-callback", async (
 
   // ====================== Role Assignment ======================
 
-  // Assign admin role if email matches configured admin email
   var adminEmail = config["AdminSettings:SeedAdminEmail"];
 
   if (!string.IsNullOrWhiteSpace(adminEmail) &&
@@ -204,17 +225,14 @@ app.MapGet("/signin-google-callback", async (
   }
   else
   {
-    // Default all other users to Client role
     if (!await userManager.IsInRoleAsync(user, Roles.Client))
     {
       await userManager.AddToRoleAsync(user, Roles.Client);
     }
   }
 
-  // Sign user into the application
   await signInManager.SignInAsync(user, isPersistent: false);
 
-  // Clear temporary external login cookie
   await context.SignOutAsync(IdentityConstants.ExternalScheme);
 
   return Results.Redirect("/");
@@ -229,7 +247,6 @@ app.MapGet("/logout", async (SignInManager<ApplicationUser> signInManager) =>
 
 // ====================== Database Seeding ======================
 
-// Ensure database is created and roles are seeded
 using (var scope = app.Services.CreateScope())
 {
   var db = scope.ServiceProvider.GetRequiredService<PetStoreContext>();
