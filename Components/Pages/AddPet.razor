@@ -71,6 +71,7 @@
     }
   </div>
 
+  <!-- Energy picker will allow admin to hover over icon, and click to set the amount-->
   <div class="mb-3">
     <label class="form-label">Energy Level</label>
 
@@ -88,9 +89,16 @@
     <ValidationMessage For="@(() => newPet.Energy)" />
   </div>
 
+  <!-- Shelters presented as dropdown menu to avoid confusion with different shelters -->
   <div>
-    <label>Shelter ID:</label>
-    <InputText class="form-control" @bind-Value="newPet.Shelter_id" />
+    <label>Shelter:</label>
+    <InputSelect class="form-control" @bind-Value="newPet.Shelter_id">
+      <option value="">Select a Shelter</option>
+      @foreach (var shelter in shelters)
+      {
+        <option value="@shelter.Id">@shelter.Name</option>
+      }
+    </InputSelect>
     <ValidationMessage For="@(() => newPet.Shelter_id)" />
   </div>
 
@@ -129,16 +137,20 @@
   // List of pet categories loaded from the service
   private List<PetCategory> categories = new();
 
+  // List of shelters loaded from service
+  private List<Shelter> shelters = new();
+
   // Holds the uploaded file temporarily
   private IBrowserFile? selectedFile;
 
   // Message shown after selecting a file
   private string uploadMessage = "";
 
-  // Load all categories when the page initializes
+  // Load all categories and shelters when the page initializes
   protected override void OnInitialized()
   {
     categories = PetService.GetAllCategories();
+    shelters = PetService.GetAllShelters();
   }
 
   // Handles file selection from the InputFile component.  Stores the file for later processing.

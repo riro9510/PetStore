@@ -74,7 +74,7 @@ else
       }
     </div>
 
-    <!-- ENERGY PICKER -->
+    <!-- Energy picker will allow admin to hover to see energy amount, and click to set it -->
     <div class="mb-3">
       <label class="form-label">Energy Level</label>
 
@@ -93,8 +93,15 @@ else
     </div>
 
     <div>
-      <label>Shelter ID:</label>
-      <InputText class="form-control" @bind-Value="editPet.Shelter_id" />
+      <label>Shelter:</label>
+      <InputSelect class="form-control" @bind-Value="editPet.Shelter_id">
+        <option value="">Select a Shelter</option>
+        @foreach (var shelter in shelters)
+        {
+          <option value="@shelter.Id">@shelter.Name</option>
+        }
+      </InputSelect>
+      <ValidationMessage For="@(() => editPet.Shelter_id)" />
     </div>
 
     <div class="form-check">
@@ -126,12 +133,15 @@ else
   private Pet? editPet { get; set; }
   private List<PetCategory> categories = new();
 
+  private List<Shelter> shelters = new();
+
   private IBrowserFile? selectedFile;
   private string uploadMessage = "";
 
   protected override void OnInitialized()
   {
     categories = PetService.GetAllCategories();
+    shelters = PetService.GetAllShelters();
 
     var pet = PetService.GetPetById(Id);
 
