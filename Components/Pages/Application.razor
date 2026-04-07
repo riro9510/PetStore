@@ -179,6 +179,6 @@
     DbContext.ApplicationForms.Add(application);
     await DbContext.SaveChangesAsync();
 
-    Navigation.NavigateTo($"/thankyou?id={application.Id}");
+    Navigation.NavigateTo($"/thankyou={application.Id}");
   }
 }
