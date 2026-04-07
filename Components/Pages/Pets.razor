@@ -12,7 +12,7 @@
 <!-- This page is for viewing pets in the system -->
 <h1>@PageTitleText</h1>
 
-<!-- Filter links for viewing pets by category-->
+<!-- Filter links for viewing pets by category -->
 <div class="pet-filters">
   <a href="/pets">All</a>
 
@@ -37,6 +37,7 @@
 
       @foreach (var pet in filteredPets)
       {
+        <!-- Pass pet data and event handler to PetCard -->
         <PetCard Pet="pet" OnAboutMeClicked="OpenPetModal" />
       }
     </div>
@@ -98,6 +99,11 @@
       </p>
 
       <p><strong>Description: </strong>@selectedPet.Description</p>
+
+      <!-- Application button -->
+      <a href="/application?petId=@selectedPet.Id" class="apply-button">
+        Apply for @selectedPet.Name
+      </a>
     </div>
   </div>
 }
