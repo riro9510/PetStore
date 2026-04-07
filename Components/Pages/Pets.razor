@@ -1,4 +1,5 @@
 @page "/pets"
+@rendermode InteractiveServer
 
 @using Microsoft.VisualBasic
 @using PetStore.Models
@@ -24,7 +25,7 @@
 </div>
 
 <div class="pets-container">
-  
+
   @if (filteredPets.Count == 0)
   {
     <!-- Display message if no pets match the filter -->
@@ -36,62 +37,70 @@
 
       @foreach (var pet in filteredPets)
       {
-        <div class="pet-card">
-
-          <div>
-            <div class="pet-image-container">
-              <img src="@pet.ImageUrl" alt="@pet.Name image" />
-            </div>
-
-            <h3>@pet.Name</h3>
-
-            @{
-              // Calculate pet age from year of birth
-              int age = DateTime.Now.Year - pet.YearOfBirth;
-            }
-    
-            <p>
-              <strong>Age: </strong>
-              @if (age < 1)
-              {
-                <span>Less than a year old</span>
-              }
-              else
-              {
-                <span>@age @(age == 1 ? "year" : "years") old</span>
-              }
-            </p>
-          </div>
-
-          <div>
-            <!-- Additional pet details -->
-            <p><strong>Breed: </strong>@pet.Breed</p>
-
-            <p>
-              <strong>Energy: </strong>
-              @for (int i = 1; i <= 5; i++)
-              {
-                if (i <= pet.Energy)
-                {
-                  <!-- Highlight filled energy levels -->
-                  <span style="color: #FFD700;">⚡</span>
-                }
-                else
-                {
-                  <!-- Dim remaining energy levels -->
-                  <span style="color: #ccc; opacity: 0.2;">⚡</span>
-                }
-              }
-            </p>
-
-            <p><strong>Description:</strong> @pet.Description</p>
-          </div>
-
-        </div>
+        <PetCard Pet="pet" OnAboutMeClicked="OpenPetModal" />
       }
     </div>
   }
 </div>
+
+@if (selectedPet is not null)
+{
+  <!-- Dark background behind modal -->
+  <div class="modal-backdrop-custom" @onclick="ClosePetModal"></div>
+
+  <!-- Modal showing full pet information -->
+  <div class="pet-modal">
+    <div class="pet-modal-content">
+
+      <!-- Close button for the modal -->
+      <button class="modal-close-button" @onclick="ClosePetModal">×</button>
+
+      <div class="pet-modal-image-container">
+        <img src="@selectedPet.ImageUrl" alt="@selectedPet.Name image" />
+      </div>
+
+      <h2>@selectedPet.Name</h2>
+
+      @{
+        // Calculate pet age from year of birth
+        int age = DateTime.Now.Year - selectedPet.YearOfBirth;
+      }
+
+      <p>
+        <strong>Age: </strong>
+        @if (age < 1)
+        {
+          <span>Less than a year old</span>
+        }
+        else
+        {
+          <span>@age @(age == 1 ? "year" : "years") old</span>
+        }
+      </p>
+
+      <p><strong>Breed: </strong>@selectedPet.Breed</p>
+
+      <p>
+        <strong>Energy: </strong>
+        @for (int i = 1; i <= 5; i++)
+        {
+          if (i <= selectedPet.Energy)
+          {
+            <!-- Highlight filled energy levels -->
+            <span style="color: #FFD700;">⚡</span>
+          }
+          else
+          {
+            <!-- Dim remaining energy levels -->
+            <span style="color: #ccc; opacity: 0.2;">⚡</span>
+          }
+        }
+      </p>
+
+      <p><strong>Description: </strong>@selectedPet.Description</p>
+    </div>
+  </div>
+}
 
 @code {
   // Query parameter from URL
@@ -105,18 +114,32 @@
   // Unique list of available pet types for filter links
   private List<string> availableTypes = new();
 
+  // Stores the selected pet for the modal
+  private Pet? selectedPet;
+
   // Dynamically updates page title based on selected filter
   private string PageTitleText =>
       string.IsNullOrWhiteSpace(type)
           ? "Pets"
           : mayus(type);
 
-
   // Capitalizes the first letter of a string for display purposes.
   string mayus(string text)
   {
     if (string.IsNullOrEmpty(text)) return text;
     return char.ToUpper(text[0]) + text.Substring(1);
+  }
+
+  // Opens the modal for the selected pet
+  void OpenPetModal(Pet pet)
+  {
+    selectedPet = pet;
+  }
+
+  // Closes the modal
+  void ClosePetModal()
+  {
+    selectedPet = null;
   }
 
   protected override void OnParametersSet()

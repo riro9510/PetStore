@@ -1,0 +1,38 @@
+@using PetStore.Models
+
+@* This component represents a single pet card.
+   It matches the design used on the main pets page. *@
+
+<div class="pet-card">
+
+  <!-- Container for pet image -->
+  <div class="pet-image-container">
+    <!-- Display pet image using URL -->
+    <img src="@Pet.ImageUrl" alt="@Pet.Name image" />
+  </div>
+
+  <!-- Pet name -->
+  <h3>@Pet.Name</h3>
+
+  <!-- Button opens modal with full pet details -->
+  <button class="about-button" @onclick="HandleClick">
+    About Me
+  </button>
+
+</div>
+
+@code {
+  // Pet data passed into this reusable component
+  [Parameter]
+  public Pet Pet { get; set; } = default!;
+
+  // Event sent back to the parent page when button is clicked
+  [Parameter]
+  public EventCallback<Pet> OnAboutMeClicked { get; set; }
+
+  // Runs when the About Me button is clicked
+  async Task HandleClick()
+  {
+    await OnAboutMeClicked.InvokeAsync(Pet);
+  }
+}
