@@ -11,7 +11,7 @@ using PetStore.Data;
 namespace PetStore.Migrations
 {
     [DbContext(typeof(PetStoreContext))]
-    [Migration("20260404183028_InitialCreate")]
+    [Migration("20260407031515_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -148,6 +148,61 @@ namespace PetStore.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PetStore.Models.ApplicationForm", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("AgreeToTerms")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Experience")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FosterLength")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HelpType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HousingStatus")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("MonthlyAmount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OtherPets")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("SubmittedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationForms");
+                });
+
             modelBuilder.Entity("PetStore.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -233,7 +288,7 @@ namespace PetStore.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("PetStore.Pet", b =>
+            modelBuilder.Entity("PetStore.Models.Pet", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");

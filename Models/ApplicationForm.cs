@@ -2,10 +2,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PetStore.Models
 {
-  // Represents the user application form for adopting, fostering, or sponsoring a pet.
-  // Includes validation rules for required fields and user input format.
+  // Represents the user application form for adopting, fostering, sponsoring, or volunteering.
   public class ApplicationForm
   {
+    // Primary key for database
+    public int Id { get; set; }
+
     // Personal information
     [Required(ErrorMessage = "Please fill in your full name")]
     [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Name can only contain letters")]
@@ -17,7 +19,7 @@ namespace PetStore.Models
 
     [Required(ErrorMessage = "Please fill in your phone number")]
     [RegularExpression(@"^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$",
-    ErrorMessage = "Enter a valid phone number")]
+      ErrorMessage = "Enter a valid phone number")]
     public string? PhoneNumber { get; set; }
 
     [Required(ErrorMessage = "Please fill in your address")]
@@ -34,6 +36,9 @@ namespace PetStore.Models
     public string? Experience { get; set; }
     public string? Reason { get; set; }
     public decimal? MonthlyAmount { get; set; }
+
+    // Date submitted
+    public DateTime SubmittedAt { get; set; } = DateTime.Now;
 
     // Requires user confirmation before submission
     [Range(typeof(bool), "true", "true", ErrorMessage = "You must agree before submitting.")]

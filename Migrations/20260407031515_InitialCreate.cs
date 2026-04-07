@@ -14,6 +14,31 @@ namespace PetStore.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "ApplicationForms",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FullName = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: false),
+                    Address = table.Column<string>(type: "TEXT", nullable: false),
+                    HelpType = table.Column<string>(type: "TEXT", nullable: false),
+                    HousingStatus = table.Column<string>(type: "TEXT", nullable: true),
+                    OtherPets = table.Column<string>(type: "TEXT", nullable: true),
+                    FosterLength = table.Column<string>(type: "TEXT", nullable: true),
+                    Experience = table.Column<string>(type: "TEXT", nullable: true),
+                    Reason = table.Column<string>(type: "TEXT", nullable: true),
+                    MonthlyAmount = table.Column<decimal>(type: "TEXT", nullable: true),
+                    SubmittedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    AgreeToTerms = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationForms", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -297,6 +322,9 @@ namespace PetStore.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ApplicationForms");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
