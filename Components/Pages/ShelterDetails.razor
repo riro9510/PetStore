@@ -1,26 +1,157 @@
 @page "/shelters/{id}"
+@rendermode InteractiveServer
+
+@using PetStore
 @using PetStore.Models
 @using PetStore.Services
 @using Microsoft.AspNetCore.Components.Authorization
+
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject PetService PetService
 @inject NavigationManager Navigation
 
-<PageTitle>Details</PageTitle>
+<PageTitle>Shelter Details</PageTitle>
 
+@* If shelter is not found, show message *@
 @if (selectedShelter is null)
 {
-  <!-- Display message if shelter is not found -->
   <p>Shelter not found.</p>
 }
 else
 {
   <section class="shelter-details">
-    
-    <!-- Display selected shelter name -->
-    <h1>@selectedShelter.Name</h1>
 
+    <!-- Hero section (placeholder for future image/banner) -->
+    <div class="shelter-hero">
+
+      <!-- Placeholder box for hero image -->
+      <div class="hero-placeholder">
+        (Hero image/banner here)
+      </div>
+
+      <!-- Shelter title and intro text -->
+      <div class="hero-text">
+        <h1>@selectedShelter.Name</h1>
+        <p>Learn more about this shelter and the pets currently available here.</p>
+      </div>
+    </div>
+
+    <!-- Shelter information section -->
+    <div class="shelter-info">
+      <h2>Shelter Information</h2>
+
+      <!-- Required fields -->
+      <p><strong>Country:</strong> @selectedShelter.Country</p>
+      <p><strong>State/Region:</strong> @selectedShelter.State</p>
+
+      <!-- Optional fields (only show if they exist) -->
+      @if (!string.IsNullOrWhiteSpace(selectedShelter.City))
+      {
+        <p><strong>City:</strong> @selectedShelter.City</p>
+      }
+
+      @if (!string.IsNullOrWhiteSpace(selectedShelter.Email))
+      {
+        <p>
+          <strong>Email:</strong>
+          <a href="mailto:@selectedShelter.Email">@selectedShelter.Email</a>
+        </p>
+      }
+
+      @if (!string.IsNullOrWhiteSpace(selectedShelter.Phone))
+      {
+        <p>
+          <strong>Phone:</strong>
+          <a href="tel:@selectedShelter.Phone">@selectedShelter.Phone</a>
+        </p>
+      }
+    </div>
+
+    <!-- Pets that belong to this shelter -->
+    <div class="shelter-pets">
+      <h2>Pets at @selectedShelter.Name</h2>
+
+      @* If no pets found for this shelter *@
+      @if (shelterPets.Count == 0)
+      {
+        <p>No pets are currently listed for this shelter.</p>
+      }
+      else
+      {
+        <!-- Grid layout for pet cards -->
+        <div class="pets-grid">
+
+          @* Loop through all pets that match this shelter *@
+          @foreach (var pet in shelterPets)
+          {
+            <PetCard Pet="pet" OnAboutMeClicked="OpenPetModal" />
+          }
+        </div>
+      }
+    </div>
   </section>
+}
+
+@* Modal for selected pet *@
+@if (selectedPet is not null)
+{
+  <!-- Dark background behind modal -->
+  <div class="modal-backdrop-custom" @onclick="ClosePetModal"></div>
+
+  <!-- Modal showing full pet information -->
+  <div class="pet-modal">
+    <div class="pet-modal-content">
+
+      <!-- Close button -->
+      <button class="modal-close-button" @onclick="ClosePetModal">×</button>
+
+      <!-- Pet image -->
+      <div class="pet-modal-image-container">
+        <img src="@selectedPet.ImageUrl" alt="@selectedPet.Name image" />
+      </div>
+
+      <!-- Pet name -->
+      <h2>@selectedPet.Name</h2>
+
+      @{
+        // Calculate pet age from year of birth
+        int age = DateTime.Now.Year - selectedPet.YearOfBirth;
+      }
+
+      <p>
+        <strong>Age: </strong>
+        @if (age < 1)
+        {
+          <span>Less than a year old</span>
+        }
+        else
+        {
+          <span>@age @(age == 1 ? "year" : "years") old</span>
+        }
+      </p>
+
+      <p><strong>Breed: </strong>@selectedPet.Breed</p>
+
+      <p>
+        <strong>Energy: </strong>
+        @for (int i = 1; i <= 5; i++)
+        {
+          if (i <= selectedPet.Energy)
+          {
+            <!-- Highlight filled energy levels -->
+            <span style="color: #FFD700;">⚡</span>
+          }
+          else
+          {
+            <!-- Dim remaining energy levels -->
+            <span style="color: #ccc; opacity: 0.2;">⚡</span>
+          }
+        }
+      </p>
+
+      <p><strong>Description: </strong>@selectedPet.Description</p>
+    </div>
+  </div>
 }
 
 @code {
@@ -28,18 +159,45 @@ else
   [Parameter]
   public required string id { get; set; }
 
-  // Holds the selected shelter data
+  // Stores the selected shelter data
   private Shelter? selectedShelter;
 
-  // Navigates the user to the application page.
-  void GoToApplication()
-  {
-    Navigation.NavigateTo("/application");
-  }
+  // Stores pets that belong to this shelter
+  private List<Pet> shelterPets = new();
 
+  // Stores the selected pet for the modal
+  private Pet? selectedPet;
+
+  // Runs whenever the page loads or parameter changes
   protected override void OnParametersSet()
   {
-    // Retrieve shelter data based on the shelter ID
+    // Get shelter using ID from URL
     selectedShelter = PetService.GetShelterById(id);
+
+    if (selectedShelter is not null)
+    {
+      // Filter pets that match this shelter's ID
+      shelterPets = PetService
+          .GetAllPets()
+          .Where(p => p.Shelter_id == selectedShelter.Id)
+          .ToList();
+    }
+    else
+    {
+      // If shelter not found, clear pet list
+      shelterPets = new List<Pet>();
+    }
+  }
+
+  // Opens the modal for the selected pet
+  void OpenPetModal(Pet pet)
+  {
+    selectedPet = pet;
+  }
+
+  // Closes the modal
+  void ClosePetModal()
+  {
+    selectedPet = null;
   }
 }

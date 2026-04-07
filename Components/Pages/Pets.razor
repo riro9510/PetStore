@@ -37,21 +37,7 @@
 
       @foreach (var pet in filteredPets)
       {
-        <div class="pet-card">
-
-          <!-- Only show the image and name on the pet card -->
-          <div class="pet-image-container">
-            <img src="@pet.ImageUrl" alt="@pet.Name image" />
-          </div>
-
-          <h3>@pet.Name</h3>
-
-          <!-- Button opens modal with full pet details -->
-          <button class="about-button" @onclick="() => OpenPetModal(pet)">
-            About Me
-          </button>
-
-        </div>
+        <PetCard Pet="pet" OnAboutMeClicked="OpenPetModal" />
       }
     </div>
   }
