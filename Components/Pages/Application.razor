@@ -2,6 +2,7 @@
 @using PetStore.Models
 @rendermode InteractiveServer
 @inject NavigationManager Navigation
+@inject PetStore.Data.PetStoreContext DbContext
 @* @attribute [Authorize(Roles = $"{Roles.Admin},{Roles.Client}")] *@
 
 <PageTitle>Pet Application</PageTitle>
@@ -157,7 +158,7 @@
     <ValidationMessage For="@(() => application.AgreeToTerms)" />
   </div>
 
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="submit" class="btn btn-primary" disabled="@submitted">Submit</button>
 
 </EditForm>
 
@@ -168,9 +169,16 @@
   // Tracks submission state (can be used for future enhancements)
   private bool submitted = false;
 
-  /// Handles form submission and redirects user to a confirmation page. Passes the selected "help type" as a query parameter.
-  private void HandleSubmit()
+  /// Handles form submission and redirects user to a confirmation page.
+  private async Task HandleSubmit()
   {
-    Navigation.NavigateTo($"/thankyou?type={application.HelpType}");
+    submitted = true;
+
+    application.SubmittedAt = DateTime.Now;
+
+    DbContext.ApplicationForms.Add(application);
+    await DbContext.SaveChangesAsync();
+
+    Navigation.NavigateTo($"/thankyou?id={application.Id}");
   }
 }
