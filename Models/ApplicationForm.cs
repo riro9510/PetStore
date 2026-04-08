@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Components;
 
 namespace PetStore.Models
 {
@@ -6,6 +7,7 @@ namespace PetStore.Models
   public class ApplicationForm
   {
     // Primary key for database
+    [Parameter]
     public int Id { get; set; }
     
     public string PetName { get; set;  }

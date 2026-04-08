@@ -1,9 +1,9 @@
-@page "/thankyou/{applicationId}"
+@page "/thankyou"
 @using PetStore.Models
 @inject PetStore.Data.PetStoreContext DbContext
 
 
-<PageTitle>Thank You</PageTitle>
+<PageTitle>Thank You @Id</PageTitle>
 
 <h1>Thank You!</h1>
 
@@ -34,6 +34,7 @@ else
 @code {
 
   [Parameter]
+  [SupplyParameterFromQuery]
   public int Id { get; set; }
 
   private ApplicationForm? application;
