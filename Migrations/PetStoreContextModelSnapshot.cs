@@ -280,7 +280,7 @@ namespace PetStore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Pets");
+                    b.ToTable("Pets", (string)null);
 
                     b.HasData(
                         new
@@ -417,7 +417,7 @@ namespace PetStore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PetCategories");
+                    b.ToTable("PetCategories", (string)null);
 
                     b.HasData(
                         new
@@ -481,7 +481,7 @@ namespace PetStore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Shelters");
+                    b.ToTable("Shelters", (string)null);
 
                     b.HasData(
                         new
