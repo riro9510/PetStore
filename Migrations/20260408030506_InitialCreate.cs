@@ -19,6 +19,7 @@ namespace PetStore.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    PetName = table.Column<string>(type: "TEXT", nullable: false),
                     FullName = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     PhoneNumber = table.Column<string>(type: "TEXT", nullable: false),
@@ -242,6 +243,15 @@ namespace PetStore.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "ApplicationForms",
+                columns: new[] { "Id", "Address", "AgreeToTerms", "Email", "Experience", "FosterLength", "FullName", "HelpType", "HousingStatus", "MonthlyAmount", "OtherPets", "PetName", "PhoneNumber", "Reason", "SubmittedAt" },
+                values: new object[,]
+                {
+                    { 1, "123 Main St, City, State, 12345", false, "john@example.com", null, null, "John Doe", "Adopt", null, null, null, "Max", "555-1234", null, new DateTime(2026, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, "123 Main St, City, State, 12345", false, "jane@example.com", null, null, "Jane Smith", "Foster", null, null, null, "Majesty", "555-5678", null, new DateTime(2026, 4, 6, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
+
+            migrationBuilder.InsertData(
                 table: "PetCategories",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
@@ -259,13 +269,16 @@ namespace PetStore.Migrations
                 values: new object[,]
                 {
                     { "1", "Golden Retriever", "Friendly, loyal, and ready for a home.", 4, "https://raw.githubusercontent.com/vsyang/pet-images/main/goldenr.jpg", true, true, true, "Max", "SHELTER-01", "dogs", 2021 },
+                    { "10", "Ferret", "Only wants to be by you and follow you everywhere.", 4, "https://raw.githubusercontent.com/vsyang/pet-images/main/ferret.jpg", true, false, true, "Squishy", "SHELTER-06", "exotics", 2025 },
+                    { "11", "Sugar Glider", "Comes out and plays all night.", 3, "https://raw.githubusercontent.com/vsyang/pet-images/main/sugar-glider.jpg", true, false, true, "Sweety", "SHELTER-04", "exotics", 2024 },
                     { "2", "Persian", "Curious, calm, and full of personality.", 3, "https://raw.githubusercontent.com/vsyang/pet-images/main/persian.jpg", true, false, true, "Majesty", "SHELTER-02", "cats", 2022 },
                     { "3", "Netherland Dwarf", "Magical companion with fiery charm.", 5, "https://raw.githubusercontent.com/vsyang/pet-images/main/netherland-dwarf.jpg", false, true, true, "Tiny", "SHELTER-06", "rabbits", 2010 },
                     { "4", "Hedgehog", "Rare, shy, and full of wonder.", 2, "https://raw.githubusercontent.com/vsyang/pet-images/main/hedgehog.jpg", true, true, true, "Sparkle", "SHELTER-04", "exotics", 2019 },
                     { "5", "Maltese", "Intelligent and handsome. He just loves to be with you.", 3, "https://raw.githubusercontent.com/vsyang/pet-images/main/maltese.jpg", true, true, true, "Cloud", "SHELTER-01", "dogs", 2023 },
                     { "6", "Bearded Dragon", "Curious, adorable, and intelligent.", 2, "https://raw.githubusercontent.com/vsyang/pet-images/main/bearded-dragon.jpg", false, false, false, "Jimbo", "SHELTER-05", "exotics", 2020 },
-                    { "7", "Orange Tabby", "Majestic, regal, and content. All she wants is to lay in the sun.", 1, "https://raw.githubusercontent.com/vsyang/pet-images/main/orange-cat.jpg", false, false, true, "Raja", "SHELTER-02", "cats", 2017 },
-                    { "8", "White Cockatoo", "Loves to talk, sing, and dance.", 5, "https://raw.githubusercontent.com/vsyang/pet-images/main/white-parrot.jpg", true, true, true, "Marshmallow", "SHELTER-03", "birds", 2014 }
+                    { "7", "Orange Tabby", "Majestic, regal, and content. All she wants is to lay in the sun.", 5, "https://raw.githubusercontent.com/vsyang/pet-images/main/orange-cat.jpg", false, false, true, "Raja", "SHELTER-02", "cats", 2017 },
+                    { "8", "White Cockatoo", "Loves to talk, sing, and dance.", 5, "https://raw.githubusercontent.com/vsyang/pet-images/main/white-parrot.jpg", true, true, true, "Marshmallow", "SHELTER-03", "birds", 2014 },
+                    { "9", "Parrot", "He's a living rainforest ready to go home with you.", 5, "https://raw.githubusercontent.com/vsyang/pet-images/main/parrot.jpg", true, true, true, "Sir Zir", "SHELTER-03", "birds", 2022 }
                 });
 
             migrationBuilder.InsertData(

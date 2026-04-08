@@ -1,6 +1,7 @@
-@page "/thankyou/{id:int}"
+@page "/thankyou/{applicationId}"
 @using PetStore.Models
 @inject PetStore.Data.PetStoreContext DbContext
+
 
 <PageTitle>Thank You</PageTitle>
 
@@ -31,17 +32,15 @@ else
 }
 
 @code {
-  // Gets the application ID from the URL (e.g., /thankyou/5)
+
   [Parameter]
   public int Id { get; set; }
 
-  // Stores the application retrieved from the database
   private ApplicationForm? application;
 
-  /// Loads the application from the database when the page initializes
   protected override async Task OnInitializedAsync()
   {
-    // Find the application using the ID passed in the URL
+    // Use the Id from the URL path to find the application
     application = await DbContext.ApplicationForms.FindAsync(Id);
   }
 }

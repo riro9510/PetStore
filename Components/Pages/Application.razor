@@ -1,8 +1,11 @@
 @page "/application"
 @using PetStore.Models
+@using PetStore.Services
+@using Microsoft.AspNetCore.WebUtilities
 @rendermode InteractiveServer
 @inject NavigationManager Navigation
 @inject PetStore.Data.PetStoreContext DbContext
+@inject PetService PetService
 @* @attribute [Authorize(Roles = $"{Roles.Admin},{Roles.Client}")] *@
 
 <PageTitle>Pet Application</PageTitle>
@@ -127,6 +130,9 @@
     </div>
   }
 
+  <!-- Hidden field to store petName passed from the URL -->
+  <InputHidden @bind-Value="@petName" />
+  
   <div class="form-section">
     <!-- Required confirmation checkbox -->
     <label>
@@ -147,16 +153,36 @@
   // Tracks submission state (can be used for future enhancements)
   private bool submitted = false;
 
-  /// Handles form submission and redirects user to a confirmation page.
+  private string petName;
+
+  protected override void OnInitialized()
+  {
+    // Get the query parameters from the URL
+    var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+    var queryParams = QueryHelpers.ParseQuery(uri.Query);
+
+    // Capture the petName from the query string and set it in the application
+    if (queryParams.TryGetValue("petName", out var name))
+    {
+      petName = name;
+    }
+    else
+    {
+      petName = "No pet name provided";
+    }
+  }
   private async Task HandleSubmit()
   {
     submitted = true;
 
     application.SubmittedAt = DateTime.Now;
+    application.PetName = petName;
 
+    // Save the application to the database
     DbContext.ApplicationForms.Add(application);
     await DbContext.SaveChangesAsync();
 
-    Navigation.NavigateTo($"/thankyou={application.Id}");
+    // Redirect to the Thank You page with applicationId
+    Navigation.NavigateTo($"/thankyou/{application.Id}");
   }
 }
