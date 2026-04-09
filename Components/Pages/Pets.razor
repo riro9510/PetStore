@@ -100,9 +100,14 @@
 
       <p><strong>Description: </strong>@selectedPet.Description</p>
 
-      <!-- Application button with pet name -->
-      <a href="/application?petName=@selectedPet.Name" class="apply-button">
-          Help @selectedPet.Name
+      <!-- Application button with pet name and shelter -->
+      @{
+        var shelterName = PetService.GetShelterNameById(selectedPet.Shelter_id);
+      }
+
+      <a href="/application?petName=@Uri.EscapeDataString(selectedPet.Name)&shelterName=@Uri.EscapeDataString(shelterName)"
+         class="apply-button">
+        Help @selectedPet.Name
       </a>
     </div>
   </div>

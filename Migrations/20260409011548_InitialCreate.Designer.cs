@@ -11,7 +11,7 @@ using PetStore.Data;
 namespace PetStore.Migrations
 {
     [DbContext(typeof(PetStoreContext))]
-    [Migration("20260409003215_InitialCreate")]
+    [Migration("20260409011548_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -199,6 +199,10 @@ namespace PetStore.Migrations
                     b.Property<string>("Reason")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ShelterName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("SubmittedAt")
                         .HasColumnType("TEXT");
 
@@ -216,7 +220,8 @@ namespace PetStore.Migrations
                             FullName = "John Doe",
                             HelpType = "Adopt",
                             PetName = "Max",
-                            PhoneNumber = "555-1234",
+                            PhoneNumber = "555-123-4567",
+                            ShelterName = "Golden Paws Rescue",
                             SubmittedAt = new DateTime(2026, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -228,7 +233,8 @@ namespace PetStore.Migrations
                             FullName = "Jane Smith",
                             HelpType = "Foster",
                             PetName = "Majesty",
-                            PhoneNumber = "555-5678",
+                            PhoneNumber = "555-567-8901",
+                            ShelterName = "Whisker Haven",
                             SubmittedAt = new DateTime(2026, 4, 6, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
