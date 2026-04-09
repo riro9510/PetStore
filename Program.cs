@@ -55,6 +55,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<PetStoreContext>()
 .AddDefaultTokenProviders();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+  options.LoginPath = "/signin";
+});
 // ====================== Authentication ======================
 
 // Initialize Authentication
