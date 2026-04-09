@@ -131,7 +131,7 @@ app.MapRazorComponents<App>()
 // ====================== Google Login Routes ======================
 
 // Route to initiate Google login
-app.MapGet("/login-google", (IConfiguration config) =>
+app.MapGet("/login-google", (HttpContext context, IConfiguration config) =>
 {
   var clientId = config["Authentication:Google:ClientId"];
 
@@ -140,8 +140,18 @@ app.MapGet("/login-google", (IConfiguration config) =>
     return Results.BadRequest("Google authentication is not configured.");
   }
 
+  var returnUrl = context.Request.Query["returnUrl"].ToString();
+
+  if (string.IsNullOrWhiteSpace(returnUrl))
+  {
+    returnUrl = "/";
+  }
+
   return Results.Challenge(
-      new AuthenticationProperties { RedirectUri = "/signin-google-callback" },
+      new AuthenticationProperties
+      {
+        RedirectUri = $"/signin-google-callback?returnUrl={Uri.EscapeDataString(returnUrl)}"
+      },
       new[] { GoogleDefaults.AuthenticationScheme }
   );
 });
@@ -159,6 +169,13 @@ app.MapGet("/signin-google-callback", async (
   if (!result.Succeeded || result.Principal == null)
   {
     return Results.Redirect("/signin");
+  }
+
+  var returnUrl = context.Request.Query["returnUrl"].ToString();
+
+  if (string.IsNullOrWhiteSpace(returnUrl))
+  {
+    returnUrl = "/";
   }
 
   var email = result.Principal.FindFirstValue(ClaimTypes.Email);
@@ -188,7 +205,7 @@ app.MapGet("/signin-google-callback", async (
     }
   }
 
-  // ====================== Claim Management ======================
+// ====================== Claim Management ======================
 
   if (!string.IsNullOrWhiteSpace(firstName))
   {
@@ -250,7 +267,7 @@ app.MapGet("/signin-google-callback", async (
 
   await context.SignOutAsync(IdentityConstants.ExternalScheme);
 
-  return Results.Redirect("/");
+  return Results.Redirect(returnUrl);
 });
 
 // Logout route
