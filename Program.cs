@@ -14,26 +14,36 @@ using System.Security.Claims;
 var builder = WebApplication.CreateBuilder(args);
 
 // ====================== Services ======================
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? "Data Source=PetStore.db";
 
-builder.Services.AddDbContext<PetStoreContext>(options =>
+
+// ====================== Database Configuration ======================
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (string.IsNullOrEmpty(connectionString))
 {
-  if (builder.Environment.IsDevelopment())
-  {
-    // En tu máquina usamos el motor ligero
-    options.UseSqlite(connectionString);
-  }
-  else
-  {
-    // En Render usamos el motor de Azure con resiliencia
-    options.UseSqlServer(connectionString, sqlOptions =>
-    {
-      sqlOptions.CommandTimeout(60);
-      sqlOptions.EnableRetryOnFailure(5);
-    });
-  }
-});
+    throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+}
+
+if (builder.Environment.IsDevelopment())
+{   //------ NOTE: For database migration on prod, please use this part. ----//
+    // builder.Services.AddDbContext<PetStoreContext>(options =>
+    //     options.UseSqlServer(connectionString, sqlOptions =>
+    //     {
+    //         sqlOptions.CommandTimeout(60);
+    //         sqlOptions.EnableRetryOnFailure(5);
+    //     }));
+    builder.Services.AddDbContext<PetStoreContext>(options =>
+        options.UseSqlite(connectionString));
+}
+else
+{
+    builder.Services.AddDbContext<PetStoreContext>(options =>
+        options.UseSqlServer(connectionString, sqlOptions =>
+        {
+            sqlOptions.CommandTimeout(60);
+            sqlOptions.EnableRetryOnFailure(5);
+        }));
+}
 
 // Configure Identity system for authentication and user management
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
