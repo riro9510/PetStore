@@ -104,6 +104,7 @@
     protected override void OnInitialized()
     {
         allShelters = PetService.GetAllShelters();
+        // disabled for frontend-only dev (no DB)
     }
 
     private void HandleShelterSelection(string id)
