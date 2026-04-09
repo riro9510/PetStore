@@ -28,13 +28,32 @@ if (!builder.Environment.IsDevelopment())
     }
 }
 
-// Retrieve database connection string from configuration
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? "Data Source=PetStore.db";
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Configure Entity Framework with SQLite database
-builder.Services.AddDbContext<PetStoreContext>(options =>
-    options.UseSqlite(connectionString));
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+}
+
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<PetStoreContext>(options =>
+        options.UseSqlServer(connectionString, sqlOptions =>
+        {
+            sqlOptions.CommandTimeout(60);
+            sqlOptions.EnableRetryOnFailure(5);
+        }));
+}
+else
+{
+    builder.Services.AddDbContext<PetStoreContext>(options =>
+        options.UseSqlServer(connectionString, sqlOptions =>
+        {
+            sqlOptions.CommandTimeout(60);
+            sqlOptions.EnableRetryOnFailure(5);
+        }));
+}
 
 // Configure Identity system for authentication and user management
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
