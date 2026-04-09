@@ -208,6 +208,10 @@ namespace PetStore.Migrations
                     b.Property<string>("Reason")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ShelterName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("SubmittedAt")
                         .HasColumnType("datetime2");
 
@@ -225,7 +229,8 @@ namespace PetStore.Migrations
                             FullName = "John Doe",
                             HelpType = "Adopt",
                             PetName = "Max",
-                            PhoneNumber = "555-1234",
+                            PhoneNumber = "555-123-4567",
+                            ShelterName = "Golden Paws Rescue",
                             SubmittedAt = new DateTime(2026, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -237,7 +242,8 @@ namespace PetStore.Migrations
                             FullName = "Jane Smith",
                             HelpType = "Foster",
                             PetName = "Majesty",
-                            PhoneNumber = "555-5678",
+                            PhoneNumber = "555-567-8901",
+                            ShelterName = "Whisker Haven",
                             SubmittedAt = new DateTime(2026, 4, 6, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });

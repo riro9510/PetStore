@@ -10,7 +10,8 @@ namespace PetStore.Models
     [Parameter]
     public int Id { get; set; }
     
-    public string PetName { get; set;  }
+    public string PetName { get; set; }
+    public string ShelterName { get; set; }
 
     // Personal information
     [Required(ErrorMessage = "Please fill in your full name")]

@@ -6,6 +6,8 @@
 @using PetStore.Services
 @inject PetService PetService
 @inject NavigationManager NavManager
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthStateProvider
 
 <PageTitle>Pets</PageTitle>
 
@@ -100,10 +102,10 @@
 
       <p><strong>Description: </strong>@selectedPet.Description</p>
 
-      <!-- Application button with pet name -->
-      <a href="/application?petName=@selectedPet.Name" class="apply-button">
-          Help @selectedPet.Name
-      </a>
+      <!-- Application button with pet name and shelter -->
+      <button class="apply-button" @onclick="() => HandleApplyClick(selectedPet.Id)">
+        Help @selectedPet.Name
+      </button>
     </div>
   </div>
 }
@@ -165,6 +167,27 @@
     else
     {
       filteredPets = PetService.GetPetsByCategory(type);
+    }
+  }
+
+  // Handler to ensure visitor signs in before seeing the application
+  private async Task HandleApplyClick(string petId)
+  {
+    var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+    var user = authState.User;
+
+    // Build the page we want to return to after sign in
+    var returnUrl = Uri.EscapeDataString($"/application?petId={petId}");
+
+    // If user is not signed in, send them to sign in page
+    if (user.Identity?.IsAuthenticated != true)
+    {
+      NavManager.NavigateTo($"/signin?returnUrl={returnUrl}");
+    }
+    else
+    {
+      // If already signed in, go straight to the application page
+      NavManager.NavigateTo($"/application?petId={petId}");
     }
   }
 }

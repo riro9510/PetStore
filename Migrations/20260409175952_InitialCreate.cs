@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PetStore.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate_Azure : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,6 +20,7 @@ namespace PetStore.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PetName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShelterName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -244,11 +245,11 @@ namespace PetStore.Migrations
 
             migrationBuilder.InsertData(
                 table: "ApplicationForms",
-                columns: new[] { "Id", "Address", "AgreeToTerms", "Email", "Experience", "FosterLength", "FullName", "HelpType", "HousingStatus", "MonthlyAmount", "OtherPets", "PetName", "PhoneNumber", "Reason", "SubmittedAt" },
+                columns: new[] { "Id", "Address", "AgreeToTerms", "Email", "Experience", "FosterLength", "FullName", "HelpType", "HousingStatus", "MonthlyAmount", "OtherPets", "PetName", "PhoneNumber", "Reason", "ShelterName", "SubmittedAt" },
                 values: new object[,]
                 {
-                    { 1, "123 Main St, City, State, 12345", false, "john@example.com", null, null, "John Doe", "Adopt", null, null, null, "Max", "555-1234", null, new DateTime(2026, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, "123 Main St, City, State, 12345", false, "jane@example.com", null, null, "Jane Smith", "Foster", null, null, null, "Majesty", "555-5678", null, new DateTime(2026, 4, 6, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 1, "123 Main St, City, State, 12345", false, "john@example.com", null, null, "John Doe", "Adopt", null, null, null, "Max", "555-123-4567", null, "Golden Paws Rescue", new DateTime(2026, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, "123 Main St, City, State, 12345", false, "jane@example.com", null, null, "Jane Smith", "Foster", null, null, null, "Majesty", "555-567-8901", null, "Whisker Haven", new DateTime(2026, 4, 6, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
