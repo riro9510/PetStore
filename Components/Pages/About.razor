@@ -1,18 +1,149 @@
 @page "/about"
 @rendermode InteractiveServer
+@inject IJSRuntime JS
 
 <PageTitle>About Us</PageTitle>
 
-<h1>About Pawsitive Friends</h1>
+<section class="about-hero reveal">
+    <div class="about-hero-content">
+        <span class="about-tag">Who We Are</span>
+        <h1>About Pawsitive Friends</h1>
+        <p class="about-lead">
+            Pawsitive Friends is a modern pet care and adoption platform built to connect people with animals in need of love,
+            care, and lasting companionship. Our goal is to create a trusted digital space where users can discover pets,
+            explore meaningful ways to help, and build life-changing connections with animals.
+        </p>
+    </div>
+</section>
 
-<p class="about-text">
-  We are a non-profit organization that has partnered with shelters worldwide to bring
-  attention to animals in need of love, care, and a forever home. Our mission is to
-  connect people with shelters and help shine a light on animals waiting for a second chance.
-</p>
+<section class="about-section reveal">
+    <div class="about-grid two-column">
+        <div class="about-card">
+            <h2>Our Mission</h2>
+            <p>
+                Our mission is to make pet adoption, fostering, and animal support more accessible through a user-friendly
+                platform that brings people closer to pets in need. We aim to simplify the journey of finding, learning about,
+                and caring for animals while promoting responsible pet ownership and compassionate action.
+            </p>
+        </div>
 
+        <div class="about-card">
+            <h2>Our Vision</h2>
+            <p>
+                We envision a future where technology helps every pet find care, safety, and a sense of belonging. By bridging
+                the gap between shelters, animals, and animal lovers, we strive to build a community where every interaction
+                contributes to better outcomes for pets and the people who care about them.
+            </p>
+        </div>
+    </div>
+</section>
 
+<section class="about-section alt-section reveal">
+    <div class="about-grid two-column">
+        <div>
+            <span class="section-label">What We Do</span>
+            <h2>More Than a Pet Store</h2>
+            <p>
+                Pawsitive Friends goes beyond the traditional idea of a pet marketplace. Our platform is designed to support
+                different types of users, from those ready to adopt a pet permanently to those who want to foster, sponsor,
+                or simply explore available animals and shelters.
+            </p>
+            <p>
+                This flexibility makes our platform more inclusive and practical for people with different lifestyles, needs,
+                and levels of commitment. Whether someone is searching for a forever companion or looking for a way to support
+                pets in transition, Pawsitive Friends provides a meaningful starting point.
+            </p>
+        </div>
+
+        <div class="feature-panel">
+            <div class="feature-item">
+                <h3>Adopt</h3>
+                <p>Help pets find loving, permanent homes.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Foster</h3>
+                <p>Provide temporary care and support for animals in need.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Sponsor</h3>
+                <p>Contribute to the wellbeing of pets even without long-term ownership.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Explore</h3>
+                <p>Browse shelters and pet profiles through an accessible digital experience.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-section reveal">
+    <div class="about-grid two-column">
+        <div class="about-card highlight-card">
+            <span class="section-label">Why It Matters</span>
+            <h2>Built with Purpose</h2>
+            <p>
+                Many people love animals but may not be in a position to adopt immediately. At the same time, many pets need
+                visibility, care, and connection. Pawsitive Friends was created to meet both needs by offering a platform that
+                supports compassion in practical ways.
+            </p>
+            <p>
+                By combining technology with empathy, we hope to create experiences that are not only efficient and responsive,
+                but also genuinely impactful.
+            </p>
+        </div>
+
+        <div class="about-card">
+            <span class="section-label">Our Values</span>
+            <h2>What Guides Us</h2>
+            <ul class="values-list">
+                <li><strong>Compassion:</strong> Every pet deserves care, dignity, and a chance to be loved.</li>
+                <li><strong>Accessibility:</strong> Helping animals should be simple, clear, and open to more people.</li>
+                <li><strong>Responsibility:</strong> We encourage thoughtful and informed decisions around pet care.</li>
+                <li><strong>Community:</strong> Stronger connections between people and pets create better outcomes for all.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="about-section alt-section reveal">
+    <div class="team-wrapper">
+        <span class="section-label">Meet the Team</span>
+        <h2>The People Behind Pawsitive Friends</h2>
+        <p class="team-intro">
+            Pawsitive Friends is being developed through the collaboration of a dedicated team committed to building a
+            functional, responsive, and meaningful platform:
+        </p>
+
+        <div class="team-grid">
+            <div class="team-member">Joelnin Eizabeth Rodriguez Manosalva</div>
+            <div class="team-member">Jose David Colmenarez Gil</div>
+            <div class="team-member">Ndarama Mark</div>
+            <div class="team-member">Vanessa Yang</div>
+            <div class="team-member">Ricardo Ramos</div>
+            <div class="team-member">Yeampier Jesus Huerta Fernandez</div>
+            <div class="team-member">Mawuli Ayikpa</div>
+            <div class="team-member">Uduakobong Okonah</div>
+        </div>
+    </div>
+</section>
+
+<section class="about-cta reveal">
+    <div class="about-cta-content">
+        <span class="section-label">Join the Mission</span>
+        <h2>Creating Better Connections for Pets and People</h2>
+        <p>
+            At Pawsitive Friends, we believe even small actions can make a real difference. Through adoption, fostering,
+            sponsorship, and awareness, we are building a platform that helps more pets receive the care and attention they deserve.
+        </p>
+    </div>
+</section>
 
 @code {
-
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("aboutPageAnimations.init");
+        }
+    }
 }

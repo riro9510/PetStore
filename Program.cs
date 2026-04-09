@@ -25,13 +25,7 @@ if (string.IsNullOrEmpty(connectionString))
 }
 
 if (builder.Environment.IsDevelopment())
-{   //------ NOTE: For database migration on prod, please use this part. ----//
-    // builder.Services.AddDbContext<PetStoreContext>(options =>
-    //     options.UseSqlServer(connectionString, sqlOptions =>
-    //     {
-    //         sqlOptions.CommandTimeout(60);
-    //         sqlOptions.EnableRetryOnFailure(5);
-    //     }));
+{   
     builder.Services.AddDbContext<PetStoreContext>(options =>
         options.UseSqlite(connectionString));
 }
