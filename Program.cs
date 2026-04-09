@@ -14,6 +14,9 @@ using System.Security.Claims;
 var builder = WebApplication.CreateBuilder(args);
 
 // ====================== Services ======================
+
+
+// ====================== Database Configuration ======================
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 if (string.IsNullOrEmpty(connectionString))
@@ -21,15 +24,10 @@ if (string.IsNullOrEmpty(connectionString))
     throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 }
 
-
 if (builder.Environment.IsDevelopment())
-{
+{   
     builder.Services.AddDbContext<PetStoreContext>(options =>
-        options.UseSqlServer(connectionString, sqlOptions =>
-        {
-            sqlOptions.CommandTimeout(60);
-            sqlOptions.EnableRetryOnFailure(5);
-        }));
+        options.UseSqlite(connectionString));
 }
 else
 {
@@ -60,8 +58,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 // Initialize Authentication
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultScheme = IdentityConstants.ApplicationScheme;
-    options.DefaultChallengeScheme = IdentityConstants.ExternalScheme;
+  options.DefaultScheme = IdentityConstants.ApplicationScheme;
+  options.DefaultChallengeScheme = IdentityConstants.ExternalScheme;
 });
 
 // Getting credentials  (appsettings)
@@ -71,16 +69,16 @@ var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecr
 if (!string.IsNullOrWhiteSpace(googleClientId) &&
     !string.IsNullOrWhiteSpace(googleClientSecret))
 {
-    builder.Services.AddAuthentication().AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
-    {
-        options.ClientId = googleClientId;
-        options.ClientSecret = googleClientSecret;
-        options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
-    });
+  builder.Services.AddAuthentication().AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+  {
+    options.ClientId = googleClientId;
+    options.ClientSecret = googleClientSecret;
+    options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+  });
 }
 else
 {
-    Console.WriteLine("Google authentication secrets are missing. Google login disabled.");
+  Console.WriteLine("Google authentication secrets are missing. Google login disabled.");
 }
 
 // Enable Blazor components with server-side interactivity
@@ -224,14 +222,24 @@ app.MapGet("/signin-google-callback", async (
 
   // ====================== Role Assignment ======================
 
-  var adminEmail = config["AdminSettings:SeedAdminEmail"];
+  var adminEmails = config
+    .GetSection("AdminSettings:SeedAdminEmails")
+    .Get<string[]>() ?? Array.Empty<string>();
 
-  if (!string.IsNullOrWhiteSpace(adminEmail) &&
-      email.Equals(adminEmail, StringComparison.OrdinalIgnoreCase))
+  var isAdmin = adminEmails.Any(a =>
+    !string.IsNullOrWhiteSpace(a) &&
+    email.Equals(a, StringComparison.OrdinalIgnoreCase));
+
+  if (isAdmin)
   {
     if (!await userManager.IsInRoleAsync(user, Roles.Admin))
     {
       await userManager.AddToRoleAsync(user, Roles.Admin);
+    }
+
+    if (await userManager.IsInRoleAsync(user, Roles.Client))
+    {
+      await userManager.RemoveFromRoleAsync(user, Roles.Client);
     }
   }
   else
