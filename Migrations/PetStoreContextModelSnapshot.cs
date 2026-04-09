@@ -145,6 +145,91 @@ namespace PetStore.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PetStore.Models.ApplicationForm", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("AgreeToTerms")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Experience")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FosterLength")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HelpType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HousingStatus")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("MonthlyAmount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OtherPets")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PetName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("SubmittedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationForms");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "123 Main St, City, State, 12345",
+                            AgreeToTerms = false,
+                            Email = "john@example.com",
+                            FullName = "John Doe",
+                            HelpType = "Adopt",
+                            PetName = "Max",
+                            PhoneNumber = "555-1234",
+                            SubmittedAt = new DateTime(2026, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "123 Main St, City, State, 12345",
+                            AgreeToTerms = false,
+                            Email = "jane@example.com",
+                            FullName = "Jane Smith",
+                            HelpType = "Foster",
+                            PetName = "Majesty",
+                            PhoneNumber = "555-5678",
+                            SubmittedAt = new DateTime(2026, 4, 6, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
+                });
+
             modelBuilder.Entity("PetStore.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -230,7 +315,7 @@ namespace PetStore.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("PetStore.Pet", b =>
+            modelBuilder.Entity("PetStore.Models.Pet", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -378,7 +463,7 @@ namespace PetStore.Migrations
                             Id = "7",
                             Breed = "Orange Tabby",
                             Description = "Majestic, regal, and content. All she wants is to lay in the sun.",
-                            Energy = 1,
+                            Energy = 5,
                             ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/orange-cat.jpg",
                             Is_Adopt = false,
                             Is_Foster = false,
@@ -402,6 +487,51 @@ namespace PetStore.Migrations
                             Shelter_id = "SHELTER-03",
                             Type = "birds",
                             YearOfBirth = 2014
+                        },
+                        new
+                        {
+                            Id = "9",
+                            Breed = "Parrot",
+                            Description = "He's a living rainforest ready to go home with you.",
+                            Energy = 5,
+                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/parrot.jpg",
+                            Is_Adopt = true,
+                            Is_Foster = true,
+                            Is_Friendly = true,
+                            Name = "Sir Zir",
+                            Shelter_id = "SHELTER-03",
+                            Type = "birds",
+                            YearOfBirth = 2022
+                        },
+                        new
+                        {
+                            Id = "10",
+                            Breed = "Ferret",
+                            Description = "Only wants to be by you and follow you everywhere.",
+                            Energy = 4,
+                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/ferret.jpg",
+                            Is_Adopt = true,
+                            Is_Foster = false,
+                            Is_Friendly = true,
+                            Name = "Squishy",
+                            Shelter_id = "SHELTER-06",
+                            Type = "exotics",
+                            YearOfBirth = 2025
+                        },
+                        new
+                        {
+                            Id = "11",
+                            Breed = "Sugar Glider",
+                            Description = "Comes out and plays all night.",
+                            Energy = 3,
+                            ImageUrl = "https://raw.githubusercontent.com/vsyang/pet-images/main/sugar-glider.jpg",
+                            Is_Adopt = true,
+                            Is_Foster = false,
+                            Is_Friendly = true,
+                            Name = "Sweety",
+                            Shelter_id = "SHELTER-04",
+                            Type = "exotics",
+                            YearOfBirth = 2024
                         });
                 });
 

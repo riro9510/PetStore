@@ -1,33 +1,47 @@
 @page "/thankyou"
-@inject NavigationManager Navigation
+@using PetStore.Models
+@inject PetStore.Data.PetStoreContext DbContext
 
-<PageTitle>Thank You</PageTitle>
+
+<PageTitle>Thank You @Id</PageTitle>
 
 <h1>Thank You!</h1>
 
-<!-- Displays confirmation message using selected help type -->
-<p>
-  We have successfully received your application to @helpType?.ToLower().
-  We will review your application and reach out to you within 7-10 business days.
-</p>
+<!-- If no application is found, show an error message -->
+@if (application is null)
+{
+  <p>We could not find your application.</p>
+}
+else
+{
+  <!-- Display user's name -->
+  <p>Thank you, @application.FullName!</p>
 
-<!-- Navigation back to home page -->
-<NavLink href="/">Return to Home</NavLink>
+  <!-- Confirmation message showing selected help type -->
+  <p>
+    We have successfully received your application to @application.HelpType?.ToLower().
+    We will review your application and reach out to you within 7 to 10 business days.
+  </p>
+
+  <!-- Show additional details from the saved application -->
+  <p><strong>Application ID:</strong> @application.Id</p>
+  <p><strong>Submitted:</strong> @application.SubmittedAt.ToString("MMMM d, yyyy")</p>
+
+  <!-- Navigation back to home page -->
+  <NavLink href="/">Return to Home</NavLink>
+}
 
 @code {
-  // Stores the help type passed from the application page (Adopt, Foster, Sponsor)
-  private string? helpType;
 
-  protected override void OnInitialized()
+  [Parameter]
+  [SupplyParameterFromQuery]
+  public int Id { get; set; }
+
+  private ApplicationForm? application;
+
+  protected override async Task OnInitializedAsync()
   {
-    // Get the current URL and extract query parameters
-    var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
-    var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
-
-    // Retrieve the "help type" parameter from the query string
-    if (query.TryGetValue("type", out var value))
-    {
-      helpType = value;
-    }
+    // Use the Id from the URL path to find the application
+    application = await DbContext.ApplicationForms.FindAsync(Id);
   }
 }

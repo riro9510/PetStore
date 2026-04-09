@@ -1,7 +1,11 @@
 @page "/application"
 @using PetStore.Models
+@using PetStore.Services
+@using Microsoft.AspNetCore.WebUtilities
 @rendermode InteractiveServer
 @inject NavigationManager Navigation
+@inject PetStore.Data.PetStoreContext DbContext
+@inject PetService PetService
 @attribute [Authorize(Roles = $"{Roles.Admin},{Roles.Client}")]
 
 <PageTitle>Pet Application</PageTitle>
@@ -66,11 +70,6 @@
         </label>
       </div>
 
-      <div>
-        <label>
-          <InputRadio Value='@("Volunteer")' /> Volunteer
-        </label>
-      </div>
     </InputRadioGroup>
   </div>
 
@@ -130,24 +129,10 @@
       </div>
     </div>
   }
-  else if (application.HelpType == "Volunteer")
-  {
-    <!-- Section for volunteer questions -->
-    <div class="form-section">
-      <h3>Volunteer Questions</h3>
 
-      <div class="form-group">
-        <label>What kind of volunteer work are you interested in?</label>
-        <InputText class="form-control" @bind-Value="application.Experience" />
-      </div>
-
-      <div class="form-group">
-        <label>Why do you want to volunteer?</label>
-        <InputTextArea class="form-control" @bind-Value="application.Reason" />
-      </div>
-    </div>
-  }
-
+  <!-- Hidden field to store petName passed from the URL -->
+  <InputHidden @bind-Value="@petName" />
+  
   <div class="form-section">
     <!-- Required confirmation checkbox -->
     <label>
@@ -157,7 +142,7 @@
     <ValidationMessage For="@(() => application.AgreeToTerms)" />
   </div>
 
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="submit" class="btn btn-primary" disabled="@submitted">Submit</button>
 
 </EditForm>
 
@@ -168,9 +153,37 @@
   // Tracks submission state (can be used for future enhancements)
   private bool submitted = false;
 
-  /// Handles form submission and redirects user to a confirmation page. Passes the selected "help type" as a query parameter.
-  private void HandleSubmit()
+  private string petName;
+
+  protected override void OnInitialized()
   {
-    Navigation.NavigateTo($"/thankyou?type={application.HelpType}");
+    // Get the query parameters from the URL
+    var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+    var queryParams = QueryHelpers.ParseQuery(uri.Query);
+
+    // Capture the petName from the query string and set it in the application
+    if (queryParams.TryGetValue("petName", out var name))
+    {
+      petName = name;
+    }
+    else
+    {
+      petName = "No pet name provided";
+    }
+  }
+  private async Task HandleSubmit()
+  {
+    submitted = true;
+
+    application.SubmittedAt = DateTime.Now;
+    application.PetName = petName;
+
+    // Save the application to the database
+    DbContext.ApplicationForms.Add(application);
+    await DbContext.SaveChangesAsync();
+
+    // Redirect to the Thank You page with applicationId
+    
+    Navigation.NavigateTo($"/thankyou?id={application.Id}");
   }
 }
