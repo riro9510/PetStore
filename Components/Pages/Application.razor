@@ -12,13 +12,6 @@
 
 <h1>Pet Application</h1>
 
-<!-- Display selected pet and shelter info -->
-@if (selectedPet is not null)
-{
-  <p><strong>Pet:</strong> @selectedPet.Name</p>
-  <p><strong>Shelter:</strong> @shelterName</p>
-}
-
 <!-- Main application form for adopting, fostering, or sponsoring a pet -->
 <EditForm Model="application" OnValidSubmit="HandleSubmit">
   <DataAnnotationsValidator />
@@ -190,7 +183,7 @@
       {
         application.PetName = selectedPet.Name;
 
-        // Get shelter name using Shelter_id (linked table) :contentReference[oaicite:0]{index=0}
+        // Get shelter name using Shelter id 
         shelterName = PetService.GetShelterNameById(selectedPet.Shelter_id);
 
         application.ShelterName = shelterName;
