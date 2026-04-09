@@ -1,0 +1,99 @@
+@page "/volunteer"
+@rendermode InteractiveServer
+
+@using PetStore.Data
+@using PetStore.Models
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.EntityFrameworkCore
+
+@inject PetStoreContext DbContext
+@inject NavigationManager NavigationManager
+
+<h1>volunteer</h1>
+
+<h2>Would you like to volunteer?</h2>
+
+<EditForm Model="volunteerApplication" OnValidSubmit="SubmitApplication">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label>Volunteer Type:</label>
+        <InputRadioGroup @bind-Value="volunteerApplication.VolunteerType">
+            <div>
+                <InputRadio Value="@VolunteerType.PetWalker" /> Pet walkers 
+            </div>
+            <div>
+                <InputRadio Value="@VolunteerType.PetCare" /> Pet Care and Bathing 
+            </div>
+            <div>
+                <InputRadio Value="@VolunteerType.Institution" /> I represent an institution
+            </div>
+        </InputRadioGroup>
+        <ValidationMessage For="@(() => volunteerApplication.VolunteerType)" />
+    </div>
+
+    <div class="form-group">
+        <label>Full Name or Institution Name:</label>
+        <InputText class="form-control" @bind-Value="volunteerApplication.Name" />
+        <ValidationMessage For="@(() => volunteerApplication.Name)" />
+    </div>
+
+    <div class="form-group">
+        <label>Contact Phone Number:</label>
+        <InputText class="form-control" @bind-Value="volunteerApplication.PhoneNumber" />
+        <ValidationMessage For="@(() => volunteerApplication.PhoneNumber)" />
+    </div>
+
+    <div class="form-group">
+        <label>Preferred Email:</label>
+        <InputText class="form-control" @bind-Value="volunteerApplication.Email" />
+        <ValidationMessage For="@(() => volunteerApplication.Email)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+@if (volunteerApplications.Any())
+{
+    <h2>Volunteer Applications</h2>
+    @foreach (var group in volunteerApplications.GroupBy(v => v.SubmittedAt.Date))
+    {
+        <h3>@group.Key.ToShortDateString()</h3>
+        <ul>
+            @foreach (var app in group.OrderBy(v => v.SubmittedAt))
+            {
+                <li>
+                    <strong>@app.Name</strong> - @app.VolunteerType<br />
+                    Phone: @app.PhoneNumber | Email: @app.Email<br />
+                    Submitted: @app.SubmittedAt.ToShortTimeString()
+                </li>
+            }
+        </ul>
+    }
+}
+
+@code {
+    private VolunteerApplication volunteerApplication = new();
+    private List<VolunteerApplication> volunteerApplications = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadApplications();
+    }
+
+    private async Task SubmitApplication()
+    {
+        volunteerApplication.SubmittedAt = DateTime.Now;
+        DbContext.VolunteerApplications.Add(volunteerApplication);
+        await DbContext.SaveChangesAsync();
+        volunteerApplication = new VolunteerApplication();
+        await LoadApplications();
+    }
+
+    private async Task LoadApplications()
+    {
+        volunteerApplications = await DbContext.VolunteerApplications
+            .OrderByDescending(v => v.SubmittedAt)
+            .ToListAsync();
+    }
+}
