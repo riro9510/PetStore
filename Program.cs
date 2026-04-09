@@ -18,27 +18,27 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 if (string.IsNullOrEmpty(connectionString))
 {
-    throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+  throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 }
 
 
 if (builder.Environment.IsDevelopment())
 {
-    builder.Services.AddDbContext<PetStoreContext>(options =>
-        options.UseSqlServer(connectionString, sqlOptions =>
-        {
-            sqlOptions.CommandTimeout(60);
-            sqlOptions.EnableRetryOnFailure(5);
-        }));
+  builder.Services.AddDbContext<PetStoreContext>(options =>
+      options.UseSqlServer(connectionString, sqlOptions =>
+      {
+        sqlOptions.CommandTimeout(60);
+        sqlOptions.EnableRetryOnFailure(5);
+      }));
 }
 else
 {
-    builder.Services.AddDbContext<PetStoreContext>(options =>
-        options.UseSqlServer(connectionString, sqlOptions =>
-        {
-            sqlOptions.CommandTimeout(60);
-            sqlOptions.EnableRetryOnFailure(5);
-        }));
+  builder.Services.AddDbContext<PetStoreContext>(options =>
+      options.UseSqlServer(connectionString, sqlOptions =>
+      {
+        sqlOptions.CommandTimeout(60);
+        sqlOptions.EnableRetryOnFailure(5);
+      }));
 }
 
 // Configure Identity system for authentication and user management
@@ -55,17 +55,13 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<PetStoreContext>()
 .AddDefaultTokenProviders();
 
-builder.Services.ConfigureApplicationCookie(options =>
-{
-  options.LoginPath = "/signin";
-});
 // ====================== Authentication ======================
 
 // Initialize Authentication
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultScheme = IdentityConstants.ApplicationScheme;
-    options.DefaultChallengeScheme = IdentityConstants.ExternalScheme;
+  options.DefaultScheme = IdentityConstants.ApplicationScheme;
+  options.DefaultChallengeScheme = IdentityConstants.ExternalScheme;
 });
 
 // Getting credentials  (appsettings)
@@ -75,16 +71,16 @@ var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecr
 if (!string.IsNullOrWhiteSpace(googleClientId) &&
     !string.IsNullOrWhiteSpace(googleClientSecret))
 {
-    builder.Services.AddAuthentication().AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
-    {
-        options.ClientId = googleClientId;
-        options.ClientSecret = googleClientSecret;
-        options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
-    });
+  builder.Services.AddAuthentication().AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+  {
+    options.ClientId = googleClientId;
+    options.ClientSecret = googleClientSecret;
+    options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+  });
 }
 else
 {
-    Console.WriteLine("Google authentication secrets are missing. Google login disabled.");
+  Console.WriteLine("Google authentication secrets are missing. Google login disabled.");
 }
 
 // Enable Blazor components with server-side interactivity
@@ -131,7 +127,7 @@ app.MapRazorComponents<App>()
 // ====================== Google Login Routes ======================
 
 // Route to initiate Google login
-app.MapGet("/login-google", (HttpContext context, IConfiguration config) =>
+app.MapGet("/login-google", (IConfiguration config) =>
 {
   var clientId = config["Authentication:Google:ClientId"];
 
@@ -140,18 +136,8 @@ app.MapGet("/login-google", (HttpContext context, IConfiguration config) =>
     return Results.BadRequest("Google authentication is not configured.");
   }
 
-  var returnUrl = context.Request.Query["returnUrl"].ToString();
-
-  if (string.IsNullOrWhiteSpace(returnUrl))
-  {
-    returnUrl = "/";
-  }
-
   return Results.Challenge(
-      new AuthenticationProperties
-      {
-        RedirectUri = $"/signin-google-callback?returnUrl={Uri.EscapeDataString(returnUrl)}"
-      },
+      new AuthenticationProperties { RedirectUri = "/signin-google-callback" },
       new[] { GoogleDefaults.AuthenticationScheme }
   );
 });
@@ -169,13 +155,6 @@ app.MapGet("/signin-google-callback", async (
   if (!result.Succeeded || result.Principal == null)
   {
     return Results.Redirect("/signin");
-  }
-
-  var returnUrl = context.Request.Query["returnUrl"].ToString();
-
-  if (string.IsNullOrWhiteSpace(returnUrl))
-  {
-    returnUrl = "/";
   }
 
   var email = result.Principal.FindFirstValue(ClaimTypes.Email);
@@ -205,7 +184,7 @@ app.MapGet("/signin-google-callback", async (
     }
   }
 
-// ====================== Claim Management ======================
+  // ====================== Claim Management ======================
 
   if (!string.IsNullOrWhiteSpace(firstName))
   {
@@ -245,14 +224,24 @@ app.MapGet("/signin-google-callback", async (
 
   // ====================== Role Assignment ======================
 
-  var adminEmail = config["AdminSettings:SeedAdminEmail"];
+  var adminEmails = config
+    .GetSection("AdminSettings:SeedAdminEmails")
+    .Get<string[]>() ?? Array.Empty<string>();
 
-  if (!string.IsNullOrWhiteSpace(adminEmail) &&
-      email.Equals(adminEmail, StringComparison.OrdinalIgnoreCase))
+  var isAdmin = adminEmails.Any(a =>
+    !string.IsNullOrWhiteSpace(a) &&
+    email.Equals(a, StringComparison.OrdinalIgnoreCase));
+
+  if (isAdmin)
   {
     if (!await userManager.IsInRoleAsync(user, Roles.Admin))
     {
       await userManager.AddToRoleAsync(user, Roles.Admin);
+    }
+
+    if (await userManager.IsInRoleAsync(user, Roles.Client))
+    {
+      await userManager.RemoveFromRoleAsync(user, Roles.Client);
     }
   }
   else
@@ -267,7 +256,7 @@ app.MapGet("/signin-google-callback", async (
 
   await context.SignOutAsync(IdentityConstants.ExternalScheme);
 
-  return Results.Redirect(returnUrl);
+  return Results.Redirect("/");
 });
 
 // Logout route
