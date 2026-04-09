@@ -10,24 +10,10 @@ using PetStore.Data;
 using PetStore.Services;
 using PetStore.Models;
 using System.Security.Claims;
-using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ====================== Services ======================
-
-if (!builder.Environment.IsDevelopment())
-{
-    var keyVaultUri = builder.Configuration["KEYVAULT_URI"];
-
-    if (!string.IsNullOrWhiteSpace(keyVaultUri))
-    {
-        builder.Configuration.AddAzureKeyVault(
-            new Uri(keyVaultUri),
-            new DefaultAzureCredential());
-    }
-}
-
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 if (string.IsNullOrEmpty(connectionString))
@@ -71,14 +57,14 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 // ====================== Authentication ======================
 
-// Siempre inicializamos Authentication
+// Initialize Authentication
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = IdentityConstants.ApplicationScheme;
     options.DefaultChallengeScheme = IdentityConstants.ExternalScheme;
 });
 
-// Obtener credenciales desde configuración (appsettings o ENV)
+// Getting credentials  (appsettings)
 var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
 var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
 
