@@ -740,7 +740,12 @@ select.invalid {
     border-radius: 20px;
     padding: 2rem;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease;
 }
+
+.about-card:hover {
+    transform: translateY(-4px);
+} 
 
 .about-card h2,
 .about-section h2,
@@ -772,6 +777,7 @@ select.invalid {
     border-radius: 18px;
     padding: 1.25rem;
     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .feature-item h3 {
@@ -783,6 +789,11 @@ select.invalid {
     color: #666;
     line-height: 1.6;
     margin: 0;
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
 .highlight-card {
@@ -826,6 +837,10 @@ select.invalid {
     font-weight: 600;
     color: #333;
     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0;
+    transform: translateY(25px);
+    animation: fadeUp 0.6s ease forwards;
 }
 
 .about-cta {
@@ -837,6 +852,58 @@ select.invalid {
     max-width: 850px;
     margin: 0 auto;
     text-align: center;
+}
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.team-member:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.team-member:nth-child(1) { animation-delay: 0.1s; }
+.team-member:nth-child(2) { animation-delay: 0.2s; }
+.team-member:nth-child(3) { animation-delay: 0.3s; }
+.team-member:nth-child(4) { animation-delay: 0.4s; }
+.team-member:nth-child(5) { animation-delay: 0.5s; }
+.team-member:nth-child(6) { animation-delay: 0.6s; }
+.team-member:nth-child(7) { animation-delay: 0.7s; }
+.team-member:nth-child(8) { animation-delay: 0.8s; }
+
+.feature-item,
+.team-member {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+}
+
+.reveal.active .feature-item:nth-child(1) { transition-delay: 0.1s; opacity: 1; transform: translateY(0); }
+.reveal.active .feature-item:nth-child(2) { transition-delay: 0.2s; opacity: 1; transform: translateY(0); }
+.reveal.active .feature-item:nth-child(3) { transition-delay: 0.3s; opacity: 1; transform: translateY(0); }
+.reveal.active .feature-item:nth-child(4) { transition-delay: 0.4s; opacity: 1; transform: translateY(0); }
+
+.reveal.active .team-member:nth-child(1) { transition-delay: 0.1s; opacity: 1; transform: translateY(0); }
+.reveal.active .team-member:nth-child(2) { transition-delay: 0.2s; opacity: 1; transform: translateY(0); }
+.reveal.active .team-member:nth-child(3) { transition-delay: 0.3s; opacity: 1; transform: translateY(0); }
+.reveal.active .team-member:nth-child(4) { transition-delay: 0.4s; opacity: 1; transform: translateY(0); }
+.reveal.active .team-member:nth-child(5) { transition-delay: 0.5s; opacity: 1; transform: translateY(0); }
+.reveal.active .team-member:nth-child(6) { transition-delay: 0.6s; opacity: 1; transform: translateY(0); }
+.reveal.active .team-member:nth-child(7) { transition-delay: 0.7s; opacity: 1; transform: translateY(0); }
+.reveal.active .team-member:nth-child(8) { transition-delay: 0.8s; opacity: 1; transform: translateY(0); }
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @media (max-width: 900px) {

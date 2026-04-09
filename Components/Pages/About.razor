@@ -1,9 +1,10 @@
 @page "/about"
 @rendermode InteractiveServer
+@inject IJSRuntime JS
 
 <PageTitle>About Us</PageTitle>
 
-<section class="about-hero">
+<section class="about-hero reveal">
     <div class="about-hero-content">
         <span class="about-tag">Who We Are</span>
         <h1>About Pawsitive Friends</h1>
@@ -15,7 +16,7 @@
     </div>
 </section>
 
-<section class="about-section">
+<section class="about-section reveal">
     <div class="about-grid two-column">
         <div class="about-card">
             <h2>Our Mission</h2>
@@ -37,7 +38,7 @@
     </div>
 </section>
 
-<section class="about-section alt-section">
+<section class="about-section alt-section reveal">
     <div class="about-grid two-column">
         <div>
             <span class="section-label">What We Do</span>
@@ -75,7 +76,7 @@
     </div>
 </section>
 
-<section class="about-section">
+<section class="about-section reveal">
     <div class="about-grid two-column">
         <div class="about-card highlight-card">
             <span class="section-label">Why It Matters</span>
@@ -104,7 +105,7 @@
     </div>
 </section>
 
-<section class="about-section alt-section">
+<section class="about-section alt-section reveal">
     <div class="team-wrapper">
         <span class="section-label">Meet the Team</span>
         <h2>The People Behind Pawsitive Friends</h2>
@@ -126,7 +127,7 @@
     </div>
 </section>
 
-<section class="about-cta">
+<section class="about-cta reveal">
     <div class="about-cta-content">
         <span class="section-label">Join the Mission</span>
         <h2>Creating Better Connections for Pets and People</h2>
@@ -136,3 +137,13 @@
         </p>
     </div>
 </section>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("aboutPageAnimations.init");
+        }
+    }
+}
