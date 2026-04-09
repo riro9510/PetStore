@@ -1,5 +1,3 @@
-// This file configures the entire application including services, authentication, middleware pipeline, and custom routes.
-
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
@@ -49,33 +47,43 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<PetStoreContext>()
 .AddDefaultTokenProviders();
 
-// ====================== Authentication ======================
-
-// Initialize Authentication
-builder.Services.AddAuthentication(options =>
+// Used to re-route from Pets.razor to sign in page
+builder.Services.ConfigureApplicationCookie(options =>
 {
-  options.DefaultScheme = IdentityConstants.ApplicationScheme;
-  options.DefaultChallengeScheme = IdentityConstants.ExternalScheme;
+  options.LoginPath = "/signin";
 });
+
+// ====================== Authentication ======================
 
 // Getting credentials  (appsettings)
 var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
 var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
 
-if (!string.IsNullOrWhiteSpace(googleClientId) &&
-    !string.IsNullOrWhiteSpace(googleClientSecret))
+// Initialize Authentication + Google
+builder.Services.AddAuthentication(options =>
 {
-  builder.Services.AddAuthentication().AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+  // Default scheme for signed-in users (cookie auth)
+  options.DefaultScheme = IdentityConstants.ApplicationScheme;
+
+  // Default scheme used when we challenge (Google login)
+  options.DefaultChallengeScheme = IdentityConstants.ExternalScheme;
+})
+.AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+{
+  if (!string.IsNullOrWhiteSpace(googleClientId) &&
+      !string.IsNullOrWhiteSpace(googleClientSecret))
   {
     options.ClientId = googleClientId;
     options.ClientSecret = googleClientSecret;
+
+    // Map Google "given_name" to ASP.NET claim
     options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
-  });
-}
-else
-{
-  Console.WriteLine("Google authentication secrets are missing. Google login disabled.");
-}
+  }
+  else
+  {
+    Console.WriteLine("Google authentication secrets are missing. Google login disabled.");
+  }
+});
 
 // Enable Blazor components with server-side interactivity
 builder.Services.AddRazorComponents()
@@ -121,7 +129,7 @@ app.MapRazorComponents<App>()
 // ====================== Google Login Routes ======================
 
 // Route to initiate Google login
-app.MapGet("/login-google", (IConfiguration config) =>
+app.MapGet("/login-google", (HttpContext context, IConfiguration config) =>
 {
   var clientId = config["Authentication:Google:ClientId"];
 
@@ -130,9 +138,19 @@ app.MapGet("/login-google", (IConfiguration config) =>
     return Results.BadRequest("Google authentication is not configured.");
   }
 
+  var returnUrl = context.Request.Query["returnUrl"].ToString();
+
+  if (string.IsNullOrWhiteSpace(returnUrl))
+  {
+    returnUrl = "/";
+  }
+
   return Results.Challenge(
-      new AuthenticationProperties { RedirectUri = "/signin-google-callback" },
-      new[] { GoogleDefaults.AuthenticationScheme }
+    new AuthenticationProperties
+    {
+      RedirectUri = $"/signin-google-callback?returnUrl={Uri.EscapeDataString(returnUrl)}"
+    },
+    new[] { GoogleDefaults.AuthenticationScheme }
   );
 });
 
@@ -144,6 +162,13 @@ app.MapGet("/signin-google-callback", async (
     SignInManager<ApplicationUser> signInManager,
     IConfiguration config) =>
 {
+  var returnUrl = context.Request.Query["returnUrl"].ToString();
+
+  if (string.IsNullOrWhiteSpace(returnUrl))
+  {
+    returnUrl = "/";
+  }
+
   var result = await context.AuthenticateAsync(IdentityConstants.ExternalScheme);
 
   if (!result.Succeeded || result.Principal == null)
@@ -250,7 +275,8 @@ app.MapGet("/signin-google-callback", async (
 
   await context.SignOutAsync(IdentityConstants.ExternalScheme);
 
-  return Results.Redirect("/");
+  // Redirect back to original page
+  return Results.Redirect(returnUrl);
 });
 
 // Logout route
