@@ -2,7 +2,6 @@
 @using PetStore.Models
 @inject PetStore.Data.PetStoreContext DbContext
 
-
 <PageTitle>Thank You @Id</PageTitle>
 
 <h1>Thank You!</h1>
@@ -15,33 +14,73 @@
 else
 {
   <!-- Display user's name -->
-  <p>Thank you, @application.FullName!</p>
+  <p>Thank you, @FormatName(application.FullName)!</p>
 
-  <!-- Confirmation message showing selected help type -->
+  <!-- Confirmation message showing selected help type, pet name, and shelter associated with pet -->
   <p>
-    We have successfully received your application to @application.HelpType?.ToLower().
-    We will review your application and reach out to you within 7 to 10 business days.
+    We have successfully received your application to @application.HelpType?.ToLower() @application.PetName.
+    We will send your application to @application.ShelterName and they will reach out to you within 7 to 10 business days.
   </p>
 
-  <!-- Show additional details from the saved application -->
-  <p><strong>Application ID:</strong> @application.Id</p>
-  <p><strong>Submitted:</strong> @application.SubmittedAt.ToString("MMMM d, yyyy")</p>
+  <p><strong>What we have from you</strong></p>
+  <p>Your Name: @FormatName(application.FullName)</p>
+  <p>Your E-mail: @application.Email</p>
+  <p>Your Phone: @FormatPhone(application.PhoneNumber)</p>
+  <p>Submitted: @application.SubmittedAt.ToString("MMMM d, yyyy")</p>
 
   <!-- Navigation back to home page -->
   <NavLink href="/">Return to Home</NavLink>
 }
 
 @code {
-
   [Parameter]
   [SupplyParameterFromQuery]
   public int Id { get; set; }
 
   private ApplicationForm? application;
 
-  protected override async Task OnInitializedAsync()
+  protected override async Task OnParametersSetAsync()
   {
-    // Use the Id from the URL path to find the application
+    // Use the Id from the query string to find the application
     application = await DbContext.ApplicationForms.FindAsync(Id);
+  }
+
+  // Formats each part of the name so the first letter is uppercase and the remaining letters are lowercase
+  private string FormatName(string? fullName)
+  {
+    if (string.IsNullOrWhiteSpace(fullName))
+      return string.Empty;
+
+    var words = fullName
+      .Trim()
+      .Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+    for (int i = 0; i < words.Length; i++)
+    {
+      var word = words[i].ToLower();
+
+      words[i] = char.ToUpper(word[0]) + word.Substring(1);
+    }
+
+    return string.Join(" ", words);
+  }
+
+  // Format phone number
+  private string FormatPhone(string? phone)
+  {
+    if (string.IsNullOrWhiteSpace(phone))
+      return string.Empty;
+
+    // Keep only numbers
+    var digits = new string(phone.Where(char.IsDigit).ToArray());
+
+    // If it's 10 digits, format it
+    if (digits.Length == 10)
+    {
+      return $"{digits.Substring(0, 3)}-{digits.Substring(3, 3)}-{digits.Substring(6, 4)}";
+    }
+
+    // If not valid length, just return original
+    return phone;
   }
 }
