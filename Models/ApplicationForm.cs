@@ -40,7 +40,7 @@ namespace PetStore.Models
     public string? FosterLength { get; set; }
     public string? Experience { get; set; }
     public string? Reason { get; set; }
-    public decimal? MonthlyAmount { get; set; }
+    public int? MonthlyAmount { get; set; }
 
     // Date submitted
     public DateTime SubmittedAt { get; set; } = DateTime.Now;

@@ -10,31 +10,36 @@ using PetStore.Data;
 using PetStore.Services;
 using PetStore.Models;
 using System.Security.Claims;
-using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ====================== Services ======================
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-if (!builder.Environment.IsDevelopment())
+if (string.IsNullOrEmpty(connectionString))
 {
-    var keyVaultUri = builder.Configuration["KEYVAULT_URI"];
-
-    if (!string.IsNullOrWhiteSpace(keyVaultUri))
-    {
-        builder.Configuration.AddAzureKeyVault(
-            new Uri(keyVaultUri),
-            new DefaultAzureCredential());
-    }
+    throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 }
 
-// Retrieve database connection string from configuration
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? "Data Source=PetStore.db";
 
-// Configure Entity Framework with SQLite database
-builder.Services.AddDbContext<PetStoreContext>(options =>
-    options.UseSqlite(connectionString));
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<PetStoreContext>(options =>
+        options.UseSqlServer(connectionString, sqlOptions =>
+        {
+            sqlOptions.CommandTimeout(60);
+            sqlOptions.EnableRetryOnFailure(5);
+        }));
+}
+else
+{
+    builder.Services.AddDbContext<PetStoreContext>(options =>
+        options.UseSqlServer(connectionString, sqlOptions =>
+        {
+            sqlOptions.CommandTimeout(60);
+            sqlOptions.EnableRetryOnFailure(5);
+        }));
+}
 
 // Configure Identity system for authentication and user management
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -52,14 +57,14 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 // ====================== Authentication ======================
 
-// Siempre inicializamos Authentication
+// Initialize Authentication
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = IdentityConstants.ApplicationScheme;
     options.DefaultChallengeScheme = IdentityConstants.ExternalScheme;
 });
 
-// Obtener credenciales desde configuración (appsettings o ENV)
+// Getting credentials  (appsettings)
 var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
 var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
 
