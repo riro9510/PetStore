@@ -14,32 +14,26 @@ using System.Security.Claims;
 var builder = WebApplication.CreateBuilder(args);
 
 // ====================== Services ======================
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? "Data Source=PetStore.db";
 
-if (string.IsNullOrEmpty(connectionString))
+builder.Services.AddDbContext<PetStoreContext>(options =>
 {
-  throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-}
-
-
-if (builder.Environment.IsDevelopment())
-{
-  builder.Services.AddDbContext<PetStoreContext>(options =>
-      options.UseSqlServer(connectionString, sqlOptions =>
-      {
-        sqlOptions.CommandTimeout(60);
-        sqlOptions.EnableRetryOnFailure(5);
-      }));
-}
-else
-{
-  builder.Services.AddDbContext<PetStoreContext>(options =>
-      options.UseSqlServer(connectionString, sqlOptions =>
-      {
-        sqlOptions.CommandTimeout(60);
-        sqlOptions.EnableRetryOnFailure(5);
-      }));
-}
+  if (builder.Environment.IsDevelopment())
+  {
+    // En tu máquina usamos el motor ligero
+    options.UseSqlite(connectionString);
+  }
+  else
+  {
+    // En Render usamos el motor de Azure con resiliencia
+    options.UseSqlServer(connectionString, sqlOptions =>
+    {
+      sqlOptions.CommandTimeout(60);
+      sqlOptions.EnableRetryOnFailure(5);
+    });
+  }
+});
 
 // Configure Identity system for authentication and user management
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
