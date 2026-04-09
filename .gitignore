@@ -18,3 +18,5 @@ usersecrets.json
 # System Files
 .DS_Store
 Thumbs.db
+# Ignorar migraciones para evitar conflictos
+Migrations
