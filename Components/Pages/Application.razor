@@ -12,6 +12,13 @@
 
 <h1>Pet Application</h1>
 
+<!-- Display selected pet and shelter info -->
+@if (selectedPet is not null)
+{
+  <p><strong>Pet:</strong> @selectedPet.Name</p>
+  <p><strong>Shelter:</strong> @shelterName</p>
+}
+
 <!-- Main application form for adopting, fostering, or sponsoring a pet -->
 <EditForm Model="application" OnValidSubmit="HandleSubmit">
   <DataAnnotationsValidator />
@@ -69,7 +76,6 @@
           <InputRadio Value='@("Sponsor")' /> Sponsor
         </label>
       </div>
-
     </InputRadioGroup>
   </div>
 
@@ -130,9 +136,12 @@
     </div>
   }
 
-  <!-- Hidden field to store petName passed from the URL -->
-  <InputHidden @bind-Value="@petName" />
-  
+  <!-- Hidden field to store pet name -->
+  <InputHidden @bind-Value="@application.PetName" />
+
+  <!-- Hidden field to store shelter name -->
+  <InputHidden @bind-Value="@application.ShelterName" />
+
   <div class="form-section">
     <!-- Required confirmation checkbox -->
     <label>
@@ -150,10 +159,17 @@
   // Holds all user input from the application form
   private ApplicationForm application = new();
 
-  // Tracks submission state (can be used for future enhancements)
+  // Tracks submission state
   private bool submitted = false;
 
-  private string petName;
+  // Stores the petId from the URL
+  private string? petId;
+
+  // Stores selected pet object
+  private Pet? selectedPet;
+
+  // Stores shelter name
+  private string shelterName = "Unknown Shelter";
 
   protected override void OnInitialized()
   {
@@ -161,29 +177,38 @@
     var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
     var queryParams = QueryHelpers.ParseQuery(uri.Query);
 
-    // Capture the petName from the query string and set it in the application
-    if (queryParams.TryGetValue("petName", out var name))
+    // Capture petId from the query string
+    if (queryParams.TryGetValue("petId", out var id))
     {
-      petName = name;
-    }
-    else
-    {
-      petName = "No pet name provided";
+      petId = id;
+
+      // Find the pet using the ID
+      selectedPet = PetService.GetPetById(petId);
+
+      // If pet exists, set values in the application model
+      if (selectedPet is not null)
+      {
+        application.PetName = selectedPet.Name;
+
+        // Get shelter name using Shelter_id (linked table) :contentReference[oaicite:0]{index=0}
+        shelterName = PetService.GetShelterNameById(selectedPet.Shelter_id);
+
+        application.ShelterName = shelterName;
+      }
     }
   }
+
   private async Task HandleSubmit()
   {
     submitted = true;
 
     application.SubmittedAt = DateTime.Now;
-    application.PetName = petName;
 
     // Save the application to the database
     DbContext.ApplicationForms.Add(application);
     await DbContext.SaveChangesAsync();
 
-    // Redirect to the Thank You page with applicationId
-    
+    // Redirect to Thank You page
     Navigation.NavigateTo($"/thankyou?id={application.Id}");
   }
 }
