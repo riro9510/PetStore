@@ -5,9 +5,10 @@
 @inject PetService PetService
 
 <div class="shelter-selector-container">
-    <p class="selector-label">FIND YOUR NEAREST SHELTER</p>
     
-    <select @ref="shelterSelectRef" @bind="SelectedShelterId" @bind:after="NotifyChange"
+    
+    <label for="shelterSelect" class="selector-label">FIND YOUR NEAREST SHELTER</label>
+    <select id="shelterSelect" @ref="shelterSelectRef" @bind="SelectedShelterId" @bind:after="NotifyChange"
             class="form-select custom-select">
         <option value="">-- Choose a location --</option>
         @foreach (var shelter in Shelters)
