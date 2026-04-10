@@ -1,0 +1,86 @@
+@page "/volunteer"
+@rendermode InteractiveServer
+@attribute [Authorize(Roles = $"{Roles.Client},{Roles.Admin}")]
+
+@using PetStore.Data
+@using PetStore.Models
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Authorization
+
+@inject PetStoreContext DbContext
+@inject NavigationManager NavigationManager
+
+<!-- Page title shown at the top -->
+<h1>Volunteer</h1>
+
+<!-- Short prompt for the user -->
+<h2>Would you like to volunteer?</h2>
+
+<!-- Form for submitting a volunteer application -->
+<EditForm Model="volunteerApplication" OnValidSubmit="SubmitApplication">
+  <DataAnnotationsValidator />
+
+  <!-- Volunteer type selection -->
+  <div class="form-group">
+    <label>Volunteer Type:</label>
+    <InputRadioGroup @bind-Value="volunteerApplication.VolunteerType">
+      <div>
+        <InputRadio Value="@VolunteerType.PetWalker" /> Pet walkers
+      </div>
+      <div>
+        <InputRadio Value="@VolunteerType.PetCare" /> Pet Care and Bathing
+      </div>
+      <div>
+        <InputRadio Value="@VolunteerType.Institution" /> I represent an institution
+      </div>
+    </InputRadioGroup>
+
+    <!-- Validation message for volunteer type -->
+    <ValidationMessage For="@(() => volunteerApplication.VolunteerType)" />
+  </div>
+
+    <!-- Name or institution name input -->
+  <div class="form-group">
+    <label>Full Name or Institution Name:</label>
+    <InputText class="form-control" @bind-Value="volunteerApplication.Name" />
+    <ValidationMessage For="@(() => volunteerApplication.Name)" />
+  </div>
+
+  <!-- Phone number input -->
+  <div class="form-group">
+    <label>Contact Phone Number:</label>
+    <InputText class="form-control" @bind-Value="volunteerApplication.PhoneNumber" />
+    <ValidationMessage For="@(() => volunteerApplication.PhoneNumber)" />
+  </div>
+
+  <!-- Email input -->
+  <div class="form-group">
+    <label>Preferred Email:</label>
+    <InputText class="form-control" @bind-Value="volunteerApplication.Email" />
+    <ValidationMessage For="@(() => volunteerApplication.Email)" />
+  </div>
+
+  <!-- Submit button -->
+  <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+@code {
+  // Holds the current form data entered by the user
+  private VolunteerApplication volunteerApplication = new();
+
+  // Handles form submission when all validation rules pass
+  private async Task SubmitApplication()
+  {
+    // Save the date and time the form was submitted
+    volunteerApplication.SubmittedAt = DateTime.Now;
+
+    // Add the application to the database
+    DbContext.VolunteerApplications.Add(volunteerApplication);
+
+    // Save so the database generates the Id
+    await DbContext.SaveChangesAsync();
+
+    // Redirect to thank you page with this application's Id
+    NavigationManager.NavigateTo($"/volunteer-thankyou?id={volunteerApplication.Id}");
+  }
+}
