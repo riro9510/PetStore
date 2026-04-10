@@ -1,0 +1,4 @@
+
+    .bg-purple { background-color: #6f42c1; }
+    .list-group-item { transition: transform 0.2s; border-left: 4px solid transparent !important; }
+    .list-group-item:hover { transform: translateX(5px); border-left: 4px solid #0d6efd !important; background-color: #f8f9fa; }
