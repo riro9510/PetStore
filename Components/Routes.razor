@@ -1,25 +1,38 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Authorization
 
-<Router AppAssembly="typeof(Program).Assembly">
+<!-- This file controls page routing for the app -->
+<Router AppAssembly="@typeof(Program).Assembly">
+
+    <!-- Runs when the route exists -->
     <Found Context="routeData">
-        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)">
+
+        <!-- Shows the page and also checks authorization rules like [Authorize] -->
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)">
+
+            <!-- Shows this message if the page exists but the user is not allowed to access it -->
             <NotAuthorized>
-                <div class="access-denied">
-                    <h3>Access denied</h3>
-                    <p>You are not authorized to view this page.</p>
-                    <a href="/">Return to Home</a>
-                </div>
+                <LayoutView Layout="@typeof(Layout.MainLayout)">
+                    <div class="access-denied">
+                        <h1>Access Denied</h1>
+                        <p>You do not have access to this page.</p>
+                        <a href="/">Return to Home</a>
+                    </div>
+                </LayoutView>
             </NotAuthorized>
+
         </AuthorizeRouteView>
 
-        <FocusOnNavigate RouteData="routeData" Selector="h1" />
+        <!-- Moves focus to the first h1 after navigation for accessibility -->
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
 
+    <!-- Shows this when no matching page route is found -->
     <NotFound>
-        <LayoutView Layout="typeof(Layout.MainLayout)">
+        <LayoutView Layout="@typeof(Layout.MainLayout)">
             <h1>Not Found</h1>
             <p>Sorry, the content you are looking for does not exist.</p>
         </LayoutView>
     </NotFound>
+
 </Router>
