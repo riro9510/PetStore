@@ -182,12 +182,12 @@
     // If user is not signed in, send them to sign in page
     if (user.Identity?.IsAuthenticated != true)
     {
-      NavManager.NavigateTo($"/signin?returnUrl={returnUrl}");
+      NavManager.NavigateTo($"/signin?returnUrl={returnUrl}", forceLoad: true);
     }
     else
     {
       // If already signed in, go straight to the application page
-      NavManager.NavigateTo($"/application?petId={petId}");
+      NavManager.NavigateTo($"/application?petId={petId}", forceLoad: true);
     }
   }
 }
