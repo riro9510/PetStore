@@ -1,0 +1,73 @@
+@page "/management/applications/helpers"
+@rendermode InteractiveServer
+@attribute [Authorize(Roles = Roles.Admin)]
+
+@using PetStore.Models
+@using PetStore.Services
+@inject PetService PetService
+@inject NavigationManager NavigationManager
+
+<a href="/management">Back to General Management</a>
+
+<h1>Pet Specific Applications Management</h1>
+
+<!-- Display application information -->
+<table class="table">
+  <thead class="text-center">
+    <tr>
+      <th>Shelter Name</th>
+      <th>Pet Name</th>
+      <th>Helper's Name</th>
+      <th>Type of Help</th>
+      <th>Address</th>
+      <th>More info</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @foreach (var application in applications)
+    {
+      <tr>
+        <td>@application.ShelterName</td>
+        <td>@application.PetName</td>
+        <td>@application.FullName</td>
+        <td>@application.HelpType</td>
+        <td>@application.Address</td>
+        <td><a href="/management/applications/helpers/@application.Id">More Info</a></td>
+        <td>
+          <button class="btn btn-danger me-2 w-100" type="button" @onclick="() => DeleteApplication(application.Id)">
+            Delete
+          </button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+
+
+
+@code {
+  // Holds all applications displayed in table
+  private List<ApplicationForm> applications = new();
+
+  // Loads the applications when the page first renders
+  protected override void OnInitialized()
+  {
+    LoadApplications();
+  }
+
+  // Gets all applications from service/db and updates the table
+  private void LoadApplications()
+  {
+    applications = PetService.GetAllHelpers();
+  }
+
+  // Deletes the selected appliccation and refreshes the list
+  private void DeleteApplication(int id)
+  {
+    PetService.DeleteHelper(id);
+    LoadApplications();
+  }
+}

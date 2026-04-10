@@ -195,4 +195,48 @@ public class PetService
 
     return (petsCount, sheltersCount);
   }
+
+// Return all application for help in the database.
+  public List<ApplicationForm> GetAllHelpers()
+  {
+    return _context.ApplicationForms.ToList();
+  }
+
+// Return all application for volunteer in the database.
+  public List<VolunteerApplication> GetAllVolunteers()
+  {
+    return _context.VolunteerApplications.ToList();
+  }
+
+// Delete a volunteer application by id if it exists.
+    public void DeleteVolunteer(int id)
+  {
+    var app = _context.VolunteerApplications.FirstOrDefault(a => a.Id == id);
+
+    if (app != null)
+    {
+      _context.VolunteerApplications.Remove(app);
+      _context.SaveChanges();
+    }
+  }
+
+  // Delete a helper application by id if it exists.
+     public void DeleteHelper(int id)
+  {
+    var app = _context.ApplicationForms.FirstOrDefault(a => a.Id == id);
+
+    if (app != null)
+    {
+      _context.ApplicationForms.Remove(app);
+      _context.SaveChanges();
+    }
+  }
+
+
+    public ApplicationForm? GetHelperById(int id)
+  {
+    return _context.ApplicationForms.FirstOrDefault(a => a.Id == id);
+  }
+
+
 }
