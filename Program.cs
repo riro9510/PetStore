@@ -54,7 +54,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 // Used to re-route from Pets.razor to sign in page
 builder.Services.ConfigureApplicationCookie(options =>
 {
+  // Visitor goes to login if not signed in
   options.LoginPath = "/signin";
+  // Where unauthorized users go if trying to access secured pages
+  options.AccessDeniedPath = "/access-denied";
 });
 
 // ====================== Authentication ======================
@@ -64,14 +67,7 @@ var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
 var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
 
 // Initialize Authentication + Google
-builder.Services.AddAuthentication(options =>
-{
-  // Default scheme for signed-in users (cookie auth)
-  options.DefaultScheme = IdentityConstants.ApplicationScheme;
-
-  // Default scheme used when we challenge (Google login)
-  options.DefaultChallengeScheme = IdentityConstants.ExternalScheme;
-})
+builder.Services.AddAuthentication()
 .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
 {
   if (!string.IsNullOrWhiteSpace(googleClientId) &&
