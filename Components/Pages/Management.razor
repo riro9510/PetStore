@@ -2,127 +2,37 @@
 @rendermode InteractiveServer
 @attribute [Authorize(Roles = Roles.Admin)]
 
+@using Microsoft.VisualBasic
 @using PetStore.Models
 @using PetStore.Services
 @inject PetService PetService
 @inject NavigationManager NavigationManager
 
-<h1>Pet Management</h1>
+<h1>General Management</h1>
 
-<!-- Navigation buttons for admin actions -->
-<button type="button" @onclick="CreatePet">Add Pet</button>
-<button type="button" @onclick="AddCategory">Manage Categories</button>
-
-<!-- Display basic pet information -->
-<table class="table">
-  <thead class="text-center">
-    <tr>
-      <th>Name</th>
-      <th>Category</th>
-      <th>Breed</th>
-      <th>Age</th>
-      <th>Energy</th>
-      <th>Shelter</th>
-      <th>Friendly</th>
-      <th>Adopt</th>
-      <th>Foster</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    @foreach (var pet in pets)
-    {
-      <tr>
-        <td>@pet.Name</td>
-        <td>@pet.Type</td>
-        <td>@pet.Breed</td>
-
-        <!-- Convert YearOfBirth to approximate age -->
-        <td class="text-center">@GetAge(pet.YearOfBirth)</td>
-
-        <!-- Show energy with lightning icons -->
-        <td>
-          @for (int i = 0; i < pet.Energy; i++)
-          {
-            <span style="margin-right: 2px; font-size: 18px;">⚡</span>
-          }
-        </td>
-
-        <!-- Show shelter id -->
-        <td title="@GetShelterName(pet.Shelter_id)">
-          @pet.Shelter_id
-        </td>
-
-        <!-- Boolean values displayed as Yes/No -->
-        <td>@(pet.Is_Friendly ? "Yes" : "No")</td>
-        <td>@(pet.Is_Adopt ? "Yes" : "No")</td>
-        <td>@(pet.Is_Foster ? "Yes" : "No")</td>
-
-        <td>
-          <button class="btn btn-success me-2 w-100" type="button" @onclick="() => EditPet(pet.Id)">
-            Edit
-          </button>
-
-          <button class="btn btn-danger me-2 w-100" type="button" @onclick="() => DeletePet(pet.Id)">
-            Delete
-          </button>
-        </td>
-      </tr>
-    }
-  </tbody>
-</table>
+<div class="management-options">
+  @foreach (var m in managementPages)
+  {
+    <button class="btn management-link" @onclick="() => GoToPage(m.Key)">
+      @m.Value
+    </button>
+  }
+</div>
 
 @code {
-  // Holds all pets displayed in table
-  private List<Pet> pets = new();
-
-  // Loads the pets when the page first renders
-  protected override void OnInitialized()
+  // Link available for management organized
+  private Dictionary<string, string> managementPages = new ()
   {
-    LoadPets();
-  }
+    { "pets", "Pets" },
+    { "applications/helpers", "Pet Specific Applications" },
+    { "applications/volunteers", "General Volunteers Applications" }
+  };
 
-  // Gets all pets from service/db and updates the table
-  private void LoadPets()
-  {
-    pets = PetService.GetAllPets();
-  }
-
-  // Takes admin to add pet page
-  private void CreatePet()
-  {
-    NavigationManager.NavigateTo("/management/add");
-  }
-
-  // Takes admin to edit page for the selected pet
-  private void EditPet(string id)
-  {
-    NavigationManager.NavigateTo($"/management/edit/{id}");
-  }
-
-  // Deletes the selected pet and refreshes the list
-  private void DeletePet(string id)
-  {
-    PetService.DeletePet(id);
-    LoadPets();
-  }
-
-  // Takes admin to the category management page
-  private void AddCategory()
-  {
-    NavigationManager.NavigateTo("/management/categories");
-  }
-
-  // Converts a birth year into an approximate age.
-  private int GetAge(int yearOfBirth)
-  {
-    return DateTime.Now.Year - yearOfBirth;
-  }
-
-  private string GetShelterName(string shelterId)
-  {
-    var shelter = PetService.GetShelterById(shelterId);
-    return shelter?.Name ?? "Unknown Shelter";
-  }
+  private void GoToPage(string pageKey)
+    {
+        if (!string.IsNullOrEmpty(pageKey))
+        {
+            NavigationManager.NavigateTo($"/management/{pageKey}");
+        }
+    }
 }

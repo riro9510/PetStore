@@ -1,0 +1,67 @@
+@page "/management/applications/volunteers"
+@rendermode InteractiveServer
+@attribute [Authorize(Roles = Roles.Admin)]
+
+@using PetStore.Models
+@using PetStore.Services
+@inject PetService PetService
+@inject NavigationManager NavigationManager
+
+<a href="/management">Back to General Management</a>
+
+<h1>Volunteer Applications Management</h1>
+
+<!-- Display application information -->
+<table class="table">
+  <thead class="text-center">
+    <tr>
+      <th>Type of Volunteer</th>
+      <th>Name</th>
+      <th>Phone Number</th>
+      <th>Email</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @foreach (var application in applications)
+    {
+      <tr>
+        <td>@application.VolunteerType.ToString()</td>
+        <td>@application.Name</td>
+        <td>@application.PhoneNumber</td>
+        <td>@application.Email</td>
+
+        <td>
+          <button class="btn btn-danger me-2 w-100" type="button" @onclick="() => DeleteApplication(application.Id)">
+            Delete
+          </button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+@code {
+  // Holds all pets displayed in table
+  private List<VolunteerApplication> applications = new();
+
+  // Loads the pets when the page first renders
+  protected override void OnInitialized()
+  {
+    LoadApplications();
+  }
+
+  // Gets all pets from service/db and updates the table
+  private void LoadApplications()
+  {
+    applications = PetService.GetAllVolunteers();
+  }
+
+  // Deletes the selected pet and refreshes the list
+  private void DeleteApplication(int id)
+  {
+    PetService.DeleteVolunteer(id);
+    LoadApplications();
+  }
+}

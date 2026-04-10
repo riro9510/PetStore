@@ -938,3 +938,23 @@ select.invalid {
         grid-template-columns: 1fr;
     }
 }
+
+.management-options {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    
+
+    .management-link {
+        margin: 1rem;
+        padding: 1rem;
+        font-size: 1.2rem;
+        text-decoration: none;
+        color: black;
+        background-color: white;
+        width: 100%;
+        max-width: 320px;
+        border: 1px solid black;
+        align-self: center;
+    }
+}
