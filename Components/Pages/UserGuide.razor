@@ -1,0 +1,139 @@
+@page "/user-guide"
+
+@using Microsoft.AspNetCore.Authorization
+@using PetStore.Models
+
+<PageTitle>User Guide | Pawsitive Friends</PageTitle>
+
+<h1>User Guide</h1>
+<p class="lead">Welcome to Pawsitive Friends. This guide walks you through everything you can do on the site.</p>
+
+<hr />
+
+    <!-- ===== OVERVIEW ===== -->
+    <section>
+        <h2>Overview</h2>
+        <p>
+            Pawsitive Friends is a non-profit platform that connects loving families with pets in shelters worldwide.
+            You can browse pets and shelters without an account. To submit an application you will need to sign in with Google.
+        </p>
+    </section>
+
+    <!-- ===== NAVIGATION ===== -->
+    <section>
+        <h2>Navigation</h2>
+        <p>The top navigation bar gives you access to the main areas of the site:</p>
+        <ul>
+            <li><strong>Home</strong> — Landing page with a shelter selector and quick-action cards.</li>
+            <li><strong>Pets</strong> — Browse all available pets. Hover over the link to see category shortcuts.</li>
+            <li><strong>Shelters</strong> — Browse partner shelters filtered by country.</li>
+            <li><strong>About Us</strong> — Our mission and team.</li>
+        </ul>
+        <p>When signed in you will also see a personalized greeting and a <strong>Log Out</strong> link in the top-right corner.</p>
+    </section>
+
+    <!-- ===== BROWSING PETS ===== -->
+    <section>
+        <h2>Browsing Pets</h2>
+        <ol>
+            <li>Go to <strong>Pets</strong> (<code>/pets</code>).</li>
+            <li>Use the filter links at the top to narrow by category (Dogs, Cats, etc.) or select <strong>All</strong> to see every pet.</li>
+            <li>Click <strong>About Me</strong> on any pet card to open a detail panel showing the pet's breed, age, description, and photo.</li>
+            <li>Close the panel by clicking the <strong>&times;</strong> button or clicking outside it.</li>
+        </ol>
+    </section>
+
+    <!-- ===== BROWSING SHELTERS ===== -->
+    <section>
+        <h2>Browsing Shelters</h2>
+        <ol>
+            <li>Go to <strong>Shelters</strong> (<code>/shelters</code>).</li>
+            <li>Use the country filter links at the top to narrow results by location, or select <strong>All</strong>.</li>
+            <li>Click any shelter card to open its detail page, which shows contact information and the pets currently available there.</li>
+        </ol>
+    </section>
+
+    <!-- ===== HOME SHELTER SELECTOR ===== -->
+    <section>
+        <h2>Home Page Shelter Selector</h2>
+        <p>
+            The home page includes a shelter selector dropdown. Pick a shelter to quickly filter pets by that location
+            without leaving the home page.
+        </p>
+    </section>
+
+    <!-- ===== SIGNING IN ===== -->
+    <section>
+        <h2>Signing In</h2>
+        <p>A Google account is required to submit any application. To sign in:</p>
+        <ol>
+            <li>Click <strong>Sign In</strong> in the top-right corner, or go to <code>/signin</code>.</li>
+            <li>Click <strong>Continue with Google</strong>.</li>
+            <li>Complete the Google sign-in flow — you will be redirected back to the site automatically.</li>
+        </ol>
+        <p>To sign out, click <strong>Log Out</strong> in the top-right corner after signing in.</p>
+    </section>
+
+    <!-- ===== APPLICATION ===== -->
+    <section>
+        <h2>Submitting an Application</h2>
+        <p><em>Requires sign-in.</em></p>
+        <ol>
+            <li>Go to <strong>Application</strong> (<code>/application</code>).</li>
+            <li>Fill in your personal information: full name, email, phone number, and address.</li>
+            <li>
+                Select how you would like to help:
+                <ul>
+                    <li><strong>Adopt</strong> — give a pet a permanent forever home.</li>
+                    <li><strong>Foster</strong> — provide temporary care while a permanent home is found.</li>
+                    <li><strong>Sponsor</strong> — support a pet financially without taking them home.</li>
+                    <li><strong>Volunteer</strong> — donate your time to shelter activities.</li>
+                </ul>
+            </li>
+            <li>Complete the additional questions that appear for your chosen option.</li>
+            <li>Click <strong>Submit</strong>.</li>
+        </ol>
+        <p>After submitting you will see a confirmation page. Expect a response within <strong>7–10 business days</strong>.</p>
+    </section>
+
+    <!-- ===== ADMIN SECTION (Admin only) ===== -->
+    <AuthorizeView Roles="@Roles.Admin">
+        <Authorized>
+            <hr />
+            <section>
+                <h2>Admin: Managing Pets</h2>
+                <p>
+                    As an admin you have access to the <strong>Update Animals</strong> link in the navigation bar,
+                    which opens the management dashboard (<code>/management</code>).
+                </p>
+
+                <h3>View All Pets</h3>
+                <p>
+                    The management table lists every pet with their name, category, breed, age, energy level,
+                    shelter, and availability flags (Adopt / Foster / Friendly).
+                </p>
+
+                <h3>Add a Pet</h3>
+                <ol>
+                    <li>Click <strong>Add Pet</strong> at the top of the management page.</li>
+                    <li>
+                        Fill in the pet details: name, type (category), breed, year of birth, description,
+                        image URL, energy level, shelter, and availability flags.
+                    </li>
+                    <li>Click <strong>Save</strong> to add the pet to the system.</li>
+                </ol>
+
+                <h3>Edit or Delete a Pet</h3>
+                <p>
+                    Use the <strong>Edit</strong> or <strong>Delete</strong> buttons on any row in the management table.
+                    Deleting a pet is permanent.
+                </p>
+
+                <h3>Manage Categories</h3>
+                <p>
+                    Click <strong>Manage Categories</strong> from the management page to add or update the pet types
+                    that appear in the Pets filter and navigation dropdown.
+                </p>
+            </section>
+        </Authorized>
+    </AuthorizeView>
