@@ -294,6 +294,6 @@ using (var scope = app.Services.CreateScope())
   db.Database.Migrate();
 
   await IdentitySeeder.SeedRolesAsync(scope.ServiceProvider);
-}
+} //comment out for frontend-only dev (no DB)
 
 app.Run();
