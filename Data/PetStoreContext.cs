@@ -23,6 +23,9 @@ public class PetStoreContext : IdentityDbContext<ApplicationUser>
   // Table for application
   public DbSet<ApplicationForm> ApplicationForms { get; set; }
 
+  // Table for volunteer applications
+  public DbSet<VolunteerApplication> VolunteerApplications { get; set; }
+
   // Configuring the database model and seeding the initial data
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
