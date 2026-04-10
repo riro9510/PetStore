@@ -1,0 +1,56 @@
+@using PetStore.Models
+@using PetStore.Services
+@inject IDonationService DonationService
+
+<div class="card shadow-sm">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Latest Institutional Donors</h5>
+    </div>
+    <div class="card-body p-0">
+        <ul class="list-group list-group-flush">
+            @if (recentDonations == null)
+            {
+                <li class="list-group-item text-center p-4">
+                    <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                    <span class="ms-2">Loading donors...</span>
+                </li>
+            }
+            else if (!recentDonations.Any())
+            {
+                <li class="list-group-item text-center p-4 text-muted">No validated donations yet.</li>
+            }
+            else
+            {
+                @foreach (var donation in recentDonations)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                        <div>
+                            @if (donation.IsAnonymous)
+                            {
+                                <span class="text-muted"><i class="bi bi-incognito"></i> Anonymous Donor</span>
+                            }
+                            else
+                            {
+                                <span class="fw-bold">@donation.FirstName @donation.LastName</span>
+                            }
+                            <div class="small text-muted">@donation.SubmittedAt.ToLocalTime().ToString("MMM dd, yyyy HH:mm")
+                            </div>
+                        </div>
+                        <span class="badge bg-success fs-6">
+                            $@donation.Amount
+                        </span>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+</div>
+
+@code {
+    private IEnumerable<Donation>? recentDonations;
+
+    protected override async Task OnInitializedAsync()
+    {
+        recentDonations = await DonationService.GetRecentDonationsAsync();
+    }
+}

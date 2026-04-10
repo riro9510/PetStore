@@ -1,0 +1,98 @@
+@page "/donate/validate"
+@using PetStore.Models
+@using PetStore.Services
+@inject IDonationService DonationService
+@inject NavigationManager NavManager
+@rendermode InteractiveServer
+
+<PageTitle>Confirm Payment</PageTitle>
+
+<div class="container mt-4">
+    @if (currentDonation == null)
+    {
+        <div class="alert alert-warning">Donation record not found.</div>
+    }
+    else if (isCompleted)
+    {
+        <div class="alert alert-success">
+            <h4>Payment Successful!</h4>
+            <p>Transaction ID: @DonationId</p>
+            <a href="/donate" class="btn btn-outline-primary">Make another donation</a>
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Confirm Your Donation</h5>
+                <p>Donor: <strong>@currentDonation.FirstName</strong></p>
+                <p>Amount: <strong class="text-success">$@currentDonation.Amount</strong></p>
+
+                <hr />
+
+                <div class="mb-3">
+                    <label class="form-label">Select Pre-loaded Institutional Card:</label>
+                    <select class="form-select" @bind="selectedCardId">
+                        <option value="1">VISA **** 1234 (Corporate Account)</option>
+                        <option value="2">MC **** 5678 (Emergency Fund)</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-success w-100" @onclick="ProcessPayment" disabled="@isProcessing">
+                    @if (isProcessing)
+                    {
+                        <span class="spinner-border spinner-border-sm"></span>
+                    }
+                    Complete Transaction
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter, SupplyParameterFromQuery]
+    public string? DonationId { get; set; }
+
+    private Donation? currentDonation;
+    private bool isProcessing = false;
+    private bool isCompleted = false;
+    private string selectedCardId = "1";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(DonationId) && Guid.TryParse(DonationId, out var guid))
+        {
+            var all = await DonationService.GetAllDonationsAsync();
+            currentDonation = all.FirstOrDefault(d => d.Id == guid);
+        }
+    }
+
+    private async Task ProcessPayment()
+    {
+        if (currentDonation == null || isProcessing) return;
+
+        isProcessing = true;
+        StateHasChanged(); 
+
+        try
+        {
+            await Task.Delay(1500);
+        
+            currentDonation.Status = DonationStatus.Validated;
+        
+            await DonationService.UpdateDonationAsync(currentDonation);
+        
+            isCompleted = true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Error] Payment validation failed for ID {DonationId}: {ex.Message}");
+        }
+        finally
+        {
+            isProcessing = false;
+            StateHasChanged();
+        }
+    }
+}

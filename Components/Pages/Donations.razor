@@ -1,0 +1,84 @@
+﻿@page "/donate"
+@using PetStore.Models
+@using PetStore.Services
+@inject IDonationService DonationService
+@inject NavigationManager NavManager
+
+<PageTitle>Make a Donation</PageTitle>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title">Support Our Pets</h3>
+
+                    <EditForm Model="@donationModel" OnValidSubmit="HandleValidSubmit" FormName="DonationForm">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary class="text-danger" />
+
+                        <div class="form-group mb-3">
+                            <label for="firstName">First Name</label>
+                            <InputText id="firstName" @bind-Value="donationModel!.FirstName" class="form-control" />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="lastName">Last Name</label>
+                            <InputText id="lastName" @bind-Value="donationModel!.LastName" class="form-control" />
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="amount">Amount (USD)</label>
+                            <InputNumber id="amount" @bind-Value="donationModel!.Amount" class="form-control" />
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <InputCheckbox id="isAnonymous" @bind-Value="donationModel!.IsAnonymous"
+                                           class="form-check-input" />
+                            <label class="form-check-label" for="isAnonymous">Donate Anonymously</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100" disabled="@isLoading">
+                            @if (isLoading)
+                            {
+                                <span class="spinner-border spinner-border-sm"></span>
+                            }
+                            Confirm Donation
+                        </button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <DonationList />
+        </div>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromForm(FormName = "DonationForm")]
+    private Donation? donationModel { get; set; }
+    private bool isLoading = false;
+
+    protected override void OnInitialized() => donationModel ??= new();
+
+    private async Task HandleValidSubmit()
+    {
+        if (donationModel is null) return;
+        
+        isLoading = true;
+        try
+        {
+            // Register as Pending
+            var created = await DonationService.CreateDonationAsync(donationModel);
+            
+            // Redirect to the new validation page with the ID as query parameter
+            NavManager.NavigateTo($"/donate/validate?donationId={created.Id}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}
