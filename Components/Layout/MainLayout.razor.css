@@ -23,3 +23,30 @@
   color: var(--brand-emerald);
   text-decoration: underline;
 }
+
+/* ---- Footer ---- */
+
+.site-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 1.25rem 1.5rem;
+  background-color: var(--brand-pine-teal);
+  color: var(--text-light);
+  font-size: 0.875rem;
+  border-top: 3px solid var(--brand-orange);
+}
+
+.site-footer ::deep a,
+.site-footer ::deep .nav-link {
+  color: var(--brand-amber-gold);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.site-footer ::deep a:hover,
+.site-footer ::deep .nav-link:hover {
+  color: var(--brand-orange);
+  text-decoration: underline;
+}
