@@ -1,53 +1,64 @@
-﻿@using System.Linq
-@using System.Security.Claims
+﻿@using System.Security.Claims
 @inherits LayoutComponentBase
 
 <div class="page">
   <main>
-    <!-- Top navigation area shown on every page -->
-    <header class="top-row px-4">
-      <div class="top-row-right">
-        
-        <!-- Show different content depending on if the user is signed in -->
-        <AuthorizeView>
-          <Authorized>
-            @{
-
-              <!-- Get user's first name from info from Google. If it's not available, get the account name. If neither exists, show a default greeting "User" -->
-              var firstName = context.User.FindFirst(ClaimTypes.GivenName)?.Value
-                              ?? context.User.Identity?.Name
-                              ?? "User";
-            }
-
-            <!-- Personalized greeting for signed-in users -->
-            <span class="user-greeting">
-              Hello @firstName
+    @* Header *@
+    <header class="top-row">
+      <div class="container-centered">
+        @* Brand *@
+        <div class="me-auto">
+          <a href="/" class="brand-link">
+            <img src="images/logo-pawsitive-friends.svg" alt="Pawsitive Friends" height="48" />
+            <span class="brand-text d-none d-md-flex">
+              <span class="line-1">Pawsitive</span>
+              <span class="line-2">Friends</span>
             </span>
+          </a>
+        </div>
 
-            <!-- Sign-out link for authenticated users -->
-            <a class="signin-link" href="/logout">Log Out</a>
-          </Authorized>
+        @* Nav *@
+        <nav class="d-none d-lg-flex">
+          <NavLink class="nav-link" href="about">About Us</NavLink>
+          <NavLink class="nav-link" href="pets">Adopt</NavLink>
+          <NavLink class="nav-link" href="shelters">Shelters</NavLink>
+          <NavLink class="nav-link" href="contact">Contact Us</NavLink>
+          <NavLink class="nav-link" href="donate">Donate</NavLink>
+        </nav>
 
-          <NotAuthorized>
-            <!-- Sign-in link shown when no user is logged in -->
-            <a class="signin-link" href="/signin">Sign In</a>
-          </NotAuthorized>
-        </AuthorizeView>
+        @* Auth *@
+        <div class="ms-4">
+          <AuthorizeView>
+            <Authorized>
+              @{
+                var firstName = context.User.FindFirst(ClaimTypes.GivenName)?.Value
+                                ?? context.User.Identity?.Name
+                                ?? "User";
+              }
+              <span class="user-greeting me-2">
+                Hello, <strong>@firstName</strong>
+              </span>
+              <a class="btn btn-outline-danger btn-sm" href="/logout">Log Out</a>
+            </Authorized>
+            <NotAuthorized>
+              <a class="signin-link btn btn-outline-primary" href="/signin">Sign In</a>
+            </NotAuthorized>
+          </AuthorizeView>
+        </div>
       </div>
     </header>
 
-    <!-- Main content area where each page is rendered inside the layout -->
+    @* APP *@
     <article class="content px-4">
       @Body
     </article>
   </main>
 
-  <!-- Site-wide footer -->
+  @* Footer *@
   <footer class="site-footer">
     <span>&copy; 2026 Pawsitive Friends</span>
     <NavLink href="/user-guide">User Guide</NavLink>
   </footer>
-
 </div>
 
 @code {
