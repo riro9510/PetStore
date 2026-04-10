@@ -1,0 +1,30 @@
+    .not-found-container {
+        min-height: 80vh;
+        background-color: var(--bg-main);
+    }
+
+    .hero-image-wrapper img {
+        max-width: 280px;
+        height: auto;
+        border: 8px solid var(--accent);
+    }
+
+    .text-primary {
+        color: var(--primary) !important;
+    }
+
+    .btn-primary {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        transition: transform 0.2s, background-color 0.2s;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--secondary);
+        border-color: var(--secondary);
+        transform: translateY(-3px);
+    }
+
+    .border-accent {
+        border-color: var(--accent) !important;
+    }
