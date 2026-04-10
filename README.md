@@ -1,10 +1,8 @@
-# 🐾 Pawsitive Friends
+# 🐾 Pawsitive Friends — Quantum Coders
 
 A web-based platform designed to connect people with pets in need of care, companionship, and safe homes. Users can explore, adopt, foster, or sponsor pets while supporting shelters in meaningful ways.
 
 ---
-
-# Quantum Coders
 
 ## 👥 Team
 
@@ -62,18 +60,26 @@ git clone https://github.com/Joelnin/PetStore.git
 cd PetStore
 dotnet run
 
-⚠️ Notes
-Some features may require a configured database connection
-Google authentication requires API credentials
-Mock data may be used for development/demo purposes
+```
+
+## ⚠️ Notes
+
+- Some features may require a configured database connection  
+- Google authentication requires API credentials  
+- Mock data may be used for development/demo purposes  
+
+---
 
 ## Future Improvements
-Favorites system
-Advanced filtering
-Notifications
-Chat with shelters
-Booking visits
+
+- Favorites system  
+- Advanced filtering  
+- Notifications  
+- Chat with shelters  
+- Booking visits  
+
+---
 
 ## Purpose
 
-This project was developed as a collaborative effort by Quantum Coders to demonstrate real-world web development, teamwork, and problem-solving skills.
+This project was developed as a collaborative effort by **Quantum Coders** to demonstrate real-world web development, teamwork, and problem-solving skills.
