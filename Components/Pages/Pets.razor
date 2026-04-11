@@ -59,7 +59,7 @@
       <button class="modal-close-button" @onclick="ClosePetModal">×</button>
 
       <div class="pet-modal-image-container">
-        <img src="@selectedPet.ImageUrl" alt="@selectedPet.Name image" />
+        <img src="@selectedPet.ImageUrl" alt="@selectedPet.Name image" loading="lazy"/>
       </div>
 
       <h2>@selectedPet.Name</h2>
