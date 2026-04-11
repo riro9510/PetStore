@@ -7,18 +7,31 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
+
+    <link rel="preload" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]" as="style" />
+    <link rel="preload" href="@Assets["app.css"]" as="style" />
+    <link rel="preload" href="PetStore.styles.css" as="style" />
+
     <ResourcePreloader />
+
     <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]" />
     <link rel="stylesheet" href="@Assets["app.css"]" />
     <link rel="stylesheet" href="PetStore.styles.css" />
+
     <ImportMap />
     <link rel="icon" type="image/png" href="/favicon.svg" />
     <HeadOutlet />
+
     <script>
         if (sessionStorage.getItem('pf_ready')) {
             document.documentElement.classList.add('app-loaded');
         }
+        
+        window.addEventListener('load', () => {
+            sessionStorage.setItem('pf_ready', 'true');
+        });
     </script>
+    
     <style>
         .app-loaded .loading-overlay {
             display: none !important;
