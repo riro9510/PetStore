@@ -14,21 +14,22 @@
 
 <PageTitle>Management | Add Pets</PageTitle>
 
+
 <!-- This page is for adding new pets into the system -->
 <h1>Add Pet</h1>
 
-<EditForm Model="newPet" OnValidSubmit="SavePet" >
+<EditForm Model="newPet" OnValidSubmit="SavePet">
   <DataAnnotationsValidator />
 
-  <div>
-    <label>Name:</label>
-    <InputText class="form-control" @bind-Value="newPet.Name" />
+  <div class="mb-3">
+    <label for="petName">Name:</label>
+    <InputText id="petName" class="form-control" @bind-Value="newPet.Name" />
     <ValidationMessage For="@(() => newPet.Name)" />
   </div>
 
-  <div>
-    <label>Type:</label>
-    <InputSelect class="form-control" @bind-Value="newPet.Type">
+  <div class="mb-3">
+    <label for="petType">Type:</label>
+    <InputSelect id="petType" class="form-control" @bind-Value="newPet.Type">
       <option value="">Select a Type</option>
       @foreach (var type in categories)
       {
@@ -38,34 +39,34 @@
     <ValidationMessage For="@(() => newPet.Type)" />
   </div>
 
-  <div>
-    <label>Breed:</label>
-    <InputText class="form-control" @bind-Value="newPet.Breed" />
+  <div class="mb-3">
+    <label for="petBreed">Breed:</label>
+    <InputText id="petBreed" class="form-control" @bind-Value="newPet.Breed" />
     <ValidationMessage For="@(() => newPet.Breed)" />
   </div>
 
-  <div>
-    <label>Year of Birth:</label>
-    <InputNumber class="form-control" @bind-Value="newPet.YearOfBirth" />
+  <div class="mb-3">
+    <label for="petAge">Year of Birth:</label>
+    <InputNumber id="petAge" class="form-control" @bind-Value="newPet.YearOfBirth" />
     <ValidationMessage For="@(() => newPet.YearOfBirth)" />
   </div>
 
-  <div>
+  <div class="mb-3">
     <!-- Textarea for longer description input -->
-    <label>Description:</label>
-    <InputTextArea class="form-control" @bind-Value="newPet.Description" />
+    <label for="petDescription">Description:</label>
+    <InputTextArea id="petDescription" class="form-control" @bind-Value="newPet.Description" />
   </div>
 
-  <div>
+  <div class="mb-3">
     <!-- Default image link if user doesn't upload -->
-    <label>Image URL:</label>
-    <InputText class="form-control" @bind-Value="newPet.ImageUrl" placeholder="Default used if empty" />
+    <label for="petImage">Image URL:</label>
+    <InputText id="petImage" class="form-control" @bind-Value="newPet.ImageUrl" placeholder="Default used if empty" />
   </div>
 
-  <div>
+  <div class="mb-3">
     <!-- Allows user to upload an image file from their computer -->
-    <label>OR<br /> Upload Image:<br /></label>
-    <InputFile OnChange="HandleFileSelected" accept="image/*" />
+    <label for="petImageUpload">OR Upload Image:</label>
+    <InputFile id="petImageUpload" class="form-control" OnChange="HandleFileSelected" accept="image/*" />
 
     @if (!string.IsNullOrWhiteSpace(uploadMessage))
     {
@@ -81,10 +82,13 @@
       @for (int i = 1; i <= 5; i++)
       {
         var level = i;
-        <span class="energy-icon @(GetEnergyClass(level, newPet.Energy, hoverEnergy))" @onclick="() => SetEnergy(level)"
-              @onmouseenter="() => PreviewEnergy(level)">
+        <button type="button"
+                class="energy-icon-button @(GetEnergyClass(level, newPet.Energy, hoverEnergy))"
+                @onclick="() => SetEnergy(level)"
+                @onmouseenter="() => PreviewEnergy(level)"
+                aria-label="Set energy level to @level">
           ⚡
-        </span>
+        </button>
       }
     </div>
 
@@ -92,9 +96,9 @@
   </div>
 
   <!-- Shelters presented as dropdown menu to avoid confusion with different shelters -->
-  <div>
-    <label>Shelter:</label>
-    <InputSelect class="form-control" @bind-Value="newPet.Shelter_id">
+  <div class="mb-3">
+    <label for="shelter">Shelter:</label>
+    <InputSelect id="shelter" class="form-control" @bind-Value="newPet.Shelter_id">
       <option value="">Select a Shelter</option>
       @foreach (var shelter in shelters)
       {
@@ -104,31 +108,32 @@
     <ValidationMessage For="@(() => newPet.Shelter_id)" />
   </div>
 
-  <div>
+  <div class="form-check accessible-check">
     <!-- Allows admin to let client know if pet is friendly or not -->
-    <label>
-    <InputCheckbox @bind-Value="newPet.Is_Friendly" />
-    Friendly:</label>
-    <ValidationMessage For="@(() => newPet.Is_Friendly)" />
+    <InputCheckbox id="friendly" class="form-check-input" @bind-Value="newPet.Is_Friendly" />
+    <label for="friendly" class="form-check-label">Friendly</label>
   </div>
+  <ValidationMessage For="@(() => newPet.Is_Friendly)" />
 
-  <div>
+
+  <div class="form-check accessible-check">
     <!-- Admin lets client know if pet is available to adopt -->
-    <label>
-    <InputCheckbox @bind-Value="newPet.Is_Adopt" />
-    Available for Adoption:</label>
-    <ValidationMessage For="@(() => newPet.Is_Adopt)" />
+    <InputCheckbox id="adoptable" class="form-check-input" @bind-Value="newPet.Is_Adopt" />
+    <label for="adoptable" class="form-check-label">Available for Adoption:</label>
   </div>
+  <ValidationMessage For="@(() => newPet.Is_Adopt)" />
 
-  <div>
+  <div class="form-check accessible-check">
     <!-- Admin lets client know if pet is ready to foster -->
-    <label>
-    <InputCheckbox @bind-Value="newPet.Is_Foster" />
-    Available for Foster:</label>
-    <ValidationMessage For="@(() => newPet.Is_Foster)" />
+    <InputCheckbox id="fosterable" class="form-check-input" @bind-Value="newPet.Is_Foster" />
+    <label for="fosterable" class="form-check-label">Available for Foster:</label>
   </div>
-  <button type="submit">Save</button>
-  <button type="button" @onclick="Cancel">Cancel</button>
+  <ValidationMessage For="@(() => newPet.Is_Foster)" />
+
+  <div class="mt-3">
+    <button type="submit" class="btn btn-primary me-2">Save</button>
+    <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+  </div>
 </EditForm>
 
 @code {
@@ -189,7 +194,7 @@
     return iconLevel <= activeLevel ? "filled" : "empty";
   }
 
-   // Saves the pet to the database. If an image is uploaded, it is stored in wwwroot and linked. Otherwise, a default image is used.
+  // Saves the pet to the database. If an image is uploaded, it is stored in wwwroot and linked. Otherwise, a default image is used.
   private async Task SavePet()
   {
     if (selectedFile is not null)
@@ -227,7 +232,7 @@
     NavigationManager.NavigateTo("/management");
   }
 
-   // Cancels the operation and returns to management page.
+  // Cancels the operation and returns to management page.
   private void Cancel()
   {
     NavigationManager.NavigateTo("/management");
