@@ -688,6 +688,35 @@ select.invalid {
     text-align: center;
 }
 
+.form-check-input,
+input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+    cursor: pointer;
+}
+
+.accessible-check {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 44px;
+    margin-bottom: 0.5rem;
+}
+
+.form-check-label {
+    cursor: pointer;
+    line-height: 1.4;
+}
+
+.form-control,
+select,
+textarea,
+input[type="file"] {
+    min-height: 44px;
+}
+
 .about-tag,
 .section-label {
     display: inline-block;
