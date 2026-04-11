@@ -27,14 +27,14 @@ else
     <DataAnnotationsValidator />
 
     <div>
-      <label>Name:</label>
-      <InputText class="form-control" @bind-Value="editPet.Name" />
+      <label for="petname">Name:</label>
+      <InputText id="petname" class="form-control" @bind-Value="editPet.Name" />
       <ValidationMessage For="@(() => editPet.Name)" />
     </div>
 
     <div>
-      <label>Type:</label>
-      <InputSelect class="form-control" @bind-Value="editPet.Type">
+      <label for="type">Type:</label>
+      <InputSelect id="type" class="form-control" @bind-Value="editPet.Type">
         <option value="">Select a Type</option>
         @foreach (var category in categories)
         {
@@ -45,30 +45,30 @@ else
     </div>
 
     <div>
-      <label>Breed:</label>
-      <InputText class="form-control" @bind-Value="editPet.Breed" />
+      <label for="breed">Breed:</label>
+      <InputText id="breed" class="form-control" @bind-Value="editPet.Breed" />
       <ValidationMessage For="@(() => editPet.Breed)" />
     </div>
 
     <div>
-      <label>Year of Birth:</label>
-      <InputNumber class="form-control" @bind-Value="editPet.YearOfBirth" />
+      <label for="birth">Year of Birth:</label>
+      <InputNumber id="birth" class="form-control" @bind-Value="editPet.YearOfBirth" />
       <ValidationMessage For="@(() => editPet.YearOfBirth)" />
     </div>
 
     <div>
-      <label>Description:</label>
-      <InputTextArea class="form-control" @bind-Value="editPet.Description" />
+      <label for="description">Description:</label>
+      <InputTextArea id="description" class="form-control" @bind-Value="editPet.Description" />
     </div>
 
     <div>
-      <label>Image URL:</label>
-      <InputText class="form-control" @bind-Value="editPet.ImageUrl" />
+      <label for="imageURL">Image URL:</label>
+      <InputText id="imageURL" class="form-control" @bind-Value="editPet.ImageUrl" />
     </div>
 
     <div class="mb-3">
-      <label class="form-label">OR <br/> Upload New Image</label>
-      <InputFile class="form-control" OnChange="HandleFileSelected" accept="image/*" />
+      <label for="newimage" class="form-label">OR <br/> Upload New Image</label>
+      <InputFile id="newimage" class="form-control" OnChange="HandleFileSelected" accept="image/*" />
 
       @if (!string.IsNullOrWhiteSpace(uploadMessage))
       {
@@ -78,9 +78,9 @@ else
 
     <!-- Energy picker will allow admin to hover to see energy amount, and click to set it -->
     <div class="mb-3">
-      <label class="form-label">Energy Level</label>
+      <label for="energy" class="form-label">Energy Level</label>
 
-      <div class="energy-picker" @onmouseleave="ClearEnergyHover">
+      <div id="energy" class="energy-picker" @onmouseleave="ClearEnergyHover">
         @for (int i = 1; i <= 5; i++)
         {
           var level = i;
@@ -95,8 +95,8 @@ else
     </div>
 
     <div>
-      <label>Shelter:</label>
-      <InputSelect class="form-control" @bind-Value="editPet.Shelter_id">
+      <label for="shelter">Shelter:</label>
+      <InputSelect id="shelter" class="form-control" @bind-Value="editPet.Shelter_id">
         <option value="">Select a Shelter</option>
         @foreach (var shelter in shelters)
         {
@@ -107,18 +107,18 @@ else
     </div>
 
     <div class="form-check">
-      <InputCheckbox class="form-check-input" @bind-Value="editPet.Is_Friendly" />
-      <label class="form-check-label">Friendly</label>
+      <InputCheckbox id="friendly" class="form-check-input" @bind-Value="editPet.Is_Friendly" />
+      <label for="friendly" class="form-check-label">Friendly</label>
     </div>
 
     <div class="form-check">
-      <InputCheckbox class="form-check-input" @bind-Value="editPet.Is_Adopt" />
-      <label class="form-check-label">Available for Adoption</label>
+      <InputCheckbox id="adoption" class="form-check-input" @bind-Value="editPet.Is_Adopt" />
+      <label for="adoption" class="form-check-label">Available for Adoption</label>
     </div>
 
     <div class="form-check">
-      <InputCheckbox class="form-check-input" @bind-Value="editPet.Is_Foster" />
-      <label class="form-check-label">Available for Foster</label>
+      <InputCheckbox id="foster" class="form-check-input" @bind-Value="editPet.Is_Foster" />
+      <label for="foster" class="form-check-label">Available for Foster</label>
     </div>
 
     <br />
