@@ -1,0 +1,66 @@
+@page "/volunteer-thankyou"
+
+@using PetStore.Data
+@using PetStore.Models
+@using Microsoft.AspNetCore.Components
+@using Microsoft.EntityFrameworkCore
+@using System.Globalization
+
+@inject PetStoreContext DbContext
+
+<PageTitle>Thank You</PageTitle>
+
+@if (application is null)
+{
+  <h1>Thank You!</h1>
+  <p>We could not find your volunteer application.</p>
+  <a class="btn btn-primary" href="/">Return Home</a>
+}
+else
+{
+  <h1>Thank You!</h1>
+
+  <p>
+    Thank you, <strong>@FormatName(application.Name)</strong>! We appreciate your interest in helping our furry friends, and will reach out to you soon!
+  </p>
+
+  <h2>Confirmation For</h2>
+
+  <div class="confirmation-box">
+    <p><strong>Name:</strong> @FormatName(application.Name)</p>
+    <p><strong>Volunteer Type:</strong> @application.VolunteerType</p>
+    <p><strong>Phone Number:</strong> @application.PhoneNumber</p>
+    <p><strong>Email:</strong> @application.Email</p>
+    <p><strong>Submitted At:</strong> @application.SubmittedAt.ToString("f")</p>
+  </div>
+
+  <a class="btn btn-primary" href="/">Return Home</a>
+}
+
+@code {
+  // Gets the volunteer application Id from the URL
+  [SupplyParameterFromQuery]
+  public int? Id { get; set; }
+
+  // Stores the volunteer application loaded from the database
+  private VolunteerApplication? application;
+
+  // Runs when the page loads and finds the matching application
+  protected override async Task OnInitializedAsync()
+  {
+    if (Id is not null)
+    {
+      application = await DbContext.VolunteerApplications
+        .FirstOrDefaultAsync(v => v.Id == Id);
+    }
+  }
+
+  // Capitalizes the first letter of each word in the name
+  private string FormatName(string? name)
+  {
+    if (string.IsNullOrWhiteSpace(name))
+        return string.Empty;
+
+    return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name.ToLower());
+  }
+}

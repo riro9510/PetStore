@@ -1,6 +1,30 @@
-﻿@page "/not-found"
+﻿@page "/404"
+@page "/not-found"
 @layout MainLayout
 
-<!-- This page will show when the page user is looking for is unauthorized or doesn't exist -->
-<h3>Not Found</h3>
-<p>Sorry, the content you are looking for does not exist.</p>
+<PageTitle>Page Not Found - Pawsitive Friends</PageTitle>
+
+<div class="not-found-container d-flex align-items-center justify-content-center">
+    <div class="text-center p-5">
+        @* Imagen de Héroe para 404 *@
+        <div class="hero-image-wrapper mb-4">
+            <img src="images/heroes/not-found-404.webp" alt="Sad puppy - Page not found"
+                 class="img-fluid rounded-circle shadow-sm border-accent" />
+        </div>
+
+        @* Mensaje de Error *@
+        <h1 class="display-3 fw-bold text-primary">Oops!</h1>
+        <h2 class="mb-4 text-dark">We couldn't find that page.</h2>
+        <p class="lead text-muted mb-5">
+            It seems like this page has gone for a walk. <br />
+            Let's get you back to the pack.
+        </p>
+
+        @* Acción de retorno con coherencia visual *@
+        <div class="actions">
+            <a href="/" class="btn btn-primary btn-lg px-5 py-3 shadow">
+                <i class="bi bi-house-door-fill me-2"></i> Back to Home
+            </a>
+        </div>
+    </div>
+</div>

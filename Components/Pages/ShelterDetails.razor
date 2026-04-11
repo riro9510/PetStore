@@ -10,146 +10,127 @@
 @inject PetService PetService
 @inject NavigationManager Navigation
 
-<PageTitle>Shelter Details</PageTitle>
+<PageTitle>@(selectedShelter?.Name ?? "Shelter Details") - Pawsitive Friends</PageTitle>
 
-@* If shelter is not found, show message *@
 @if (selectedShelter is null)
 {
-  <p>Shelter not found.</p>
+  <div class="container mt-5 text-center">
+    <div class="alert alert-warning shadow-sm">
+      <i class="bi bi-exclamation-triangle"></i> Shelter not found.
+    </div>
+    <a href="/shelters" class="btn btn-primary mt-3">Back to Shelters</a>
+  </div>
 }
 else
 {
-  <section class="shelter-details">
-
-    <!-- Hero section (placeholder for future image/banner) -->
+  <section class="shelter-page">
+    @* Hero Section con Video Background *@
     <div class="shelter-hero">
+      <div class="video-overlay"></div>
+      <video autoplay muted loop playsinline class="hero-video">
+        <source src="videos/shelters-hero-presentation.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
 
-      <!-- Placeholder box for hero image -->
-      <div class="hero-placeholder">
-        (Hero image/banner here)
-      </div>
-
-      <!-- Shelter title and intro text -->
-      <div class="hero-text">
-        <h1>@selectedShelter.Name</h1>
-        <p>Learn more about this shelter and the pets currently available here.</p>
-      </div>
-    </div>
-
-    <!-- Shelter information section -->
-    <div class="shelter-info">
-      <h2>Shelter Information</h2>
-
-      <!-- Required fields -->
-      <p><strong>Country:</strong> @selectedShelter.Country</p>
-      <p><strong>State/Region:</strong> @selectedShelter.State</p>
-
-      <!-- Optional fields (only show if they exist) -->
-      @if (!string.IsNullOrWhiteSpace(selectedShelter.City))
-      {
-        <p><strong>City:</strong> @selectedShelter.City</p>
-      }
-
-      @if (!string.IsNullOrWhiteSpace(selectedShelter.Email))
-      {
-        <p>
-          <strong>Email:</strong>
-          <a href="mailto:@selectedShelter.Email">@selectedShelter.Email</a>
-        </p>
-      }
-
-      @if (!string.IsNullOrWhiteSpace(selectedShelter.Phone))
-      {
-        <p>
-          <strong>Phone:</strong>
-          <a href="tel:@selectedShelter.Phone">@selectedShelter.Phone</a>
-        </p>
-      }
-    </div>
-
-    <!-- Pets that belong to this shelter -->
-    <div class="shelter-pets">
-      <h2>Pets at @selectedShelter.Name</h2>
-
-      @* If no pets found for this shelter *@
-      @if (shelterPets.Count == 0)
-      {
-        <p>No pets are currently listed for this shelter.</p>
-      }
-      else
-      {
-        <!-- Grid layout for pet cards -->
-        <div class="pets-grid">
-
-          @* Loop through all pets that match this shelter *@
-          @foreach (var pet in shelterPets)
-          {
-            <PetCard Pet="pet" OnAboutMeClicked="OpenPetModal" />
-          }
+      <div class="hero-content">
+        <div class="container">
+          <span class="badge bg-accent text-dark mb-2">Verified Shelter</span>
+          <h1 class="display-3 fw-bold">@selectedShelter.Name</h1>
+          <p class="lead">Connecting hearts, one adoption at a time.</p>
         </div>
-      }
+      </div>
+    </div>
+
+    <div class="container mt-n5 position-relative">
+      <div class="row">
+        @* Sidebar: Información del Refugio *@
+        <div class="col-lg-4">
+          <div class="info-card shadow-lg p-4 rounded-4 mb-4">
+            <h3 class="h5 fw-bold text-primary mb-3">Contact Information</h3>
+            <hr />
+            <div class="d-flex mb-3">
+              <i class="bi bi-geo-alt-fill text-secondary me-3"></i>
+              <div>
+                <p class="mb-0 fw-bold">Location</p>
+                <p class="text-muted small mb-0">@selectedShelter.City, @selectedShelter.State. @selectedShelter.Country
+                </p>
+              </div>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(selectedShelter.Email))
+            {
+              <div class="d-flex mb-3">
+                <i class="bi bi-envelope-fill text-secondary me-3"></i>
+                <a href="mailto:@selectedShelter.Email"
+                   class="text-decoration-none small text-dark">@selectedShelter.Email</a>
+              </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(selectedShelter.Phone))
+            {
+              <div class="d-flex">
+                <i class="bi bi-telephone-fill text-secondary me-3"></i>
+                <a href="tel:@selectedShelter.Phone" class="text-decoration-none small text-dark">@selectedShelter.Phone</a>
+              </div>
+            }
+          </div>
+        </div>
+
+        @* Main: Lista de Mascotas *@
+        <div class="col-lg-8">
+          <div class="pets-section p-4 bg-white rounded-4 shadow-sm">
+            <h2 class="h4 fw-bold mb-4">Available Pets at this Shelter</h2>
+                        
+            @if (shelterPets.Count == 0)
+            {
+              <div class="text-center py-5">
+                <i class="bi bi-emoji-frown fs-1 text-muted"></i>
+                <p class="mt-2">No pets currently listed here.</p>
+              </div>
+            }
+            else
+            {
+              <div class="row g-3">
+                @foreach (var pet in shelterPets)
+                {
+                  <div class="col-md-6">
+                    <PetCard Pet="pet" OnAboutMeClicked="OpenPetModal" />
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 }
 
-@* Modal for selected pet *@
+@* Modal persistente con lógica de UI mejorada *@
 @if (selectedPet is not null)
 {
-  <!-- Dark background behind modal -->
-  <div class="modal-backdrop-custom" @onclick="ClosePetModal"></div>
-
-  <!-- Modal showing full pet information -->
-  <div class="pet-modal">
-    <div class="pet-modal-content">
-
-      <!-- Close button -->
+  <div class="modal-backdrop-custom show" @onclick="ClosePetModal"></div>
+  <div class="pet-modal animate__animated animate__zoomIn">
+    <div class="pet-modal-content rounded-4 border-0">
       <button class="modal-close-button" @onclick="ClosePetModal">×</button>
-
-      <!-- Pet image -->
       <div class="pet-modal-image-container">
-        <img src="@selectedPet.ImageUrl" alt="@selectedPet.Name image" />
+        <img src="@selectedPet.ImageUrl" alt="@selectedPet.Name" />
       </div>
-
-      <!-- Pet name -->
-      <h2>@selectedPet.Name</h2>
-
-      @{
-        // Calculate pet age from year of birth
-        int age = DateTime.Now.Year - selectedPet.YearOfBirth;
-      }
-
-      <p>
-        <strong>Age: </strong>
-        @if (age < 1)
-        {
-          <span>Less than a year old</span>
-        }
-        else
-        {
-          <span>@age @(age == 1 ? "year" : "years") old</span>
-        }
-      </p>
-
-      <p><strong>Breed: </strong>@selectedPet.Breed</p>
-
-      <p>
-        <strong>Energy: </strong>
-        @for (int i = 1; i <= 5; i++)
-        {
-          if (i <= selectedPet.Energy)
+      <div class="p-4">
+        <h2 class="fw-bold text-primary">@selectedPet.Name</h2>
+        <div class="d-flex gap-2 mb-3">
+          <span class="badge bg-light text-dark">@selectedPet.Breed</span>
+          <span class="badge bg-light text-dark">Age: @(DateTime.Now.Year - selectedPet.YearOfBirth)</span>
+        </div>
+        <p class="text-muted">@selectedPet.Description</p>
+        <div class="energy-meter mt-3 p-2 bg-light rounded">
+          <span class="small fw-bold">Energy Level:</span>
+          @for (int i = 1; i <= 5; i++)
           {
-            <!-- Highlight filled energy levels -->
-            <span style="color: #FFD700;">⚡</span>
+            <span class="@(i <= selectedPet.Energy ? "text-warning" : "text-muted opacity-25")">⚡</span>
           }
-          else
-          {
-            <!-- Dim remaining energy levels -->
-            <span style="color: #ccc; opacity: 0.2;">⚡</span>
-          }
-        }
-      </p>
-
-      <p><strong>Description: </strong>@selectedPet.Description</p>
+        </div>
+      </div>
     </div>
   </div>
 }
