@@ -52,8 +52,11 @@ else
               <i class="bi bi-geo-alt-fill text-secondary me-3"></i>
               <div>
                 <p class="mb-0 fw-bold">Location</p>
+                @if (!string.IsNullOrWhiteSpace(selectedShelter.City)) {
+                  <p class="text-muted small mb-0">@selectedShelter.City,</p>
+                }
                 <p class="text-muted small mb-0">
-                  @(string.IsNullOrWhiteSpace(selectedShelter.City) ? "" : $"{selectedShelter.City}, ")@selectedShelter.State. @selectedShelter.Country
+                  @selectedShelter.State. @selectedShelter.Country
                 </p>
               </div>
             </div>
