@@ -7,6 +7,7 @@
 @inject PetService PetService
 @inject NavigationManager NavigationManager
 
+<PageTitle>Pet Specific Application Management</PageTitle>
 <a href="/management">Back to General Management</a>
 
 <h1>Pet Specific Applications Management</h1>
@@ -34,7 +35,7 @@
         <td>@application.FullName</td>
         <td>@application.HelpType</td>
         <td>@application.Address</td>
-        <td><a href="/management/applications/helpers/@application.Id">More Info</a></td>
+        <td><a href="/management/applications/helpers/@application.Id">More Details</a></td>
         <td>
           <button class="btn btn-danger me-2 w-100" type="button" @onclick="() => DeleteApplication(application.Id)">
             Delete
