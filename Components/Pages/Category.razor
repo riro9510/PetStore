@@ -5,6 +5,7 @@
 @using PetStore.Models
 @using PetStore.Services
 @inject PetService PetService
+<PageTitle>Category Management</PageTitle>
 
 <h1>Category Management</h1>
 <!-- Form to create a new category -->
@@ -12,8 +13,8 @@
   <DataAnnotationsValidator />
 
   <div class="mb-3">
-    <label class="form-label">Name</label>
-    <InputText class="form-control" @bind-Value="newCategory.Name" />
+    <label for="typeName" class="form-label">Name</label>
+    <InputText id="typeName" class="form-control" @bind-Value="newCategory.Name" />
     <ValidationMessage class="text-danger" For="@(() => newCategory.Name)" />
   </div>
 
@@ -27,7 +28,7 @@
   <p class="text-danger">@errorMessage</p>
 }
 
-<h3>Current Categories</h3>
+<h2>Current Categories</h2>
 
 <table class="table">
   <thead>
