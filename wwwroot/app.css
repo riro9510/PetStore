@@ -502,57 +502,6 @@ h1 {
     gap: 1.5rem;
 }
 
-.flip-card {
-    background: transparent;
-    width: 100%;
-    height: 220px;
-    perspective: 1000px;
-    cursor: pointer;
-}
-
-.flip-card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    transition: transform 0.7s;
-    transform-style: preserve-3d;
-}
-
-.flip-card-inner.flipped {
-    transform: rotateY(180deg);
-}
-
-.flip-card-front,
-.flip-card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 12px;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-color: white;
-}
-
-.flip-card-front {
-    border: 1px solid #ddd;
-}
-
-.flip-card-back {
-    transform: rotateY(180deg);
-    border: 1px solid #ddd;
-}
-
-.flip-card-front h3,
-.flip-card-back h3 {
-    margin-bottom: 1rem;
-}
-
 input.invalid,
 select.invalid {
     border: 2px solid red;
